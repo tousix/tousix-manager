@@ -7,7 +7,7 @@ from database.models import Flux, Stats
 
 class forgeData(object):
 
-    def get_data(self, source=0, destination=0, flux_type="IPv4", period="year", unit="packets"):
+    def get_data(self, source, destination, flux_type, period, unit):
         pk = self.get_flux_id(source, destination, flux_type)
         query = self.forge_query(pk, period)
         return self.forge_data(query, unit)
