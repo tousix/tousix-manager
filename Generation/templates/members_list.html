@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    {%  if not ipv4 and not ipv6 %}
+    <form id="MembersForm" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <INPUT TYPE="submit" VALUE=" Envoyer ">
+    </form>
+    {%  else %}
+        <textarea> {{ ipv4 }}</textarea>
+        <textarea> {{ ipv6 }}</textarea>
+    {% endif %}
+</body>
+</html>
