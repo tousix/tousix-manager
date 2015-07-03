@@ -5,10 +5,6 @@ from django import forms
 from database.models import Hote
 
 
-class JavasciptWidget(forms.Select):
-    def __init__(self, attrs=None, choices=()):
-        super(JavasciptWidget, self).__init__(attrs, choices)
-
 class MemberChoiceField(forms.ChoiceField):
     def __init__(self, choices=(), required=True, widget=None, label=None,
                  initial=None, help_text='', *args, **kwargs):
