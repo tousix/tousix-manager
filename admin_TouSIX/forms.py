@@ -22,7 +22,7 @@ class HoteForm(forms.ModelForm):
                                        initial, error_class, label_suffix,
                                        empty_permitted, instance)
         if self.instance.idhote is not None:
-            # Set editing value for instance
+            # Set idport editing value for instance
             self.fields["idport"].queryset = Port.objects.\
                                              filter(usable=True).\
                                              exclude(idport__in=(Hote.objects
