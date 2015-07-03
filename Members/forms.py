@@ -4,6 +4,7 @@ __author__ = 'remy'
 from django import forms
 from database.models import Membre, Contact, Hote
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 class MemberForm(forms.ModelForm):
     class Meta:
@@ -45,7 +46,5 @@ class RouterForm(forms.ModelForm):
         model = Hote
         fields = ['nomhote', 'machote', 'ipv4hote', 'ipv6hote']
 
-class UserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['username', 'password', 'first_name', 'last_name', 'email']
+class UserForm(UserCreationForm):
+    pass
