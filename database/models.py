@@ -10,20 +10,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.db.models.fields import PositiveIntegerField
 from django.contrib.auth.models import User
-
-# Snippet found in : https://news.numlock.ch/it/django-custom-model-field-for-an-unsigned-bigint-data-type
-class PositiveBigIntegerField(PositiveIntegerField):
-    """Represents MySQL's unsigned BIGINT data type (works with MySQL only!)"""
-    empty_strings_allowed = False
-
-    def get_internal_type(self):
-        return "PositiveBigIntegerField"
-
-    def db_type(self, connection):
-        # This is how MySQL defines 64 bit unsigned integer data types
-        return "bigint UNSIGNED"
+from database.fields import PositiveBigIntegerField, MACAddressField
 
 class Contact(models.Model):
     idcontact = models.AutoField(db_column='idContact', primary_key=True)  # Field name made lowercase.
@@ -56,7 +44,7 @@ class Membre(models.Model):
 class Pop(models.Model):
     idpop = models.AutoField(db_column='idPOP', primary_key=True)  # Field name made lowercase.
     nompop = models.CharField(db_column='NomPOP', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    adressepop = models.CharField(db_column='AdressePOP', max_length=300, blank=True, null=True)  # Field name made lowercase.
+    adressepop = models.TextField(db_column='AdressePOP', max_length=300, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         db_table = 'POP'
@@ -107,20 +95,23 @@ class Port(models.Model):
     def switch(self):
         return self.idswitch.nomswitch
 
+    def string_description(self):
+        return "POP " + self.idswitch.idpop.nompop + ": " + self.idswitch.nomswitch + " port " + str(self.numport)
+
     class Meta:
         db_table = 'Port'
 
 class Hote(models.Model):
     idhote = models.AutoField(db_column='IdHote', primary_key=True)  # Field name made lowercase.
     nomhote = models.CharField(db_column='NomHote', max_length=30, blank=True)  # Field name made lowercase.
-    machote = models.CharField(db_column='MACHote', max_length=17, blank=True)  # Field name made lowercase.
+    machote = MACAddressField(db_column='MACHote', blank=True)  # Field name made lowercase.
     ipv4hote = models.GenericIPAddressField(db_column='IPv4Hote')  # Field name made lowercase.
     ipv6hote = models.GenericIPAddressField(db_column='IPv6Hote')  # Field name made lowercase.
     idmembre = models.ForeignKey(Membre, to_field='idmembre', db_column='idMembre')  # Field name made lowercase.
     idport = models.ForeignKey(Port, to_field='idport', db_column='idPort', blank=True, null=True)  # Field name made lowercase.
     valid = models.BooleanField(default=False)
 
-    def parent_membre(self):
+    def membre(self):
         return self.idmembre.nommembre
 
     def switch(self):
