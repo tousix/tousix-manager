@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django import forms
 
 from database.models import Membre, Hote, Port, Pop, Contact, Switch
 from admin_TouSIX.forms import HoteForm, SwitchForm, MembreForm
@@ -9,15 +8,6 @@ class HoteInLine(admin.TabularInline):
     model = Hote
     max_num = 1
     form = HoteForm
-
-class PortInLine(admin.TabularInline):
-    model = Port
-
-class ContactForm(forms.ModelForm):
-
-    class Meta:
-        model = Contact
-        exclude = ['idcontact']
 
 @admin.register(Membre)
 class MembreAdmin(admin.ModelAdmin):
@@ -41,6 +31,7 @@ class PortAdmin(admin.ModelAdmin):
     inlines = [HoteInLine]
     exclude = ["idswitch"]
     list_filter = ["idswitch__nomswitch"]
+    search_fields = ["numport", 'idswitch__nomswitch']
 
 @admin.register(Pop)
 class PopAdmin(admin.ModelAdmin):
@@ -56,3 +47,4 @@ class ContactAdmin(admin.ModelAdmin):
 class SwichAdmin(admin.ModelAdmin):
     list_display = ["nomswitch", "ipswitch", "idswitch"]
     form = SwitchForm
+    search_fields = ["nomswitch", "ipswitch", "idswitch"]
