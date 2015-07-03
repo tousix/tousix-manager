@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 
 from database.models import Membre, Hote, Port, Pop, Contact, Switch
-from admin_TouSIX.forms import HoteForm, SwitchForm
+from admin_TouSIX.forms import HoteForm, SwitchForm, MembreForm
 # Register your models here.
 
 class HoteInLine(admin.TabularInline):
@@ -23,8 +23,9 @@ class ContactForm(forms.ModelForm):
 class MembreAdmin(admin.ModelAdmin):
     list_display = ["nommembre", "url", "asnumber", "approved"]
     inlines = [HoteInLine]
-    fields = ["nommembre", "asnumber", "approved"]
     list_filter = ['approved']
+    form = MembreForm
+    search_fields = ["nommembre", "asnumber"]
 
 @admin.register(Hote)
 class HoteAdmin(admin.ModelAdmin):

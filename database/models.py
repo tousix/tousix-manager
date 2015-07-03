@@ -24,6 +24,14 @@ class Contact(models.Model):
     class Meta:
         db_table = 'Contact'
 
+class Pop(models.Model):
+    idpop = models.AutoField(db_column='idPOP', primary_key=True)  # Field name made lowercase.
+    nompop = models.CharField(db_column='NomPOP', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    adressepop = models.TextField(db_column='AdressePOP', max_length=300, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        db_table = 'POP'
+
 class Membre(models.Model):
     idmembre = models.AutoField(db_column='idMembre', primary_key=True)  # Field name made lowercase.
     user = models.OneToOneField(User, null=True)
@@ -33,6 +41,7 @@ class Membre(models.Model):
     asnumber = models.PositiveIntegerField(db_column='ASNumber')  # Field name made lowercase.
     connexion_type = models.CharField(max_length=30, blank=True, null=True)
     fqdn_host = models.CharField(max_length=30, default="Undefined")
+    idpop = models.ForeignKey(Pop, to_field='idpop', db_column='idPoP', null=True)
     billing = models.OneToOneField(Contact, to_field='idcontact', related_name='billing', parent_link=True, blank=True, null=True)
     noc = models.OneToOneField(Contact, to_field='idcontact', related_name='noc', parent_link=True, blank=True, null=True)
     technical = models.OneToOneField(Contact, to_field='idcontact', related_name='technical', parent_link=True, blank=True, null=True)
@@ -40,14 +49,6 @@ class Membre(models.Model):
 
     class Meta:
         db_table = 'Membre'
-
-class Pop(models.Model):
-    idpop = models.AutoField(db_column='idPOP', primary_key=True)  # Field name made lowercase.
-    nompop = models.CharField(db_column='NomPOP', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    adressepop = models.TextField(db_column='AdressePOP', max_length=300, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        db_table = 'POP'
 
 class Controleur(models.Model):
     idctrl = models.AutoField(db_column='IdCTRL', primary_key=True)  # Field name made lowercase.
