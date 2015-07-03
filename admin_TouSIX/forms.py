@@ -2,7 +2,7 @@
 __author__ = 'remy'
 
 from django import forms
-from database.models import Hote, Port
+from database.models import Hote, Port, Switch, Pop
 from django.forms.utils import ErrorList
 
 class PortChoiceField(forms.ModelChoiceField):
@@ -33,3 +33,14 @@ class HoteForm(forms.ModelForm):
     class Meta:
         model = Hote
         exclude = ["idmembre"]
+
+class PopChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return "%s" % obj.nompop
+
+class SwitchForm(forms.ModelForm):
+    idpop = PopChoiceField(queryset=Pop.objects.all(), empty_label=None)
+
+    class Meta:
+        model = Switch
+        fields = ['nomswitch', 'idswitch', 'ipswitch', 'idpop']

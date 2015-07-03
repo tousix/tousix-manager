@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django import forms
 
-from database.models import Membre, Hote, Port, Pop, Contact
-from admin_TouSIX.forms import HoteForm
+from database.models import Membre, Hote, Port, Pop, Contact, Switch
+from admin_TouSIX.forms import HoteForm, SwitchForm
 # Register your models here.
 
 class HoteInLine(admin.TabularInline):
@@ -39,6 +39,7 @@ class PortAdmin(admin.ModelAdmin):
     list_display = ["switch", "numport", "typeport", "usable"]
     inlines = [HoteInLine]
     exclude = ["idswitch"]
+    list_filter = ["idswitch__nomswitch"]
 
 @admin.register(Pop)
 class PopAdmin(admin.ModelAdmin):
@@ -48,3 +49,9 @@ class PopAdmin(admin.ModelAdmin):
 class ContactAdmin(admin.ModelAdmin):
     exclude = ["idcontact"]
     list_display = ["nomcontact", "prenomcontact", "telcontact", "mailcontact"]
+    search_fields = ["nomcontact", "prenomcontact"]
+
+@admin.register(Switch)
+class SwichAdmin(admin.ModelAdmin):
+    list_display = ["nomswitch", "ipswitch", "idswitch"]
+    form = SwitchForm
