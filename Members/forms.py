@@ -3,7 +3,6 @@ __author__ = 'remy'
 
 from django import forms
 from database.models import Membre, Contact, Hote
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 class MemberForm(forms.ModelForm):
