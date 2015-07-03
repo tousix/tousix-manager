@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.db.models.fields import PositiveIntegerField
+from django.contrib.auth.models import User
 
 # Snippet found in : https://news.numlock.ch/it/django-custom-model-field-for-an-unsigned-bigint-data-type
 class PositiveBigIntegerField(PositiveIntegerField):
@@ -37,6 +38,7 @@ class Contact(models.Model):
 
 class Membre(models.Model):
     idmembre = models.AutoField(db_column='idMembre', primary_key=True)  # Field name made lowercase.
+    user = models.OneToOneField(User, null=True)
     nommembre = models.CharField(db_column='NomMembre', max_length=30, blank=True, null=True)  # Field name made lowercase.
     url = models.URLField(null=True)
     statut = models.CharField(db_column='Statut', max_length=12, blank=True, null=True)  # Field name made lowercase.
