@@ -156,6 +156,9 @@ class Regles(models.Model):
     regle = models.TextField(db_column='Regle', blank=True, null=True)  # Field name made lowercase.
     idswitch = models.ForeignKey(Switch, to_field='idswitch', db_column='idSwitch')  # Field name made lowercase.
 
+    def switch(self):
+        return self.idswitch.nomswitch
+
     class Meta:
         db_table = 'Règles'
 
