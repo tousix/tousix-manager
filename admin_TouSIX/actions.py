@@ -2,7 +2,7 @@
 __author__ = 'remy'
 
 from Generation.views import render_conf_members, render_conf_hosts
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from database.models import Hote, Membre
 
 def generate_routeserver_conf(modeladmin, request, queryset):
@@ -14,6 +14,3 @@ def generate_routeserver_conf(modeladmin, request, queryset):
         return render(request, "members_list.html", context=data)
 
 generate_routeserver_conf.short_description = "Générer la configuration BIRD pour la sélection"
-
-def goto_log_switch(modeladmin, request, queryset):
-    pass
