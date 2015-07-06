@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from database.models import Membre, Hote, Port, Pop, Contact, Switch
+from database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch
 from admin_TouSIX.forms import HoteForm, SwitchForm, MembreForm
 from admin_TouSIX.actions import generate_routeserver_conf
 
@@ -48,7 +48,14 @@ class ContactAdmin(admin.ModelAdmin):
     search_fields = ["nomcontact", "prenomcontact"]
 
 @admin.register(Switch)
-class SwichAdmin(admin.ModelAdmin):
+class SwitchAdmin(admin.ModelAdmin):
     list_display = ["nomswitch", "ipswitch", "idswitch"]
     form = SwitchForm
     search_fields = ["nomswitch", "ipswitch", "idswitch"]
+
+@admin.register(LogSwitch)
+class LogSwitchAdmin(admin.ModelAdmin):
+    list_display = ['nomswitch', "time", "level", "message"]
+    search_fields = ['idswitch__nomswitch', "level", "time"]
+    list_filter = ['idswitch__nomswitch', "level"]
+    readonly_fields = ['idlog', "idswitch", "time", "level", "message", "json"]
