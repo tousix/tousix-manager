@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    {%  if not rules %}
+    <form id="MembersForm" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <INPUT TYPE="submit" VALUE=" Envoyer ">
+    </form>
+    {%  else %}
+        <textarea> {{ rules }}</textarea>
+    {% endif %}
+</body>
+</html>

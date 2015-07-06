@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch, Regles
 from admin_TouSIX.forms import HoteForm, SwitchForm, MembreForm
-from admin_TouSIX.actions import generate_routeserver_conf
+from admin_TouSIX.actions import generate_routeserver_conf, generate_openflow_rules
 
 # Register your models here.
 
@@ -52,6 +52,7 @@ class SwitchAdmin(admin.ModelAdmin):
     list_display = ["nomswitch", "ipswitch", "idswitch"]
     form = SwitchForm
     search_fields = ["nomswitch", "ipswitch", "idswitch"]
+    actions = [generate_openflow_rules]
 
 @admin.register(LogSwitch)
 class LogSwitchAdmin(admin.ModelAdmin):

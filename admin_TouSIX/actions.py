@@ -2,6 +2,7 @@
 __author__ = 'remy'
 
 from Generation.views import render_conf_members, render_conf_hosts
+from Generate_rules.manager import Manager
 from django.shortcuts import render
 from database.models import Hote, Membre
 
@@ -14,3 +15,10 @@ def generate_routeserver_conf(modeladmin, request, queryset):
         return render(request, "members_list.html", context=data)
 
 generate_routeserver_conf.short_description = "Générer la configuration BIRD pour la sélection"
+
+def generate_openflow_rules(modeladmin, request, queryset):
+    manager = Manager()
+    manager.create_rules(queryset)
+    modeladmin.message_user(request, "Les règles ont été mises à jour dans la base de données.")
+
+generate_openflow_rules.short_description = "Générer la configuration Openflow pour la sélection"
