@@ -2,6 +2,8 @@ from django.contrib import admin
 
 from database.models import Membre, Hote, Port, Pop, Contact, Switch
 from admin_TouSIX.forms import HoteForm, SwitchForm, MembreForm
+from admin_TouSIX.actions import generate_routeserver_conf
+
 # Register your models here.
 
 class HoteInLine(admin.TabularInline):
@@ -16,6 +18,7 @@ class MembreAdmin(admin.ModelAdmin):
     list_filter = ['approved']
     form = MembreForm
     search_fields = ["nommembre", "asnumber"]
+    actions = [generate_routeserver_conf]
 
 @admin.register(Hote)
 class HoteAdmin(admin.ModelAdmin):
@@ -24,6 +27,7 @@ class HoteAdmin(admin.ModelAdmin):
     list_filter = ['valid']
     search_fields = ["nomhote", "ipv4hote", "ipv6hote", "machote"]
     form = HoteForm
+    actions = [generate_routeserver_conf]
 
 @admin.register(Port)
 class PortAdmin(admin.ModelAdmin):
