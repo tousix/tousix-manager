@@ -75,6 +75,9 @@ class LogSwitch(models.Model):
     message = models.TextField()
     json = models.TextField(null=True)
 
+    def nomswitch(self):
+        return self.idswitch.nomswitch
+
     class Meta:
         db_table = "SwitchLog"
 
