@@ -21,13 +21,13 @@ def render_conf_members(request, members):
     peers = []
 
     for member in members:
-        query = Hote.objects.filter(idmembre=member.pk).values('machote', 'ipv4hote', 'ipv6hote', 'nomhote')
+        query = Hote.objects.filter(idmembre=member.pk)
         for host in query:
             peer = {"member": member.nommembre,
-                    "mac": host.get('machote'),
-                    "ipv4": host.get('ipv4hote'),
-                    "ipv6": host.get('ipv6hote'),
-                    'peer': host.get('nomhote'),
+                    "mac": host.machote,
+                    "ipv4": host.ipv4hote,
+                    "ipv6": host.ipv6hote,
+                    'peer': host.nomhote,
                     "as": member.asnumber}
             peers.append(peer)
     render_ipv4 = render(request, "ipv4.conf", context={"peers": peers})
