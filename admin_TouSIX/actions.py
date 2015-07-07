@@ -22,3 +22,11 @@ def generate_openflow_rules(modeladmin, request, queryset):
     modeladmin.message_user(request, "Les règles ont été mises à jour dans la base de données.")
 
 generate_openflow_rules.short_description = "Générer la configuration Openflow pour la sélection"
+
+def get_rules_list(modeladmin, request, queryset):
+    text = ""
+    for rule in queryset:
+        text += rule.regle + "\n"
+    return render(request, "switches_list.html", context={"rules": text})
+
+get_rules_list.short_description = "Afficher une liste des règles sélectionnées"

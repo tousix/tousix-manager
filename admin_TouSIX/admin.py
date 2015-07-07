@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch, Regles
 from admin_TouSIX.forms import HoteForm, SwitchForm, MembreForm
-from admin_TouSIX.actions import generate_routeserver_conf, generate_openflow_rules
+from admin_TouSIX.actions import generate_routeserver_conf, generate_openflow_rules, get_rules_list
 
 # Register your models here.
 
@@ -67,3 +67,4 @@ class ReglesField(admin.ModelAdmin):
     list_display = ['switch', 'regle', 'typeregle']
     search_fields = ['regle']
     list_filter = ['idswitch__nomswitch']
+    actions = [get_rules_list]
