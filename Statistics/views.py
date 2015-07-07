@@ -2,11 +2,11 @@ from django.views.generic.edit import FormView
 from Statistics.forge import forgeData
 from Statistics.forms import FluxSelectionForm, RestrictedFluxSelectionForm
 from Statistics.JSONResponseMixin import JSONResponseMixin
-
+from Authentication.LoginMixin import LoginRequiredMixin
 # Create your views here.
 
 
-class StatsMembersList(FormView, JSONResponseMixin):
+class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
     template_name = 'stats_list.html'
     form_class = FluxSelectionForm
 
