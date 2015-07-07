@@ -152,7 +152,7 @@ class Flux(models.Model):
 
 class Regles(models.Model):
     idregle = models.AutoField(db_column='idRegle', primary_key=True)  # Field name made lowercase.
-    typeregle = models.CharField(db_column='TypeRegle', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    typeregle = models.CharField(db_column='TypeRegle', max_length=20, blank=True, null=True)  # Field name made lowercase.
     regle = models.TextField(db_column='Regle', blank=True, null=True)  # Field name made lowercase.
     idswitch = models.ForeignKey(Switch, to_field='idswitch', db_column='idSwitch')  # Field name made lowercase.
 
