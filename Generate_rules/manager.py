@@ -44,7 +44,7 @@ class Manager(object):
             for rule in rules:
                 db_rules.append(Regles(idswitch=switch, typeregle=rule.get("module"), regle=json.dumps(rule.get("rule"))))
             Regles.objects.bulk_create(db_rules)
-            # Copy bulk group rules into database
+            # Copy raw group rules into database
             groups_switch = groups.groups[switch.idswitch]
             for group in groups_switch:
                 Regles(idswitch=switch, typeregle="Group", regle=json.dumps(group)).save()
