@@ -10,7 +10,7 @@ import json
 class Manager(object):
 
     def get_peers(self, switch):
-        hotes = Hote.objects.filter(valid=True).order_by("-idhote")
+        hotes = Hote.objects.filter(valid=True)
         peers = []
         for hote in hotes:
             peer = Peer()
