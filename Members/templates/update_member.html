@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+<body>
+    <form id="MembersForm" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+    <form id="TechnicalForm" method="post">
+        {% csrf_token %}
+        {% bootstrap_form technical %}
+            {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+    <form id="NocForm" method="post">
+        {% bootstrap_form noc %}
+        {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+    </form>
+        <form id="BillingForm" method="post">
+        {% bootstrap_form billing %}
+        {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+    </form>
+    {% for host in hosts %}
+    <form id="RouterForm" method="post">
+        {% csrf_token %}
+        {% bootstrap_form host %}
+        {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+    </form>
+    {% endfor %}
+    <form id="UserPasswordForm" method="post">
+        {% csrf_token %}
+        {% bootstrap_form user %}
+        {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+    </form>
+</body>
+</html>
