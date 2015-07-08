@@ -46,8 +46,10 @@ class Manager(object):
             Regles.objects.bulk_create(db_rules)
             # Copy raw group rules into database
             groups_switch = groups.groups[switch.idswitch]
+            db_groups = []
             for group in groups_switch:
-                Regles(idswitch=switch, typeregle="Group", regle=json.dumps(group)).save()
+                db_groups.append(Regles(idswitch=switch, typeregle="Group", regle=json.dumps(group)).save())
+            Regles.objects.bulk_create(db_groups)
 
     def call_managers(self, dpid, peers):
         rules = []
