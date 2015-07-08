@@ -63,6 +63,7 @@ class FlowProcess(object):
 
     def save_stat(self, datas):
         time = now()
+        stats = []
         for data in datas:
-            stat = Stats(time=time, bytes=data.get('bytes'), packets=data.get('packets'), idflux_id=data.get('flux'))
-            stat.save()
+            stats.append(Stats(time=time, bytes=data.get('bytes'), packets=data.get('packets'), idflux_id=data.get('flux')))
+        Stats.objects.bulk_create(stats)
