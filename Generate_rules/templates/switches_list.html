@@ -6,7 +6,7 @@
 </head>
 <body>
     {%  if not rules %}
-    <form id="MembersForm" method="post">
+    <form id="PeersForm" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <INPUT TYPE="submit" VALUE=" Envoyer ">
