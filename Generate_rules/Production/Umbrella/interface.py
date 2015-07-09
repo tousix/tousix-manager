@@ -47,7 +47,8 @@ class Interface(object):
         :type type: str
         :returns: priority
         """
-        return conf.priority["Production"].get("Umbrella")
+        umbrella = conf.priority["Production"].get("Umbrella")
+        return umbrella[type]
 
     def forge_cookie(self, idmember):
         """

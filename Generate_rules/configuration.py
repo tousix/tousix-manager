@@ -6,7 +6,10 @@ class configuration(object):
 
     enabled = {
         "Production": {
-           "Umbrella": True,
+           "Umbrella": {
+               "IPv4": True,
+               "IPv6": True
+           },
            "Dataflow": True
         },
 
@@ -19,7 +22,10 @@ class configuration(object):
     }
     priority = {
                 "Production": {
-           "Umbrella": 1000,
+           "Umbrella": {
+               "IPv4": 1000,
+               "IPv6": 900
+           },
            "Dataflow": 1000
         },
 
