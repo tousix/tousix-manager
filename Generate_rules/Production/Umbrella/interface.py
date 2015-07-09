@@ -2,6 +2,7 @@
 __author__ = 'remy'
 
 from Generate_rules.configuration import configuration as conf
+from Generate_rules.configuration import Peer
 
 class Interface(object):
     """
@@ -17,6 +18,8 @@ class Interface(object):
         :return: Umbrella flow rule
         :raise BaseException: Not a Peer type
         """
+        if isinstance(peer, Peer) is False:
+            raise BaseException("Not a Peer type")
         rule = {
             "cookie": self.forge_cookie(peer.idPeer),
             "priority": self.find_priority("IPv4"),

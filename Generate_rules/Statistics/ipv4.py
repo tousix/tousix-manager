@@ -3,6 +3,7 @@ __author__ = 'remy'
 
 
 from Generate_rules.Statistics.interface import Interface
+from Generate_rules.configuration import Peer
 
 class IPv4(Interface):
     """
@@ -20,7 +21,8 @@ class IPv4(Interface):
         :return: statistic flow rule
         :raises BaseException: Not a Peer type
         """
-
+        if (isinstance(peer_dst, Peer) & isinstance(peer_src, Peer)) is False:
+            raise BaseException("Not a Peer type")
         rule = {"priority": self.find_priority("IPv4"),
                 "cookie": self.forge_cookie(peer_src.idPeer, peer_dst.idPeer),
                 "table_id": self.set_table_id(),
