@@ -12,7 +12,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from database.fields import PositiveBigIntegerField, MACAddressField
-from django.db.models import Q
+
 
 class Contact(models.Model):
     idcontact = models.AutoField(db_column='idContact', primary_key=True)  # Field name made lowercase.
@@ -137,35 +137,6 @@ class Hote(models.Model):
         else:
             return self.idport.idswitch.idpop.nompop
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        super(Hote, self).save(force_insert, force_update, using, update_fields)
-
-        # Verify if flux definitions already exists
-        if Flux.objects.filter(hote_src=self).count() is 0:
-            # Add flux definitions for this host
-            # Same algorithm as statistics flow rules generation
-            db_flux = []
-            db_flux.append(Flux(hote_src=None, hote_dst=self, type="ICMPv6"))
-            db_flux.append(Flux(hote_src=None, hote_dst=self, type="ARP"))
-            for peer_dst in Hote.objects.all():
-                if peer_dst != self:
-                    db_flux.append(Flux(hote_src=peer_dst, hote_dst=self, type="IPv4"))
-                    db_flux.append(Flux(hote_src=self, hote_dst=peer_dst, type="IPv4"))
-                    db_flux.append(Flux(hote_src=peer_dst, hote_dst=self, type="IPv6"))
-                    db_flux.append(Flux(hote_src=self, hote_dst=peer_dst, type="IPv6"))
-            Flux.objects.bulk_create(db_flux)
-
-    def delete(self, using=None):
-        # Retrieve all flux where the deleted host is present
-        flux_list = Flux.objects.filter(Q(hote_src=self) | Q(hote_dst=self))
-        # Remove stats from these flux
-        Stats.objects.filter(idflux__in=flux_list).delete()
-        # delete flux
-        flux_list.delete()
-        # delete host
-        super(Hote, self).delete(using)
-
     class Meta:
         db_table = 'Hôte'
         unique_together = (('idhote', 'idmembre'),)
@@ -220,3 +191,7 @@ class Switchlink(models.Model):
     class Meta:
         db_table = 'SwitchLink'
         unique_together = (('idport1', 'idport2'),)
+
+
+# Import database signals
+from database.signals import post_save_hote, pre_delete_hote
