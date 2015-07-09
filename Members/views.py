@@ -27,10 +27,12 @@ class CreateMemberView(CookieWizardView):
 
         user = form_dict['5'].save()
         member.user_id = user.pk
+        member.approved = False
         member.save()
 
         router = form_dict['4'].save(commit=False)
         router.idmembre_id = member.pk
+        router.valid = False
         router.save()
 
 class UpdateMemberView(LoginRequiredMixin, UpdateView):
