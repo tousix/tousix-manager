@@ -10,7 +10,7 @@ class MemberChoiceField(forms.ChoiceField):
                  initial=None, help_text='', *args, **kwargs):
 
         super(MemberChoiceField, self).__init__(choices, required, widget, label, initial, help_text, *args, **kwargs)
-        query = Hote.objects.all()
+        query = Hote.objects.filter(valid=True)
         self.choices.append(("0", "ALL"))
 
         for member in query:
