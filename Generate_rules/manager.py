@@ -48,7 +48,7 @@ class Manager(object):
             groups_switch = groups.groups[switch.idswitch]
             db_groups = []
             for group in groups_switch:
-                db_groups.append(Regles(idswitch=switch, typeregle="Group", regle=json.dumps(group)).save())
+                db_groups.append(Regles(idswitch=switch, typeregle="Group", regle=json.dumps(group)))
             Regles.objects.bulk_create(db_groups)
 
     def call_managers(self, dpid, peers):
