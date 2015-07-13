@@ -3,6 +3,9 @@ __author__ = 'remy'
 
 
 class groups(object):
+    """
+    This class has the same purpose as the configuration class.
+    """
     groups = {
         2221123978211977908: [
             {"dpid": 2221123978211977908,

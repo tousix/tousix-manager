@@ -9,6 +9,9 @@ from database.models import Regles
 
 
 class SelectionSwitchView(FormView):
+    """
+    Testing view for Generate_rules app
+    """
     form_class = SwitchChoiceForm
     template_name = "switches_list.html"
 

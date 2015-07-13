@@ -9,8 +9,15 @@ from Generate_rules.Statistics.manager import Manager as Statistics
 import json
 
 class Manager(object):
-
+    """
+    Main class for managing the core of Generate_rues app
+    """
     def get_peers(self, switch):
+        """
+        This method creates a list of peers seen by the given switch (only valid peers)
+        :param switch: Switch model
+        :return list(Peer): Peer array
+        """
         hotes = Hote.objects.filter(valid=True)
         peers = []
         for hote in hotes:
@@ -33,7 +40,11 @@ class Manager(object):
         return peers
 
     def create_rules(self, switches):
-
+        """
+        Insert into the database a new set of rules generated .
+        :param switches: list(Switch)
+        :return:
+        """
         for switch in switches:
             peers = self.get_peers(switch)
             rules = self.call_managers(switch.idswitch, peers)
@@ -52,6 +63,12 @@ class Manager(object):
             Regles.objects.bulk_create(db_groups)
 
     def call_managers(self, dpid, peers):
+        """
+        Method for calling managgers of other modules.
+        :param dpid: Target DPID
+        :param peers: LIst Peer
+        :return:
+        """
         rules = []
 
         production = Production()

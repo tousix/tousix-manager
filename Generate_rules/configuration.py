@@ -3,7 +3,10 @@ __author__ = 'remy'
 
 
 class configuration(object):
-
+    """
+    This cclass is intended for replacing the configuration file of the original program.
+    It contains all the parameters needed for the exectution of the application.
+    """
     enabled = {
         "Production": {
            "Umbrella": {
