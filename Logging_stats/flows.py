@@ -2,8 +2,7 @@
 __author__ = 'remy'
 
 import logging
-from database.models import Flux, Stats
-from django.utils.timezone import now
+from database.models import Flux, Stats, Switch
 
 LOG = logging.getLogger("Logging_stats")
 
@@ -12,14 +11,15 @@ class FlowProcess(object):
         datas = []
         for key, value in request.items():
             LOG.info("Stats recieved from : " + key)
-            # TODO Verify if switch is in the database
 
-            for stat in value:
-                data = {"dpid": key}
-                self.decode_flux(data, stat)
-                self.decode_data(data, stat)
-                datas.append(data)
-        self.save_stat(datas)
+            # Verify if the switch is in the database
+            if Switch.objects.filter(pk=key).exists():
+                for stat in value:
+                    data = {"dpid": key}
+                    self.decode_flux(data, stat)
+                    self.decode_data(data, stat)
+                    datas.append(data)
+            self.save_stat(datas)
 
     def decode_data(self, data, stat):
         data['bytes'] = stat.get('byte_count')
@@ -62,8 +62,7 @@ class FlowProcess(object):
                 return "ICMPv6"
 
     def save_stat(self, datas):
-        time = now()
         stats = []
         for data in datas:
-            stats.append(Stats(time=time, bytes=data.get('bytes'), packets=data.get('packets'), idflux_id=data.get('flux')))
+            stats.append(Stats(bytes=data.get('bytes'), packets=data.get('packets'), idflux_id=data.get('flux')))
         Stats.objects.bulk_create(stats)
