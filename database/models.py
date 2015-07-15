@@ -165,7 +165,7 @@ class Regles(models.Model):
 
 
 class Stats(models.Model):
-    time = models.DateTimeField(db_column='Time', auto_now_add=True)  # Field name made lowercase.
+    time = models.DateTimeField(db_column='Time', null=False)  # Field name made lowercase.
     bytes = models.BigIntegerField(db_column='Bytes', blank=True, null=True)  # Field name made lowercase.
     packets = models.BigIntegerField(db_column='Packets', blank=True, null=True)  # Field name made lowercase.
     idflux = models.ForeignKey(Flux, to_field='idflux', db_column='idFlux')  # Field name made lowercase.
