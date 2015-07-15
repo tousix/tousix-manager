@@ -60,9 +60,3 @@ class FluxSelectionForm(SourceForm, DestinationForm, TypeForm, UnitForm, PeriodF
 
 class RestrictedFluxSelectionForm(PeriodFrom, TypeForm, UnitForm):
     pass
-
-
-
-
-
-

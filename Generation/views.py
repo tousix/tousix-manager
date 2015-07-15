@@ -13,7 +13,7 @@ class SelectionMemberView(FormView):
     template_name = "members_list.html"
 
     def form_valid(self, form):
-        members = form.get_selected()
+        members = form.get_selected().filter(approved=True)
         data = render_conf_members(self.request, members)
         return render(self.request, "members_list.html", context=data)
 
