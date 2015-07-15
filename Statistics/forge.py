@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 __author__ = 'remy'
-from django.db.models import Max
+from django.db.models import Sum
 from django.utils.timezone import timedelta, now
 
 from database.models import Flux, Stats
@@ -12,7 +12,7 @@ class forgeData(object):
         query = self.forge_query(pk, period)
         return self.forge_data(query, unit)
 
-    def get_flux_id(self, source=0, destination=0, flux_type="IPv4"):
+    def get_flux_id(self, source="0", destination="0", flux_type="IPv4"):
 
         query = Flux.objects.all()
 
@@ -43,21 +43,21 @@ class forgeData(object):
         elif period == "year":
             query = query.filter(time__gte=now() - timedelta(days=366))
 
-        query = query.order_by("-time")
+        query = query.order_by("time")
 
-        query = query.values("time").annotate(bytes=Max('bytes'), packets=Max('packets'))
+        query = query.values("time").annotate(bytes=Sum('bytes'), packets=Sum('packets'))
         return query
 
     def forge_data(self, stats, unit='bytes'):
         data_list = []
         for index, stat in list(enumerate(stats)):
             try:
-                previous = stats[index + 1]
+                next = stats[index + 1]
             except IndexError:
                 break
 
-            value = ((stat.get(unit) - previous.get(unit)) / self.diff_seconds(previous.get('time'), stat.get('time')))
-            data = {'time': stat.get('time'),
+            value = ((next.get(unit) - stat.get(unit)) / self.diff_seconds(next.get('time'), stat.get('time')))
+            data = {'time': next.get('time'),
                     'value': int(value)}
             data_list.append(data)
         return data_list
