@@ -3,6 +3,7 @@ __author__ = 'remy'
 
 import logging
 from database.models import Flux, Stats, Switch
+from django.utils.timezone import now
 
 LOG = logging.getLogger("Logging_stats")
 
@@ -63,6 +64,7 @@ class FlowProcess(object):
 
     def save_stat(self, datas):
         stats = []
+        time = now()
         for data in datas:
-            stats.append(Stats(bytes=data.get('bytes'), packets=data.get('packets'), idflux_id=data.get('flux')))
+            stats.append(Stats(time=time, bytes=data.get('bytes'), packets=data.get('packets'), idflux_id=data.get('flux')))
         Stats.objects.bulk_create(stats)
