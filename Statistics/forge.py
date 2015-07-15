@@ -58,7 +58,7 @@ class forgeData(object):
 
             value = ((stat.get(unit) - previous.get(unit)) / self.diff_seconds(previous.get('time'), stat.get('time')))
             data = {'time': stat.get('time'),
-                    'value': abs(value)}
+                    'value': int(value)}
             data_list.append(data)
         return data_list
 

@@ -14,5 +14,6 @@ class JSONResponseMixin(object):
     def refactor_json(self, context):
         for data in context:
             if isinstance(data.get('time'), datetime):
-                data['time'] = data.get('time').isoformat()
+                # Remove microseconds
+                data['time'] = data['time'].replace(microsecond=0).isoformat()
         return context

@@ -16,6 +16,7 @@
 <script type="text/javascript" src="{% static "js/d3.js" %}"></script>
 <script type="text/javascript" src="{% static "js/metricsgraphics.js" %}"></script>
 <script type="text/javascript">
+
     function FormChanged(dataForm){
         var data_serialized = $("#Fluxpost").serialize();
         var period = dataForm.elements['id_period'].value;
@@ -48,6 +49,7 @@
             y_accessor: "value",
             x_accessor: "time",
             missing_is_zero: true,
+            missing_text: 'Aucune donnée disponible pour ce flux',
             missing_resolution: miss_resolution,
             height: 200,
             right: 40,
@@ -70,6 +72,7 @@
             target: '#Chart'
         });
     }
+    jQuery.post("{% url "charts" %}", $("#Fluxpost").serialize(), function datarecieved(data){dataUpdated(data,"year","bytes");}, "json");
 </script>
 </body>
 </html>
