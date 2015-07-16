@@ -66,5 +66,5 @@ class FlowProcess(object):
         stats = []
         time = now()
         for data in datas:
-            stats.append(Stats(time=time, bytes=data.get('bytes'), packets=data.get('packets'), idflux_id=data.get('flux')))
+            stats.append(Stats(time=time, bytes=data.get('bytes'), packets=data.get('packets'), idflux_id=data.get('flux'), idswitch_id=data.get("dpid")))
         Stats.objects.bulk_create(stats)
