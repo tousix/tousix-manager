@@ -169,6 +169,7 @@ class Stats(models.Model):
     bytes = models.BigIntegerField(db_column='Bytes', blank=True, null=True)  # Field name made lowercase.
     packets = models.BigIntegerField(db_column='Packets', blank=True, null=True)  # Field name made lowercase.
     idflux = models.ForeignKey(Flux, to_field='idflux', db_column='idFlux')  # Field name made lowercase.
+    idswitch = models.ForeignKey(Switch, to_field='idswitch', db_column='idSwitch', null=False)
 
     class Meta:
         db_table = 'Stats'
