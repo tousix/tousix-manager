@@ -12,29 +12,30 @@
     <form id="MembersForm" method="post">
         {% csrf_token %}
         {% bootstrap_form form %}
-        {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
-    <form id="TechnicalForm" method="post">
+    {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+        </form>
+        <form id="TechnicalForm" method="post">
         {% csrf_token %}
         {% bootstrap_form technical %}
             {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+    </form>
     <form id="NocForm" method="post">
+        {% csrf_token %}
         {% bootstrap_form noc %}
-        {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+            {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
     </form>
         <form id="BillingForm" method="post">
+        {% csrf_token %}
         {% bootstrap_form billing %}
-        {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+                {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
     </form>
-    {% for host in hosts %}
-    <form id="RouterForm" method="post">
+            <form id="RouterForm" method="post">
         {% csrf_token %}
-        {% bootstrap_form host %}
+        {% bootstrap_form router %}
         {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
-    </form>
-    {% endfor %}
-    <form id="UserPasswordForm" method="post">
+                <form id="PasswordrForm" method="post">
         {% csrf_token %}
-        {% bootstrap_form user %}
+        {% bootstrap_form password %}
         {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
     </form>
 </body>

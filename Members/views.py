@@ -46,27 +46,11 @@ class UpdateMemberView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(UpdateMemberView, self).get_context_data(**kwargs)
-        membre = self.get_object()
-
-        if membre.technical is None:
-            context['technical'] = TechnicalForm(prefix="technical")
-        else:
-            context['technical'] = TechnicalForm(instance=membre.technical, prefix="technical")
-        if membre.noc is None:
-            context['noc'] = NOCForm(prefix="noc")
-        else:
-            context['noc'] = NOCForm(instance=membre.noc, prefix="noc")
-        if membre.billing is None:
-            context['billing'] = BillingForm(prefix="billing")
-        else:
-            context['billing'] = BillingForm(instance=membre.billing, prefix="billing")
-        hosts = Hote.objects.filter(idmembre=membre)
-        context['hosts'] = []
-        i = 0
-        for host in hosts:
-            context['hosts'].append(RouterForm(instance=host, prefix="host"+str(i)))
-            i += 1
-        context['user'] = PasswordChangeForm(user=self.request.user, prefix="user")
+        context["technical"] = TechnicalForm(instance=self.get_object().technical)
+        context["noc"] = NOCForm(instance=self.get_object().noc)
+        context["billing"] = BillingForm(instance=self.get_object().billing)
+        context["router"] = RouterForm(instance=Hote.objects.filter(idmembre=self.get_object()).first())
+        context["password"] = PasswordChangeForm(self.request.user)
         return context
 
     def post(self, request, *args, **kwargs):
