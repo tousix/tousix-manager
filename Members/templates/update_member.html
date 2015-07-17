@@ -33,7 +33,8 @@
         {% csrf_token %}
         {% bootstrap_form router %}
         {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
-                <form id="PasswordrForm" method="post">
+            </form>
+    <form id="PasswordrForm" method="post">
         {% csrf_token %}
         {% bootstrap_form password %}
         {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
