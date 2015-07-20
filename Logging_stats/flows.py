@@ -57,7 +57,7 @@ class FlowProcess(object):
         elif match.get("dl_type") == 2048:
             return "IPv4"
         elif match.get("dl_type") == 34525:
-            if "ipv6_src" in match:
+            if "icmpv6_type" not in match:
                 return "IPv6"
             else:
                 return "ICMPv6"
