@@ -25,20 +25,20 @@ class IPv6(Interface):
         rule = {"priority": self.find_priority("IPv6"),
                 "cookie": self.forge_cookie(peer_src.idPeer, peer_dst.idPeer),
                 "table_id": self.set_table_id(),
-                "match": self.get_match(peer_src.IPv6, peer_dst.IPv6),
+                "match": self.get_match(peer_src.Mac, peer_dst.Mac),
                 "dpid": dpid}
         return rule
 
-    def get_match(self, ip_src, ip_dst):
+    def get_match(self, mac_src, mac_dst):
         """
         Create match object.
-        :param ip_dst: Destination IPv6 address
-        :type ip_dst: str
-        :param ip_src: Source IPv6 address
-        :type ip_src: str
+        :param mac_dst: Destination Mac address
+        :type mac_dst: str
+        :param mac_src: Source Mac address
+        :type mac_src: str
         :return: Match object
         """
         match = {"dl_type": 34525,
-                 "ipv6_src": ip_src,
-                 "ipv6_dst": ip_dst}
+                 "dl_src": mac_src,
+                 "dl_dst": mac_dst}
         return match
