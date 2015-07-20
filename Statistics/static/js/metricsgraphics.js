@@ -98,8 +98,7 @@ MG.data_graphic = function(args) {
     var defaults = {
         missing_is_zero: false,                // if true, missing values will be treated as zeros
         missing_is_hidden: false,              // if true, missing values will appear as broken segments
-        missing_is_hidden_accessor: null,      // the accessor that determines the boolean value for missing data points
-        missing_resolution: 'day',             // Set time resolution for missing points
+        missing_is_hidden_accessor: null, // the accessor that determines the boolean value for missing data points
         legend: '' ,                           // an array identifying the labels for a chart's lines
         legend_target: '',                     // if set, the specified element is populated with a legend
         error: '',                             // if set, a graph will show an error icon and log the error to the console
@@ -133,6 +132,7 @@ MG.data_graphic = function(args) {
         x_accessor: 'date',
         xax_units: '',
         x_label: '',
+        x_sort: true,
         x_axis: true,
         y_axis: true,
         y_accessor: 'value',
@@ -1381,22 +1381,22 @@ function x_axis_categorical(args) {
         .attr('text-anchor', 'middle')
         .text(String);
 
-    if (args.rotate_x_labels) {
-        labels.attr({
-            dy: 0,
-            'text-anchor': 'end',
-            transform: function() {
-                var elem = d3.select(this);
-                return 'rotate('+args.rotate_x_labels+' '+elem.attr('x')+','+elem.attr('y')+')';
-            }
-        });
-    }
-
     if (args.truncate_x_labels) {
         labels.each(function(d, idx) {
             var elem = this,
                 width = args.scales.X.rangeBand();
             truncate_text(elem, d, width);
+        });
+    }
+
+    if (args.rotate_x_labels) {
+        labels.attr({
+            dy: 0,
+            'text-anchor': (args.rotate_x_labels + 360) % 360 > 180 ? 'end' : 'start',
+            transform: function() {
+                var elem = d3.select(this);
+                return 'rotate('+args.rotate_x_labels+' '+elem.attr('x')+','+elem.attr('y')+')';
+            }
         });
     }
 
@@ -4495,7 +4495,7 @@ function raw_data_transformation(args) {
     }
 
     //sort x-axis data
-    if (args.chart_type === 'line') {
+    if (args.chart_type === 'line' && args.x_sort === true) {
         for (var i = 0; i < args.data.length; i++) {
             args.data[i].sort(function(a, b) {
                 return a[args.x_accessor] - b[args.x_accessor];
@@ -4543,27 +4543,13 @@ function process_line(args) {
             //initialize our new array for storing the processed data
             var processed_data = [];
 
-            //we'll be starting from the time step after our first date
-            var start_date = null;
-            switch(args.missing_resolution.toLowerCase())
-            {
-                case "second":
-                    start_date = MG.clone(first[args.x_accessor]).setSeconds(first[args.x_accessor].getSeconds() + 1);
-                    break;
-                case "minute":
-                    start_date = MG.clone(first[args.x_accessor]).setMinutes(first[args.x_accessor].getMinutes() + 1);
-                    break;
-                case "hour":
-                    start_date = MG.clone(first[args.x_accessor]).setHours(first[args.x_accessor].getHours() + 1);
-                    break;
-                case "day":
-                    start_date = MG.clone(first[args.x_accessor]).setDate(first[args.x_accessor].getDate() + 1);
-                    break;
-            }
+            //we'll be starting from the day after our first date
+            var start_date = MG.clone(first[args.x_accessor]).setDate(first[args.x_accessor].getDate() + 1);
 
             //if we've set a max_x, add data points up to there
             var from = (args.min_x) ? args.min_x : start_date;
             var upto = (args.max_x) ? args.max_x : last[args.x_accessor];
+
             time_frame = mg_get_time_frame((upto-from)/1000);
 
             if (time_frame == 'default' && args.missing_is_hidden_accessor == null) {
@@ -4571,38 +4557,42 @@ function process_line(args) {
                     var o = {};
                     d.setHours(0, 0, 0, 0);
 
-                    //add the first date item (judge me not, world)
+                    //add the first date item
                     //we'll be starting from the day after our first date
                     if (Date.parse(d) === Date.parse(new Date(start_date))) {
                         processed_data.push(MG.clone(args.data[i][0]));
                     }
 
-                        //check to see if we already have this date in our data object
-                        var existing_o = null;
-                        args.data[i].forEach(function(val, i) {
-                            if (Date.parse(val[args.x_accessor]) <= Date.parse(new Date(d)) && Date.parse(val[args.x_accessor]) > Date.parse(date_diff)) {
-                                existing_o = val;
+                    //check to see if we already have this date in our data object
+                    var existing_o = null;
+                    args.data[i].forEach(function(val, i) {
+                        if (Date.parse(val[args.x_accessor]) === Date.parse(new Date(d))) {
+                            existing_o = val;
 
-                                return false;
-                            }
-                        });
+                            return false;
+                        }
+                    });
 
-                        //if we don't have this date in our data object, add it and set it to zero
-                        if (!existing_o) {
-                            o[args.x_accessor] = new Date(d);
-                            o[args.y_accessor] = 0;
-                            o['_missing'] = true; //we want to distinguish between zero-value and missing observations
-                            processed_data.push(o);
-                        }
-                        //if the data point has, say, a 'missing' attribute set or if its
-                        //y-value is null identify it internally as missing
-                        else if (existing_o[args.missing_is_hidden_accessor]
-                                || existing_o[args.y_accessor] == null
-                            ) {
-                            existing_o['_missing'] = true;
-                            processed_data.push(existing_o);
-                        }
+                    //if we don't have this date in our data object, add it and set it to zero
+                    if (!existing_o) {
+                        o[args.x_accessor] = new Date(d);
+                        o[args.y_accessor] = 0;
+                        o['_missing'] = true; //we want to distinguish between zero-value and missing observations
+                        processed_data.push(o);
                     }
+                    //if the data point has, say, a 'missing' attribute set or if its
+                    //y-value is null identify it internally as missing
+                    else if (existing_o[args.missing_is_hidden_accessor]
+                            || existing_o[args.y_accessor] == null
+                        ) {
+                        existing_o['_missing'] = true;
+                        processed_data.push(existing_o);
+                    }
+                    //otherwise, use the existing object for that date
+                    else {
+                        processed_data.push(existing_o);
+                    }
+                }
             }
             else {
                 for (var j = 0; j < args.data[i].length; j += 1) {
@@ -4616,6 +4606,7 @@ function process_line(args) {
             args.data[i] = processed_data;
         }
     }
+
     return this;
 }
 
@@ -5471,29 +5462,6 @@ function wrap_text(text, width, token, tspanAttrs) {
 }
 
 MG.wrap_text = wrap_text;
-
-/**
- * Increment timestep, depending of the  missing_resolution arg
- * @param dateobj Date to increment
- * @param missing_resolution
- */
-function modify_timestep(dateobj, missing_resolution){
-    switch(missing_resolution.toLowerCase())
-    {
-        case "second":
-            return dateobj.setSeconds(dateobj.getSeconds() + 1);
-            break;
-        case "minute":
-            return dateobj.setMinutes(dateobj.getMinutes() + 1);
-            break;
-        case "hour":
-            return dateobj.setHours(dateobj.getHours() + 1);
-            break;
-        case "day":
-            return dateobj.setDate(dateobj.getDate() + 1);
-            break;
-    }
-}
 
 //call this to add a warning icon to a graph and log an error to the console
 function error(args) {
