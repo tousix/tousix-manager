@@ -7,11 +7,17 @@ from database.models import Membre
 
 
 class MembersMultipleSelectField(forms.ModelMultipleChoiceField):
+    """
+    ModelMultipleChoiceField with modified label.
+    """
     def label_from_instance(self, obj):
         return "%s" % obj.nommembre
 
 
 class MembersChoiceForm(forms.Form):
+    """
+    Form for members selection, excluding the TouIX member
+    """
     members = MembersMultipleSelectField(widget=forms.CheckboxSelectMultiple(),
                                          queryset=Membre.objects.exclude(nommembre="TouIX"))
 

@@ -5,15 +5,36 @@ from django.utils.timezone import timedelta, now
 
 from database.models import Flux, Stats, Switch
 
-class forgeData(object):
 
+class forgeData(object):
+    """
+    Class for handling statistics requests.
+    The output model for dataset is the following (Python objects)::
+
+        [{'time': datetime,
+          'value': integer},
+          {'time': datetime,
+          'value': integer},
+          ...]
+    The input in the dict is not guaranteed to be chronological.
+    """
     # delta time time between first and last stat value of the same request
     time_interval = 5
+    # initial time value
     time_first_value = now()
 
-    def get_data(self, source, destination, flux_type, period, unit):
+    def get_data(self, source, destination, flow_type, period, unit):
+        """
+        Main method for construct the dataset based on user input.
+        :param source: source host ID
+        :param destination: destination host ID
+        :param flow_type: Flow type
+        :param period: Time period asked by the user
+        :param unit: Output unit (packets or bytes)
+        :return:
+        """
         self.now = now()
-        pk = self.get_flux_id(source, destination, flux_type)
+        pk = self.get_flow_id(source, destination, flow_type)
         switches = Switch.objects.all()
         datas_non_aggregated = []
         # get statistics per switch (sum on same time values)
@@ -22,7 +43,7 @@ class forgeData(object):
             data = self.forge_data(query, unit)
             datas_non_aggregated.extend(data)
 
-        # only one flux to extract => no need for supplementary aggregations
+        # only one flow to extract => no need for supplementary aggregations
         if pk.count() == 1:
             return datas_non_aggregated
 
@@ -49,11 +70,17 @@ class forgeData(object):
                 value = data["value"]
         return datas_aggregated
 
-    def get_flux_id(self, source="0", destination="0", flux_type="IPv4"):
-
+    def get_flow_id(self, source="0", destination="0", flow_type="IPv4"):
+        """
+        Retrieve all the flow based on user input.
+        :param source: source host ID
+        :param destination: destination host ID
+        :param flow_type: Flow type
+        :return:
+        """
         query = Flux.objects.all()
-        # flux types with no sources have null value on source column
-        if flux_type == "ICMPv6" or flux_type == "ARP":
+        # flow types with no sources have null value on source column
+        if flow_type == "ICMPv6" or flow_type == "ARP":
             query = query.filter(hote_src_id__isnull=True)
 
         elif source is not "0":
@@ -62,15 +89,22 @@ class forgeData(object):
         if destination is not "0":
             query = query.filter(hote_dst_id=destination)
 
-        query = query.filter(type=flux_type)
+        query = query.filter(type=flow_type)
         liste_pk = query.values('idflux')
         return liste_pk
 
     def forge_query(self, pk, dpid, period='day'):
+        """
+        Create Django query and retrieve values.
+        :param pk:
+        :param dpid:
+        :param period:
+        :return:
+        """
         liste_pk = []
         for primary in pk:
             liste_pk.append(primary.get('idflux'))
-        # filter stats by flux and switch origin
+        # filter stats by flow and switch origin
         query = Stats.objects.filter(idflux__in=liste_pk).filter(idswitch_id=dpid)
 
         query = query.filter(time__gte=self.get_start_time(period))
@@ -78,12 +112,18 @@ class forgeData(object):
         # needed for conversion into average value
         query = query.order_by("time")
 
-        # sum on all the flux with the same time
+        # sum on all the flow with the same time
         query = query.values("time").annotate(bytes=Sum('bytes'), packets=Sum('packets'))
 
         return query
 
     def forge_data(self, stats, unit='bytes'):
+        """
+        Calculate bandwidth speed.
+        :param stats:
+        :param unit:
+        :return:
+        """
         data_list = []
         # create a special list for retrieve the next value
         for index, stat in list(enumerate(stats)):
@@ -107,6 +147,12 @@ class forgeData(object):
         return data_list
 
     def diff_seconds(self, datetime1, datetime2):
+        """
+        Get the difference between two datetimes in seconds.
+        :param datetime1:
+        :param datetime2:
+        :return:
+        """
         if datetime2 >= datetime1:
             time_diff = datetime2 - datetime1
         else:
@@ -114,6 +160,11 @@ class forgeData(object):
         return time_diff.total_seconds()
 
     def get_start_time(self, period="day"):
+        """
+        Returns a datetime for query calculations.
+        :param period:
+        :return:
+        """
         if period == "hour":
             return self.now - timedelta(hours=1)
         elif period == "day":

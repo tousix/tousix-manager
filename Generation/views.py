@@ -9,6 +9,10 @@ from database.models import Hote
 
 
 class SelectionMemberView(FormView):
+    """
+    This view is only used for testing purposes.
+    You can go to the admin panel to use this app.
+    """
     form_class = MembersChoiceForm
     template_name = "members_list.html"
 
@@ -17,7 +21,14 @@ class SelectionMemberView(FormView):
         data = render_conf_members(self.request, members)
         return render(self.request, "members_list.html", context=data)
 
+
 def render_conf_members(request, members):
+    """
+    Render the BIRD config files with the members selected
+    :param request: HTTP request
+    :param members: List of member model objects
+    :return:
+    """
     peers = []
 
     for member in members:
@@ -35,7 +46,14 @@ def render_conf_members(request, members):
     return {"ipv4": render_ipv4.content,
             "ipv6": render_ipv6.content}
 
+
 def render_conf_hosts(request, hosts):
+    """
+    Render the BIRD config files with the hosts selected
+    :param request: HTTP request
+    :param hosts: List of hosts model objects
+    :return:
+    """
     peers = []
     for host in hosts:
         peer = {"member": host.idmembre.nommembre,

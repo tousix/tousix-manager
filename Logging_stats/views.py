@@ -9,12 +9,15 @@ from django.shortcuts import HttpResponse
 
 import json
 
-class RecieveStatsForm(View):
 
+class RecieveStatsForm(View):
+    """
+    View for statistics reception, coming from the controller.
+    """
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         if request.method == "POST":
             data = json.loads(request.body.decode(encoding='utf-8'))
             process = FlowProcess()
-            process.decodeRequest(data)
+            process.decode_request(data)
             return HttpResponse(status=200)

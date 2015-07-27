@@ -7,6 +7,9 @@ from Authentication.LoginMixin import LoginRequiredMixin
 
 
 class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
+    """
+    View for display network statistics (authenticated users only)
+    """
     template_name = 'stats_list.html'
     form_class = FluxSelectionForm
 
@@ -16,7 +19,12 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
 
         return JSONResponseMixin.render_to_response(self, data)
 
+
 class RestrictedStats(FormView, JSONResponseMixin):
+    """
+    View for display network statistics (non-authenticated users only)
+    This view is the same as StatsMembersList, but with restricted options.
+    """
     template_name = 'restricted_chart.html'
     form_class = RestrictedFluxSelectionForm
 

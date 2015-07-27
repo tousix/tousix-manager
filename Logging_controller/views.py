@@ -16,9 +16,18 @@ LOG = logging.getLogger("Logging_controller")
 
 
 class AsyncEventView(View):
-
+    """
+    View for the reception of asynchronous events coming from the controller.
+    """
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
+        """
+        Direct input in the database , depending of the URL.
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         base_path = "/event/"
         if request.method == "POST":
             path = request.path
@@ -47,5 +56,8 @@ class AsyncEventView(View):
 
 
 class ShowEventView(ListView):
+    """
+    Testing view for log display (can be done nox in the admin panel).
+    """
     model = LogSwitch
     template_name = 'log_event.html'

@@ -9,10 +9,10 @@ from django.utils.decorators import method_decorator
 
 class LoginRequiredMixin(object):
     """
-    This a Mixin  created for simplifying the code prensent in the other views.
+    This a Mixin created for simplifying the code present in the other views.
     It only adds the decorator in the subclass.
     Warning: You need to inherit this class first among the others, otherwise it will be redefined by other views,
-    thus erase the modification of the method.
+    thus nullify the modification of the method.
     """
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
