@@ -31,7 +31,7 @@ class HoteAdmin(admin.ModelAdmin):
 
 @admin.register(Port)
 class PortAdmin(admin.ModelAdmin):
-    list_display = ["switch", "numport", "typeport", "usable"]
+    list_display = ["idport", "switch", "numport", "typeport", "usable"]
     inlines = [HoteInLine]
     exclude = ["idswitch"]
     list_filter = ["idswitch__nomswitch"]
