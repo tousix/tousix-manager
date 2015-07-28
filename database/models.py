@@ -24,7 +24,7 @@ class Contact(models.Model):
     nomcontact = models.CharField(db_column='NomContact', max_length=50, blank=True, null=True, verbose_name="Nom")  # Field name made lowercase.
     prenomcontact = models.CharField(db_column='PrenomContact', max_length=50, blank=True, null=True, verbose_name="Prénom")  # Field name made lowercase.
     adressecontact = models.CharField(db_column='AdresseContact', max_length=300, blank=True, null=True, verbose_name="Adresse")  # Field name made lowercase.
-    mailcontact = models.CharField(db_column='MailContact', max_length=100, blank=True, null=True, verbose_name="Mail")  # Field name made lowercase.
+    mailcontact = models.EmailField(db_column='MailContact', max_length=100, blank=True, null=True, verbose_name="Mail")  # Field name made lowercase.
     telcontact = models.CharField(db_column='TelContact', max_length=14, blank=True, null=True, verbose_name="Téléphone")  # Field name made lowercase.
 
     class Meta:
