@@ -66,5 +66,5 @@ class ReglesField(admin.ModelAdmin):
     readonly_fields = ['idregle', 'typeregle', 'regle', 'idswitch']
     list_display = ['switch', 'regle', 'typeregle']
     search_fields = ['regle']
-    list_filter = ['idswitch__nomswitch', "typeregle"]
+    list_filter = ['idswitch__nomswitch', "typeregle", "source__nomhote", "destination__nomhote"]
     actions = [get_rules_list]

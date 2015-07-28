@@ -30,21 +30,29 @@ class Manager(object):
             if peer_dst.Egress is True:
                 if conf.enabled["Stats"].get('ICMPv6') is True:
                     rule = {"module": "Statistics_ICMPv6",
-                            "rule": icmpv6.create_stat(dpid, None, peer_dst)}
+                            "rule": icmpv6.create_stat(dpid, None, peer_dst),
+                            "source": None,
+                            "destination": peer_dst.idPeer}
                     rules.append(rule)
                 if conf.enabled["Stats"].get('ARP') is True:
                     rule = {"module": "Statistics_ARP",
-                            "rule": arp.create_stat(dpid, None, peer_dst)}
+                            "rule": arp.create_stat(dpid, None, peer_dst),
+                            "source": None,
+                            "destination": peer_dst.idPeer}
                     rules.append(rule)
 
                 for peer_src in peers:
                     if peer_src != peer_dst:
                         if conf.enabled["Stats"].get('IPv6') is True:
                             rule = {"module": "Statistics_IPv6",
-                                    "rule": ipv6.create_stat(dpid, peer_src, peer_dst)}
+                                    "rule": ipv6.create_stat(dpid, peer_src, peer_dst),
+                                    "source": peer_src.idPeer,
+                                    "destination": peer_dst.idPeer}
                             rules.append(rule)
                         if conf.enabled["Stats"].get('IPv4') is True:
                             rule = {"module": "Statistics_IPv4",
-                                    "rule": ipv4.create_stat(dpid, peer_src, peer_dst)}
+                                    "rule": ipv4.create_stat(dpid, peer_src, peer_dst),
+                                    "source": peer_src.idPeer,
+                                    "destination": peer_dst.idPeer}
                             rules.append(rule)
         return rules

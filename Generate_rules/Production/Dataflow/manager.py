@@ -9,5 +9,7 @@ class Manager(interface):
     """
     def create_rules(self, dpid, peer):
         rule = [{"module": "Production_Dataflow",
-                "rule": self.create_dataflow(dpid, peer)}]
+                "rule": self.create_dataflow(dpid, peer),
+                 "source": None,
+                 "destination": peer.idPeer}]
         return rule

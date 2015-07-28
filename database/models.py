@@ -171,6 +171,8 @@ class Regles(models.Model):
     typeregle = models.CharField(db_column='TypeRegle', max_length=40, blank=True, null=True)  # Field name made lowercase.
     regle = models.TextField(db_column='Regle', blank=True, null=True)  # Field name made lowercase.
     idswitch = models.ForeignKey(Switch, to_field='idswitch', db_column='idSwitch')  # Field name made lowercase.
+    source = models.ForeignKey(Hote, related_name="source", verbose_name="Source", null=True)
+    destination = models.ForeignKey(Hote, related_name="destination", verbose_name="Destination", null=True)
 
     def switch(self):
         return self.idswitch.nomswitch
