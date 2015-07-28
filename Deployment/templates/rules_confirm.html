@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<body>
+
+<textarea>
+    {% for regle in rules %}
+    {{ regle }}
+    {% endfor %}
+</textarea>
+<form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons submit='Confirmer' cancel="Annuler" %}{% endbuttons %}
+</form>
+</body>
+</html>

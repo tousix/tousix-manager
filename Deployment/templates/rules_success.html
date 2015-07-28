@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<body>
+Statistiques HTTP:<br/>
+Requêtes réussies : {{ success }}<br/>
+Requètes échouées : {{ fails }}<br/>
+
+Il se peut que l'application sur les switchs ne soit pas effectif, veuillez consulter les éventuels logs du contrôleur.
+</body>
+</html>

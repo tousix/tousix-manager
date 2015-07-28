@@ -13,11 +13,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from database.fields import PositiveBigIntegerField, MACAddressField
 
+
 class ConnectionType(models.Model):
     connection_type = models.CharField(max_length=20, null=False)
 
     class Meta:
         db_table = 'Connection_type'
+
 
 class Contact(models.Model):
     idcontact = models.AutoField(db_column='idContact', primary_key=True)  # Field name made lowercase.
@@ -30,6 +32,7 @@ class Contact(models.Model):
     class Meta:
         db_table = 'Contact'
 
+
 class Pop(models.Model):
     idpop = models.AutoField(db_column='idPOP', primary_key=True)  # Field name made lowercase.
     nompop = models.CharField(db_column='NomPOP', max_length=30, blank=True, null=True)  # Field name made lowercase.
@@ -37,6 +40,7 @@ class Pop(models.Model):
 
     class Meta:
         db_table = 'POP'
+
 
 class Membre(models.Model):
     idmembre = models.AutoField(db_column='idMembre', primary_key=True)  # Field name made lowercase.
@@ -56,6 +60,7 @@ class Membre(models.Model):
     class Meta:
         db_table = 'Membre'
 
+
 class Controleur(models.Model):
     idctrl = models.AutoField(db_column='IdCTRL', primary_key=True)  # Field name made lowercase.
     ipctrl = models.GenericIPAddressField(db_column='IPCTRL', blank=True, null=True)  # Field name made lowercase.
@@ -63,6 +68,7 @@ class Controleur(models.Model):
 
     class Meta:
         db_table = 'Contrôleur'
+
 
 class Switch(models.Model):
     idswitch = PositiveBigIntegerField(db_column='idSwitch', primary_key=True)  # Field name made lowercase.
@@ -72,6 +78,7 @@ class Switch(models.Model):
 
     class Meta:
         db_table = 'Switch'
+
 
 class LogSwitch(models.Model):
     idlog = models.AutoField(primary_key=True)
@@ -86,6 +93,7 @@ class LogSwitch(models.Model):
 
     class Meta:
         db_table = "SwitchLog"
+
 
 class Contorleswitch(models.Model):
     idctrl = models.ForeignKey(Controleur, to_field='idctrl', db_column='IdCTRL')  # Field name made lowercase.
@@ -110,6 +118,7 @@ class Port(models.Model):
 
     class Meta:
         db_table = 'Port'
+
 
 class Hote(models.Model):
     idhote = models.AutoField(db_column='IdHote', primary_key=True)  # Field name made lowercase.
@@ -145,6 +154,7 @@ class Hote(models.Model):
     class Meta:
         db_table = 'Hôte'
         unique_together = (('idhote', 'idmembre'),)
+
 
 class Flux(models.Model):
     idflux = models.AutoField(db_column='idFlux', primary_key=True)  # Field name made lowercase.
