@@ -2,7 +2,7 @@
 __author__ = 'remy'
 
 from django import forms
-from database.models import Hote, Port, Switch, Pop, Membre
+from database.models import Hote, Port, Switch, Pop, Membre, ConnectionType
 from django.forms.utils import ErrorList
 
 class PortChoiceField(forms.ModelChoiceField):
@@ -28,7 +28,8 @@ class HoteForm(forms.ModelForm):
                                              exclude(idport__in=(Hote.objects
                                                                  .exclude(idhote=self.instance.idhote)
                                                                  .values("idport")))
-            self.fields["idport"].initial = {self.instance.idport_id: self.instance.idport.string_description}
+            if self.instance.idport is not None:
+                self.fields["idport"].initial = {self.instance.idport_id: self.instance.idport.string_description}
 
     class Meta:
         model = Hote
@@ -49,8 +50,13 @@ class PopChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         return "%s" % obj.nompop
 
+class ConnexionChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return "%s" % obj.connection_type
+
 class MembreForm(forms.ModelForm):
     idpop = PopChoiceField(queryset=Pop.objects.all())
+    connexion_type = ConnexionChoiceField(queryset=ConnectionType.objects.all())
 
     class Meta:
         model = Membre

@@ -13,14 +13,19 @@ from django.db import models
 from django.contrib.auth.models import User
 from database.fields import PositiveBigIntegerField, MACAddressField
 
+class ConnectionType(models.Model):
+    connection_type = models.CharField(max_length=20, null=False)
+
+    class Meta:
+        db_table = 'Connection_type'
 
 class Contact(models.Model):
     idcontact = models.AutoField(db_column='idContact', primary_key=True)  # Field name made lowercase.
-    nomcontact = models.CharField(db_column='NomContact', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    prenomcontact = models.CharField(db_column='PrenomContact', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    adressecontact = models.CharField(db_column='AdresseContact', max_length=300, blank=True, null=True)  # Field name made lowercase.
-    mailcontact = models.CharField(db_column='MailContact', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    telcontact = models.IntegerField(db_column='TelContact', blank=True, null=True)  # Field name made lowercase.
+    nomcontact = models.CharField(db_column='NomContact', max_length=50, blank=True, null=True, verbose_name="Nom")  # Field name made lowercase.
+    prenomcontact = models.CharField(db_column='PrenomContact', max_length=50, blank=True, null=True, verbose_name="Prénom")  # Field name made lowercase.
+    adressecontact = models.CharField(db_column='AdresseContact', max_length=300, blank=True, null=True, verbose_name="Adresse")  # Field name made lowercase.
+    mailcontact = models.CharField(db_column='MailContact', max_length=100, blank=True, null=True, verbose_name="Mail")  # Field name made lowercase.
+    telcontact = models.CharField(db_column='TelContact', max_length=14, blank=True, null=True, verbose_name="Téléphone")  # Field name made lowercase.
 
     class Meta:
         db_table = 'Contact'
@@ -36,12 +41,12 @@ class Pop(models.Model):
 class Membre(models.Model):
     idmembre = models.AutoField(db_column='idMembre', primary_key=True)  # Field name made lowercase.
     user = models.OneToOneField(User, null=True)
-    nommembre = models.CharField(db_column='NomMembre', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    url = models.URLField(null=True)
+    nommembre = models.CharField(db_column='NomMembre', max_length=30, blank=True, null=True, verbose_name="Nom membre")  # Field name made lowercase.
+    url = models.URLField(null=True, verbose_name="Lien site web")
     statut = models.CharField(db_column='Statut', max_length=12, blank=True, null=True)  # Field name made lowercase.
-    asnumber = models.PositiveIntegerField(db_column='ASNumber')  # Field name made lowercase.
-    connexion_type = models.CharField(max_length=30, blank=True, null=True)
-    fqdn_host = models.CharField(max_length=30, default="Undefined")
+    asnumber = models.PositiveIntegerField(db_column='ASNumber', verbose_name="N°AS")  # Field name made lowercase.
+    connexion_type = models.ForeignKey(ConnectionType, blank=True, null=True, verbose_name="Type de connexion")
+    fqdn_host = models.CharField(max_length=30, default="Undefined", verbose_name="FQDN Routeur")
     idpop = models.ForeignKey(Pop, to_field='idpop', db_column='idPoP', null=True)
     billing = models.OneToOneField(Contact, to_field='idcontact', related_name='billing', parent_link=True, blank=True, null=True)
     noc = models.OneToOneField(Contact, to_field='idcontact', related_name='noc', parent_link=True, blank=True, null=True)
@@ -101,17 +106,17 @@ class Port(models.Model):
         return self.idswitch.nomswitch
 
     def string_description(self):
-        return "POP " + self.idswitch.idpop.nompop + ": " + self.idswitch.nomswitch + " port " + str(self.numport)
+            return "POP " + self.idswitch.idpop.nompop + ": " + self.idswitch.nomswitch + " port " + str(self.numport)
 
     class Meta:
         db_table = 'Port'
 
 class Hote(models.Model):
     idhote = models.AutoField(db_column='IdHote', primary_key=True)  # Field name made lowercase.
-    nomhote = models.CharField(db_column='NomHote', max_length=30, blank=True)  # Field name made lowercase.
-    machote = MACAddressField(db_column='MACHote', blank=True)  # Field name made lowercase.
-    ipv4hote = models.GenericIPAddressField(db_column='IPv4Hote')  # Field name made lowercase.
-    ipv6hote = models.GenericIPAddressField(db_column='IPv6Hote')  # Field name made lowercase.
+    nomhote = models.CharField(db_column='NomHote', max_length=30, blank=True, verbose_name="Nom routeur")  # Field name made lowercase.
+    machote = MACAddressField(db_column='MACHote', verbose_name="Addresse MAC")  # Field name made lowercase.
+    ipv4hote = models.GenericIPAddressField(db_column='IPv4Hote', verbose_name="Adresse IPv4", null=True)  # Field name made lowercase.
+    ipv6hote = models.GenericIPAddressField(db_column='IPv6Hote', verbose_name="Adresse IPv6", null=True)  # Field name made lowercase.
     idmembre = models.ForeignKey(Membre, to_field='idmembre', db_column='idMembre')  # Field name made lowercase.
     idport = models.ForeignKey(Port, to_field='idport', db_column='idPort', blank=True, null=True)  # Field name made lowercase.
     valid = models.BooleanField(default=False)

@@ -2,48 +2,55 @@
 __author__ = 'remy'
 
 from django import forms
-from database.models import Membre, Contact, Hote
+from database.models import Membre, Contact, Hote, ConnectionType
 from django.contrib.auth.forms import UserCreationForm
+from localflavor.fr.forms import FRPhoneNumberField
+
+
+class ConnexionChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return "%s" % obj.connection_type
+
 
 class MemberForm(forms.ModelForm):
+    connexion_type = ConnexionChoiceField(queryset=ConnectionType.objects.all(), empty_label=None)
+
     class Meta:
         model = Membre
         fields = ['nommembre', 'url', 'asnumber', 'connexion_type', 'fqdn_host']
 
+
 class BillingForm(forms.ModelForm):
-    empty = forms.BooleanField(label="Laisser vide ?", required=False)
+
+    telcontact = FRPhoneNumberField()
 
     class Meta:
         model = Contact
-        fields = ['nomcontact', 'prenomcontact', 'adressecontact', 'mailcontact', 'telcontact']
+        exclude = ['idcontact']
 
-    def isempty(self):
-        return self.cleaned_data["empty"]
 
 class NOCForm(forms.ModelForm):
-    empty = forms.BooleanField(label="Laisser vide ?", required=False)
+
+    telcontact = FRPhoneNumberField()
 
     class Meta:
         model = Contact
-        fields = ['nomcontact', 'prenomcontact', 'adressecontact', 'mailcontact', 'telcontact']
+        exclude = ['idcontact']
 
-    def isempty(self):
-        return self.cleaned_data["empty"]
 
 class TechnicalForm(forms.ModelForm):
-    empty = forms.BooleanField(label="Laisser vide ?", required=False)
+
+    telcontact = FRPhoneNumberField()
 
     class Meta:
         model = Contact
-        fields = ['nomcontact', 'prenomcontact', 'adressecontact', 'mailcontact', 'telcontact']
+        exclude = ['idcontact']
 
-    def isempty(self):
-        return self.cleaned_data["empty"]
 
 class RouterForm(forms.ModelForm):
     class Meta:
         model = Hote
-        fields = ['nomhote', 'machote', 'ipv4hote', 'ipv6hote']
+        fields = ['nomhote', 'machote']
 
 class UserForm(UserCreationForm):
     pass

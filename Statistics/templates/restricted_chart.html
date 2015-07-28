@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 {%  load staticfiles %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +11,10 @@
 </head>
 <body>
 <LINK rel=stylesheet type="text/css" href="{% static "css/metricsgraphics.css" %}">
+
+<a href="{% url "auth_login" %}">Login</a>
+<a href="{% url "registration_register" %}">Register</a>
+
     <form id="Fluxpost" method="post">
         {% csrf_token %}
         {{ form.as_p }}
