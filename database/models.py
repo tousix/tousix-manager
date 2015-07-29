@@ -52,9 +52,9 @@ class Membre(models.Model):
     connexion_type = models.ForeignKey(ConnectionType, blank=True, null=True, verbose_name="Type de connexion")
     fqdn_host = models.CharField(max_length=30, default="Undefined", verbose_name="FQDN Routeur")
     idpop = models.ForeignKey(Pop, to_field='idpop', db_column='idPoP', null=True)
-    billing = models.OneToOneField(Contact, to_field='idcontact', related_name='billing', parent_link=True, blank=True, null=True)
-    noc = models.OneToOneField(Contact, to_field='idcontact', related_name='noc', parent_link=True, blank=True, null=True)
-    technical = models.OneToOneField(Contact, to_field='idcontact', related_name='technical', parent_link=True, blank=True, null=True)
+    billing = models.OneToOneField(Contact, to_field='idcontact', related_name='billing', parent_link=True, blank=True, null=True, on_delete=models.SET_NULL)
+    noc = models.OneToOneField(Contact, to_field='idcontact', related_name='noc', parent_link=True, blank=True, null=True, on_delete=models.SET_NULL)
+    technical = models.OneToOneField(Contact, to_field='idcontact', related_name='technical', parent_link=True, blank=True, null=True, on_delete=models.SET_NULL)
     approved = models.BooleanField(default=False)
 
     class Meta:
