@@ -29,6 +29,7 @@ class HoteAdmin(FSMTransitionMixin, admin.ModelAdmin):
     search_fields = ["nomhote", "ipv4hote", "ipv6hote", "machote"]
     form = HoteForm
     actions = [generate_routeserver_conf]
+    readonly_fields = ['etat']
     fsm_field = ['etat',]
 
 @admin.register(Port)
@@ -65,7 +66,7 @@ class LogSwitchAdmin(admin.ModelAdmin):
 
 @admin.register(Regles)
 class ReglesField(FSMTransitionMixin, admin.ModelAdmin):
-    readonly_fields = ['idregle', 'typeregle', 'regle', 'idswitch']
+    readonly_fields = ['idregle', 'typeregle', 'regle', 'idswitch', 'etat']
     list_display = ['switch', 'regle', 'typeregle']
     search_fields = ['regle']
     list_filter = ['idswitch__nomswitch', "typeregle", "source__nomhote", "destination__nomhote"]

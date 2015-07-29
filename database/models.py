@@ -158,14 +158,8 @@ class Hote(models.Model):
         db_table = 'Hôte'
         unique_together = (('idhote', 'idmembre'),)
 
-    def RouterValid(self):
-        if self.objects.filter(machote=self.machote).count() > 0:
-            return False
-        else:
-            return True
-
-    @transition(field=etat, source="Production", target="Changing", conditions=[RouterValid])
-    def PrepareNewRouter(self):
+    @transition(field=etat, source="Production", target="Changing")
+    def Prepare(self):
 
         regles = Regles.objects.filter(Q(source=self) | Q(destination=self))
         for regle in regles:
@@ -177,7 +171,7 @@ class Hote(models.Model):
         deployment.send_rules(Switch.objects.all())
 
     @transition(field=etat, source="Changing", target="Production")
-    def ApplyNewRouter(self):
+    def Apply(self):
         regles = Regles.objects.filter((Q(source=self) | Q(destination=self) & Q(etat="Deprecated")))
         deployment = RulesDeployment()
         deployment.remove_rules(regles)
