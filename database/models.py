@@ -123,7 +123,7 @@ class Port(models.Model):
 class Hote(models.Model):
     idhote = models.AutoField(db_column='IdHote', primary_key=True)  # Field name made lowercase.
     nomhote = models.CharField(db_column='NomHote', max_length=30, blank=True, verbose_name="Nom routeur")  # Field name made lowercase.
-    machote = MACAddressField(db_column='MACHote', verbose_name="Addresse MAC")  # Field name made lowercase.
+    machote = MACAddressField(db_column='MACHote', verbose_name="Adresse MAC", blank=False, null=False)  # Field name made lowercase.
     ipv4hote = models.GenericIPAddressField(db_column='IPv4Hote', verbose_name="Adresse IPv4", null=True)  # Field name made lowercase.
     ipv6hote = models.GenericIPAddressField(db_column='IPv6Hote', verbose_name="Adresse IPv6", null=True)  # Field name made lowercase.
     idmembre = models.ForeignKey(Membre, to_field='idmembre', db_column='idMembre')  # Field name made lowercase.
