@@ -18,18 +18,34 @@ class RulesDeployment(object):
             rules = Regles.objects.filter(idswitch=switch)
             groups = rules.filter(typeregle="Group")
             flows = rules.exclude(typeregle="Group")
-            for group in groups:
-                request = requests.post(self.host+"/stats/groupentry/add", json=json.loads(group.regle))
-                if request.status_code is not 200:
-                    fails += 1
-                else:
-                    success += 1
-            for flow in flows:
-                request = requests.post(self.host+"/stats/flowentry/add", json=json.loads(flow.regle))
-                if request.status_code is not 200:
-                    fails += 1
-                else:
-                    success += 1
+            stat_flows = self.send_flow_rules(flows)
+            stat_groups = self.send_group_rules(groups)
+            success += (stat_flows["success"] + stat_groups["success"])
+            success += (stat_flows["fails"] + stat_groups["fails"])
+        return {"success": success,
+                "fails": fails}
+
+    def send_group_rules(self, rules):
+        success = 0
+        fails = 0
+        for group in rules:
+            request = requests.post(self.host+"/stats/groupentry/add", json=json.loads(group.regle))
+            if request.status_code is not 200:
+                fails += 1
+            else:
+                success += 1
+        return {"success": success,
+                "fails": fails}
+
+    def send_flow_rules(self, rules):
+        success = 0
+        fails = 0
+        for flow in rules:
+            request = requests.post(self.host+"/stats/flowentry/add", json=json.loads(flow.regle))
+            if request.status_code is not 200:
+                fails += 1
+            else:
+                success += 1
         return {"success": success,
                 "fails": fails}
 
