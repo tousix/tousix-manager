@@ -18,8 +18,8 @@ class RulesDeployment(object):
             rules = Regles.objects.filter(idswitch=switch)
             groups = rules.filter(typeregle="Group")
             flows = rules.exclude(typeregle="Group")
-            stat_flows = self.send_flow_rules(flows)
             stat_groups = self.send_group_rules(groups)
+            stat_flows = self.send_flow_rules(flows)
             success += (stat_flows["success"] + stat_groups["success"])
             success += (stat_flows["fails"] + stat_groups["fails"])
         return {"success": success,
