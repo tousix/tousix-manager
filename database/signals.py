@@ -5,6 +5,7 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from database.models import Hote, Flux, Stats
 from django.db.models import Q
+from Deployment.rules import RulesDeployment
 
 @receiver(post_save, sender=Hote)
 def post_save_hote(sender, **kwargs):
@@ -28,3 +29,7 @@ def pre_delete_hote(sender, **kwargs):
     Stats.objects.filter(idflux__in=flux_list).delete()
     # delete flux
     flux_list.delete()
+
+    # remove rules for designated host
+    deployment = RulesDeployment()
+    deployment.remove_host([kwargs['instance']])

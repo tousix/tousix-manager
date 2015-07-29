@@ -52,9 +52,9 @@ class Membre(models.Model):
     connexion_type = models.ForeignKey(ConnectionType, blank=True, null=True, verbose_name="Type de connexion")
     fqdn_host = models.CharField(max_length=30, default="Undefined", verbose_name="FQDN Routeur")
     idpop = models.ForeignKey(Pop, to_field='idpop', db_column='idPoP', null=True)
-    billing = models.OneToOneField(Contact, to_field='idcontact', related_name='billing', parent_link=True, blank=True, null=True)
-    noc = models.OneToOneField(Contact, to_field='idcontact', related_name='noc', parent_link=True, blank=True, null=True)
-    technical = models.OneToOneField(Contact, to_field='idcontact', related_name='technical', parent_link=True, blank=True, null=True)
+    billing = models.OneToOneField(Contact, to_field='idcontact', related_name='billing', parent_link=True, blank=True, null=True, on_delete=models.SET_NULL)
+    noc = models.OneToOneField(Contact, to_field='idcontact', related_name='noc', parent_link=True, blank=True, null=True, on_delete=models.SET_NULL)
+    technical = models.OneToOneField(Contact, to_field='idcontact', related_name='technical', parent_link=True, blank=True, null=True, on_delete=models.SET_NULL)
     approved = models.BooleanField(default=False)
 
     class Meta:
@@ -123,7 +123,7 @@ class Port(models.Model):
 class Hote(models.Model):
     idhote = models.AutoField(db_column='IdHote', primary_key=True)  # Field name made lowercase.
     nomhote = models.CharField(db_column='NomHote', max_length=30, blank=True, verbose_name="Nom routeur")  # Field name made lowercase.
-    machote = MACAddressField(db_column='MACHote', verbose_name="Addresse MAC")  # Field name made lowercase.
+    machote = MACAddressField(db_column='MACHote', verbose_name="Adresse MAC", blank=False, null=False)  # Field name made lowercase.
     ipv4hote = models.GenericIPAddressField(db_column='IPv4Hote', verbose_name="Adresse IPv4", null=True)  # Field name made lowercase.
     ipv6hote = models.GenericIPAddressField(db_column='IPv6Hote', verbose_name="Adresse IPv6", null=True)  # Field name made lowercase.
     idmembre = models.ForeignKey(Membre, to_field='idmembre', db_column='idMembre')  # Field name made lowercase.
@@ -171,6 +171,8 @@ class Regles(models.Model):
     typeregle = models.CharField(db_column='TypeRegle', max_length=40, blank=True, null=True)  # Field name made lowercase.
     regle = models.TextField(db_column='Regle', blank=True, null=True)  # Field name made lowercase.
     idswitch = models.ForeignKey(Switch, to_field='idswitch', db_column='idSwitch')  # Field name made lowercase.
+    source = models.ForeignKey(Hote, related_name="source", verbose_name="Source", null=True)
+    destination = models.ForeignKey(Hote, related_name="destination", verbose_name="Destination", null=True)
 
     def switch(self):
         return self.idswitch.nomswitch

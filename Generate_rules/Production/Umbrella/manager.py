@@ -24,10 +24,14 @@ class Manager(object):
         rules = []
         if (conf.enabled["Production"].get('Umbrella').get('IPv6')) is True:
             rule = {"module": "Production_Umbrella_IPv6",
-                    "rule": ipv6.create_umbrella(dpid, peer)}
+                    "rule": ipv6.create_umbrella(dpid, peer),
+                    "source": None,
+                    "destination": peer.idPeer}
             rules.append(rule)
         if (conf.enabled["Production"].get('Umbrella').get('IPv4')) is True:
             rule = {"module": "Production_Umbrella_IPv4",
-                    "rule": ipv4.create_umbrella(dpid, peer)}
+                    "rule": ipv4.create_umbrella(dpid, peer),
+                    "source": None,
+                    "destination": peer.idPeer}
             rules.append(rule)
         return rules

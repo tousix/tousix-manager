@@ -4,11 +4,14 @@ __author__ = 'remy'
 import requests
 import json
 from database.models import Regles
+from django.db.models import Q
+
 
 class RulesDeployment(object):
 
+    host = "http://127.0.0.1:8080"
+
     def send_rules(self, switches):
-        host = "http://127.0.0.1:8080"
         success = 0
         fails = 0
         for switch in switches:
@@ -16,13 +19,13 @@ class RulesDeployment(object):
             groups = rules.filter(typeregle="Group")
             flows = rules.exclude(typeregle="Group")
             for group in groups:
-                request = requests.post(host+"/stats/groupentry/add", json=json.loads(group.regle))
+                request = requests.post(self.host+"/stats/groupentry/add", json=json.loads(group.regle))
                 if request.status_code is not 200:
                     fails += 1
                 else:
                     success += 1
             for flow in flows:
-                request = requests.post(host+"/stats/flowentry/add", json=json.loads(flow.regle))
+                request = requests.post(self.host+"/stats/flowentry/add", json=json.loads(flow.regle))
                 if request.status_code is not 200:
                     fails += 1
                 else:
@@ -30,5 +33,22 @@ class RulesDeployment(object):
         return {"success": success,
                 "fails": fails}
 
-    def remove_rules(self, switches):
-        pass
+    def remove_rules(self, rules):
+        success = 0
+        fails = 0
+        for rule in rules:
+            # strict comparaison
+            request = requests.post(self.host+"/stats/flowentry/delete_strict", json=json.loads(rule.regle))
+            if request.status_code is not 200:
+                fails += 1
+            else:
+                success += 1
+        return {"success": success,
+                "fails": fails}
+
+    def remove_host(self, hosts):
+        rules = []
+        for host in hosts:
+            regles = Regles.objects.filter(Q(source=host) | Q(destination=host))
+            rules.extend(regles)
+        self.remove_rules(rules)

@@ -10,12 +10,12 @@ from django.forms import fields
 from django.db import models
 from django.db.models.fields import PositiveIntegerField
 
-MAC_RE = r'^([0-9a-fA-F]{2}([:-]?|$)){6}$'
+MAC_RE = r'^([0-9a-fA-F]{2}([:]?|$)){6}$'
 mac_re = re.compile(MAC_RE)
 # snippet from : https://djangosnippets.org/snippets/1337/
 class MACAddressFormField(fields.RegexField):
     default_error_messages = {
-        'invalid': _(u'Entrez une adresse MAC valide. (caractères autorisés : 0-9 a-f A-F :- )'),
+        'invalid': _(u'Entrez une adresse MAC valide. (caractères autorisés : 0-9 a-f A-F : )'),
     }
 
     def __init__(self, *args, **kwargs):

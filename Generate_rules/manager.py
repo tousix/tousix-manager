@@ -53,7 +53,8 @@ class Manager(object):
             Regles.objects.filter(idswitch=switch.idswitch).delete()
             db_rules = []
             for rule in rules:
-                db_rules.append(Regles(idswitch=switch, typeregle=rule.get("module"), regle=json.dumps(rule.get("rule"))))
+                db_rules.append(Regles(idswitch=switch, typeregle=rule.get("module"), regle=json.dumps(rule.get("rule")),
+                                       source_id=rule.get("source"), destination_id=rule.get("destination")))
             Regles.objects.bulk_create(db_rules)
             # Copy raw group rules into database
             groups_switch = groups.groups[switch.idswitch]
