@@ -172,10 +172,12 @@ class Hote(models.Model):
 
     @transition(field=etat, source="Changing", target="Production")
     def Apply(self):
-        regles = Regles.objects.filter((Q(source=self) | Q(destination=self)) & Q(etat="Deprecated"))
+        regles_deprecated = Regles.objects.filter((Q(source=self) | Q(destination=self)) & Q(etat="Deprecated"))
+        regles_production = Regles.objects.filter((Q(source=self) | Q(destination=self)) & Q(etat="Production")).values("regle")
+        regles_invalides = regles_deprecated.exclude(Q(regle__in=regles_production))
         deployment = RulesDeployment()
-        deployment.remove_rules(regles)
-        regles.delete()
+        deployment.remove_rules(regles_invalides)
+        regles_deprecated.delete()
 
 
 class Flux(models.Model):
