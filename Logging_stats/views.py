@@ -6,11 +6,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from Logging_stats.flows import FlowProcess
 from django.shortcuts import HttpResponse
-
+from Authentication.AddressMixin import AddressLimitationMixin
 import json
 
 
-class RecieveStatsForm(View):
+class RecieveStatsForm(AddressLimitationMixin, View):
     """
     View for statistics reception, coming from the controller.
     """

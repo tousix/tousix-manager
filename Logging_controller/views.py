@@ -9,13 +9,14 @@ from django.views.generic.list import ListView
 from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from Authentication.AddressMixin import AddressLimitationMixin
 
 from database.models import LogSwitch
 
 LOG = logging.getLogger("Logging_controller")
 
 
-class AsyncEventView(View):
+class AsyncEventView(AddressLimitationMixin, View):
     """
     View for the reception of asynchronous events coming from the controller.
     """
