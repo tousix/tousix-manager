@@ -21,7 +21,7 @@ class RulesDeployment(object):
             stat_groups = self.send_group_rules(groups)
             stat_flows = self.send_flow_rules(flows)
             success += (stat_flows["success"] + stat_groups["success"])
-            success += (stat_flows["fails"] + stat_groups["fails"])
+            fails += (stat_flows["fails"] + stat_groups["fails"])
         return {"success": success,
                 "fails": fails}
 
