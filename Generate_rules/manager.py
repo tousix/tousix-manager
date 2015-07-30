@@ -50,7 +50,7 @@ class Manager(object):
             rules = self.call_managers(switch.idswitch, peers)
 
             # Remove existing rules for this switch
-            Regles.objects.filter(idswitch=switch.idswitch).delete()
+            Regles.objects.filter(idswitch=switch.idswitch).filter(etat="Production").delete()
             db_rules = []
             for rule in rules:
                 db_rules.append(Regles(idswitch=switch, typeregle=rule.get("module"), regle=json.dumps(rule.get("rule")),

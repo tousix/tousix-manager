@@ -12,6 +12,8 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from database.fields import PositiveBigIntegerField, MACAddressField
+from django_fsm import FSMField, transition
+from django.db.models import Q
 
 
 class ConnectionType(models.Model):
@@ -129,6 +131,7 @@ class Hote(models.Model):
     idmembre = models.ForeignKey(Membre, to_field='idmembre', db_column='idMembre')  # Field name made lowercase.
     idport = models.ForeignKey(Port, to_field='idport', db_column='idPort', blank=True, null=True)  # Field name made lowercase.
     valid = models.BooleanField(default=False)
+    etat = FSMField(default="Production")
 
     def membre(self):
         return self.idmembre.nommembre
@@ -155,6 +158,27 @@ class Hote(models.Model):
         db_table = 'Hôte'
         unique_together = (('idhote', 'idmembre'),)
 
+    @transition(field=etat, source="Production", target="Changing")
+    def Prepare(self):
+
+        regles = Regles.objects.filter(Q(source=self) | Q(destination=self))
+        for regle in regles:
+            regle.ChangeRulesStatus()
+            regle.save()
+        manager = Manager()
+        manager.create_rules(Switch.objects.all())
+        deployment = RulesDeployment()
+        deployment.send_rules(Switch.objects.all())
+
+    @transition(field=etat, source="Changing", target="Production")
+    def Apply(self):
+        regles_deprecated = Regles.objects.filter((Q(source=self) | Q(destination=self)) & Q(etat="Deprecated"))
+        regles_production = Regles.objects.filter((Q(source=self) | Q(destination=self)) & Q(etat="Production")).values("regle")
+        regles_invalides = regles_deprecated.exclude(Q(regle__in=regles_production))
+        deployment = RulesDeployment()
+        deployment.remove_rules(regles_invalides)
+        regles_deprecated.delete()
+
 
 class Flux(models.Model):
     idflux = models.AutoField(db_column='idFlux', primary_key=True)  # Field name made lowercase.
@@ -173,6 +197,12 @@ class Regles(models.Model):
     idswitch = models.ForeignKey(Switch, to_field='idswitch', db_column='idSwitch')  # Field name made lowercase.
     source = models.ForeignKey(Hote, related_name="source", verbose_name="Source", null=True)
     destination = models.ForeignKey(Hote, related_name="destination", verbose_name="Destination", null=True)
+    etat = FSMField(default="Production")
+
+    @transition(field=etat, source="Production", target="Deprecated")
+    def ChangeRulesStatus(self):
+
+        pass
 
     def switch(self):
         return self.idswitch.nomswitch
@@ -213,3 +243,7 @@ class Switchlink(models.Model):
 
 # Import database signals
 from database.signals import post_save_hote, pre_delete_hote
+
+#Import other apps class
+from Generate_rules.manager import Manager
+from Deployment.rules import RulesDeployment

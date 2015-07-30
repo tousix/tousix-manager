@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch, Regles
 from admin_TouSIX.forms import HoteForm, SwitchForm, MembreForm
-from admin_TouSIX.actions import generate_routeserver_conf, generate_openflow_rules, get_rules_list
+from admin_TouSIX.actions import generate_routeserver_conf, generate_openflow_rules, get_rules_list, change_hote_status
+from fsm_admin.mixins import FSMTransitionMixin
 
 # Register your models here.
 
@@ -21,13 +22,21 @@ class MembreAdmin(admin.ModelAdmin):
     actions = [generate_routeserver_conf]
 
 @admin.register(Hote)
-class HoteAdmin(admin.ModelAdmin):
+class HoteAdmin(FSMTransitionMixin, admin.ModelAdmin):
     list_display = ["nomhote", "ipv4hote", "ipv6hote", "membre", "pop", "switch", "port"]
     exclude = ["idmembre"]
     list_filter = ['valid']
     search_fields = ["nomhote", "ipv4hote", "ipv6hote", "machote"]
     form = HoteForm
-    actions = [generate_routeserver_conf]
+    actions = [generate_routeserver_conf, change_hote_status]
+    readonly_fields = ['etat']
+    fsm_field = ['etat']
+
+    def save_model(self, request, obj, form, change):
+        if obj.etat == "Production":
+            obj.save()
+            obj.Prepare()
+            obj.save()
 
 @admin.register(Port)
 class PortAdmin(admin.ModelAdmin):
@@ -62,9 +71,10 @@ class LogSwitchAdmin(admin.ModelAdmin):
     readonly_fields = ['idlog', "idswitch", "time", "level", "message", "json"]
 
 @admin.register(Regles)
-class ReglesField(admin.ModelAdmin):
-    readonly_fields = ['idregle', 'typeregle', 'regle', 'idswitch']
-    list_display = ['switch', 'regle', 'typeregle']
+class ReglesField(FSMTransitionMixin, admin.ModelAdmin):
+    readonly_fields = ['idregle', 'typeregle', 'regle', 'idswitch', 'etat']
+    list_display = ['switch', 'regle', 'typeregle', 'etat']
     search_fields = ['regle']
     list_filter = ['idswitch__nomswitch', "typeregle", "source__nomhote", "destination__nomhote"]
     actions = [get_rules_list]
+    fsm_field = ['etat']
