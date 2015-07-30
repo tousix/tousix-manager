@@ -6,8 +6,10 @@ from database.models import Regles, Switch
 from Deployment.forms import ConfirmForm
 from Deployment.rules import RulesDeployment
 from django.shortcuts import render
+from Authentication.AdminMixin import AdminVerificationMixin
 
-class RulesDeploymentConfirmView(FormView):
+
+class RulesDeploymentConfirmView(AdminVerificationMixin, FormView):
 
     form_class = ConfirmForm
     template_name = "rules_confirm.html"
