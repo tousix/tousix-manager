@@ -51,3 +51,12 @@ def get_rules_list(modeladmin, request, queryset):
     return render(request, "switches_list.html", context={"rules": text})
 
 get_rules_list.short_description = "Afficher une liste des règles sélectionnées"
+
+
+def change_hote_status(modeladmin, request, queryset):
+    for hote in queryset:
+        if hote.etat == "Changing":
+            hote.Apply()
+            hote.save()
+            modeladmin.message_user(request, "Le statut du routeur "+hote.nomhote+" a été changé.")
+change_hote_status.short_description = "Changer le statut des routeurs sélectionnées"

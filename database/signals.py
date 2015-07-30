@@ -7,6 +7,7 @@ from database.models import Hote, Flux, Stats
 from django.db.models import Q
 from Deployment.rules import RulesDeployment
 
+
 @receiver(post_save, sender=Hote)
 def post_save_hote(sender, **kwargs):
     if kwargs['created'] is True:
@@ -20,9 +21,7 @@ def post_save_hote(sender, **kwargs):
                 db_flux.append(Flux(hote_src=peer_dst, hote_dst=kwargs['instance'], type="IPv6"))
                 db_flux.append(Flux(hote_src=kwargs['instance'], hote_dst=peer_dst, type="IPv6"))
         Flux.objects.bulk_create(db_flux)
-    elif kwargs['instance'].etat == "Production":
-        kwargs['instance'].Prepare()
-        kwargs['instance'].save()
+
 
 @receiver(pre_delete, sender=Hote)
 def pre_delete_hote(sender, **kwargs):
