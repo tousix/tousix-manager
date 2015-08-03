@@ -95,8 +95,7 @@ class TechnicalUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
         return HttpResponseRedirect("/member/update")
 
     def form_valid(self, form):
-        if form.isempty() is False:
-            form.save()
+        form.save()
 
 
 class NOCUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
@@ -117,8 +116,7 @@ class NOCUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
         return HttpResponseRedirect("/member/update")
 
     def form_valid(self, form):
-        if form.isempty() is False:
-            form.save()
+        form.save()
 
 
 class BillingUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
@@ -139,8 +137,7 @@ class BillingUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
         return HttpResponseRedirect("/member/update")
 
     def form_valid(self, form):
-        if form.isempty() is False:
-            form.save()
+        form.save()
 
 
 class RouterUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
@@ -148,7 +145,7 @@ class RouterUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
     form_class = RouterForm
     template_name = "update_member.html"
     success_url = "/member/update"
-    success_message = "Changement routeur enrgistré. Un administrateur doit confirmer."
+    success_message = "Changement routeur enregistré. Un administrateur doit confirmer."
     context_object_name = "router"
 
     def get_object(self, queryset=None):
@@ -162,6 +159,8 @@ class RouterUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
 
     def form_valid(self, form):
         form.instance.valid = False
+        form.save()
+        form.Prepare()
         form.save()
 
 
