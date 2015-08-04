@@ -1,0 +1,33 @@
+{% extends "admin/index.html" %}
+    {{ block.super }}
+{% block content %}
+        {% block touSIX-log %}
+    <div id="content-main">
+    <div class="log module">
+
+        {% load logs %}
+        {% pull_logs as logs %}
+        <table>
+        <caption>
+<a class="section" title="Application Log Controleur" >Logs Controlleurs</a>
+</caption>
+        <tbody>
+        <tr>
+        <th class="row">
+        <textarea id="log-controller" readonly>
+            {% for log in logs %}
+{{ log.level }}@{{ log.time }} for {{ log.idswitch.nomswitch }}: {{ log.message }}
+
+            {% endfor %}
+        </textarea>
+        </th>
+        </tr>
+        </tbody>
+                </table>
+    {% endblock %}
+
+    </div>
+    </div>
+
+
+{% endblock %}
