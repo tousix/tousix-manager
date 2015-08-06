@@ -10,7 +10,7 @@ from admin_TouSIX.adminsite import admin_tousix
 
 class HoteInLine(admin.TabularInline):
     model = Hote
-    max_num = 1
+    max_num = 2
     form = HoteForm
 
 
