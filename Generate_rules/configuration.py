@@ -11,15 +11,15 @@ class configuration(object):
         "Production": {
            "Umbrella": {
                "IPv4": True,
-               "IPv6": True
+               "IPv6": False
            },
            "Dataflow": True
         },
 
         "Stats": {
             "IPv4": True,
-            "IPv6": True,
-            "ICMPv6": True,
+            "IPv6": False,
+            "ICMPv6": False,
             "ARP": True
         }
     }
