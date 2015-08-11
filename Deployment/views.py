@@ -7,7 +7,7 @@ from django.views.generic.list import ListView
 from database.models import Regles, Switch
 from Deployment.forms import ConfirmForm
 from Deployment.rules import RulesDeployment
-from django.shortcuts import render
+from django.shortcuts import render, Http404
 from Authentication.AdminMixin import AdminVerificationMixin
 from Authentication.AddressMixin import AddressLimitationMixin
 from django.views.decorators.csrf import csrf_exempt
@@ -37,7 +37,10 @@ class RulesRestorationView(AddressLimitationMixin, JSONResponseMixin, ListView):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        return super(RulesRestorationView, self).dispatch(request, *args, **kwargs)
+        if self.verify_address() is not None:
+            raise Http404
+        else:
+            return super(RulesRestorationView, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         if "idswitch" in self.request.GET:

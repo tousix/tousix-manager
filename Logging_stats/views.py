@@ -5,7 +5,7 @@ from django.views.generic.base import View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from Logging_stats.flows import FlowProcess
-from django.shortcuts import HttpResponse
+from django.shortcuts import HttpResponse, Http404
 from Authentication.AddressMixin import AddressLimitationMixin
 import json
 
@@ -16,6 +16,8 @@ class RecieveStatsForm(AddressLimitationMixin, View):
     """
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
+        if self.verify_address() is not None:
+            raise Http404
         if request.method == "POST":
             data = json.loads(request.body.decode(encoding='utf-8'))
             process = FlowProcess()

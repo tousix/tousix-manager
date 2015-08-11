@@ -6,7 +6,7 @@ import logging
 
 from django.views.generic import View
 from django.views.generic.list import ListView
-from django.shortcuts import HttpResponse
+from django.shortcuts import HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from Authentication.AddressMixin import AddressLimitationMixin
@@ -29,6 +29,8 @@ class AsyncEventView(AddressLimitationMixin, View):
         :param kwargs:
         :return:
         """
+        if self.verify_address() is not None:
+            raise Http404
         base_path = "/event/"
         if request.method == "POST":
             path = request.path
