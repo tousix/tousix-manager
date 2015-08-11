@@ -16,7 +16,7 @@ class AddressLimitationMixin(object):
     """
 
     def dispatch(self, request, *args, **kwargs):
-        if request.META["REMOTE_ADDR"] in settings.ADDRESS_WHITELIST:
+        if request.META["HTTP_REMOTE_ADDR"] in settings.ADDRESS_WHITELIST:
             return super(AddressLimitationMixin, self).dispatch(request, *args, **kwargs)
         else:
             raise Http404()
