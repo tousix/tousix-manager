@@ -28,7 +28,7 @@ class MembreAdmin(admin.ModelAdmin):
 
 @admin.register(Hote)
 class HoteAdmin(FSMTransitionMixin, admin.ModelAdmin):
-    list_display = ["nomhote", "ipv4hote", "ipv6hote", "membre", "pop", "switch", "port"]
+    list_display = ["nomhote", "ipv4hote", "ipv6hote", "membre", "pop", "switch", "port", "etat"]
     exclude = ["idmembre"]
     list_filter = ['valid']
     search_fields = ["nomhote", "ipv4hote", "ipv6hote", "machote"]
@@ -38,10 +38,12 @@ class HoteAdmin(FSMTransitionMixin, admin.ModelAdmin):
     fsm_field = ['etat']
 
     def save_model(self, request, obj, form, change):
+        previous = self.model.objects.filter(idhote=obj.idhote).first()
+        obj.save()
         if obj.etat == "Production":
-            obj.save()
-            obj.Prepare()
-            obj.save()
+            if obj.machote != previous.machote:
+                obj.Prepare()
+                obj.save()
 
 
 @admin.register(Port)

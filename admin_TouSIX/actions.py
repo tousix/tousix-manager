@@ -59,4 +59,9 @@ def change_hote_status(modeladmin, request, queryset):
             hote.Apply()
             hote.save()
             modeladmin.message_user(request, "Le statut du routeur "+hote.nomhote+" a été changé.")
+        elif hote.etat == "Inactive":
+            hote.Deploy()
+            hote.save()
+            modeladmin.message_user(request, "Le statut du routeur "+hote.nomhote+" a été changé.")
+
 change_hote_status.short_description = "Changer le statut des routeurs sélectionnées"

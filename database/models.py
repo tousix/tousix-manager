@@ -131,7 +131,7 @@ class Hote(models.Model):
     idmembre = models.ForeignKey(Membre, to_field='idmembre', db_column='idMembre')  # Field name made lowercase.
     idport = models.ForeignKey(Port, to_field='idport', db_column='idPort', blank=True, null=True)  # Field name made lowercase.
     valid = models.BooleanField(default=False)
-    etat = FSMField(default="Production")
+    etat = FSMField(default="Inactive")
 
     def membre(self):
         return self.idmembre.nommembre
@@ -158,7 +158,17 @@ class Hote(models.Model):
         db_table = 'Hôte'
         unique_together = (('idhote', 'idmembre'),)
 
-    @transition(field=etat, source="Production", target="Changing")
+    @transition(field=etat, source="Inactive", target="Production", custom={"admin":False})
+    def Deploy(self):
+        if self.valid is True:
+            manager = Manager()
+            manager.create_rules(Switch.objects.all())
+            deployment = RulesDeployment()
+            deployment.send_rules(Switch.objects.all())
+        else:
+            raise Exception("Not a valid router.")
+
+    @transition(field=etat, source="Production", target="Changing", custom={"admin":False})
     def Prepare(self):
 
         regles = Regles.objects.filter(Q(source=self) | Q(destination=self))
