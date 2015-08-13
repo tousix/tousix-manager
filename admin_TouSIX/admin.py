@@ -6,6 +6,7 @@ from admin_TouSIX.actions import generate_routeserver_conf, generate_openflow_ru
 from fsm_admin.mixins import FSMTransitionMixin
 from admin_TouSIX.adminsite import admin_tousix
 from django.contrib.auth.admin import UserAdmin
+from registration.admin import RegistrationAdmin
 # Register your models here.
 
 
