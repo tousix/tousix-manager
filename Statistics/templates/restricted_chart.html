@@ -76,7 +76,7 @@
                 }
                 var prefix = d3.formatPrefix(d.value);
                 d3.select('#Chart svg .mg-active-datapoint')
-                        .text(prefix.scale(d.value).toFixed(2) + ' '+ prefix.symbol + label );
+                        .text(d.time.toUTCString() + ' '+ prefix.scale(d.value).toFixed(2) + ' '+ prefix.symbol + label );
             },
             target: '#Chart'
         });

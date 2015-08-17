@@ -11,7 +11,7 @@
 </head>
 <body>
 <LINK rel=stylesheet type="text/css" href="{% static "css/metricsgraphics.css" %}">
-<a href="{% url "auth_logout" %}">Logout</a>
+<a href="{% url "auth_logout" %}?next=/">Logout</a>
 
 {% if not_member %}
     {% if member %}
@@ -26,7 +26,7 @@
         {{ form.as_p }}
     </form>
     <div id="Chart"></div>
-    <script type="text/javascript" src="{% static "js/jquery.min.jsjs" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/d3.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/metricsgraphics.min.js" %}"></script>
 <script type="text/javascript">
@@ -61,9 +61,9 @@
             width: 600,
             y_accessor: "value",
             x_accessor: "time",
-{#            missing_is_zero: true,#}
+            missing_is_zero: true,
             missing_text: 'Aucune donnée disponible pour ce flux',
-{#            missing_resolution: miss_resolution,#}
+            missing_resolution: miss_resolution,
             height: 200,
             interpolate: "linear",
             right: 40,
@@ -82,7 +82,7 @@
                 }
                 var prefix = d3.formatPrefix(d.value);
                 d3.select('#Chart svg .mg-active-datapoint')
-                        .text(prefix.scale(d.value).toFixed(2) + ' '+ prefix.symbol + label );
+                        .text(d.time.toUTCString() + ' '+ prefix.scale(d.value).toFixed(2) + ' '+ prefix.symbol + label );
             },
             target: '#Chart'
         });
