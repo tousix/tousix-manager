@@ -53,7 +53,13 @@ class AsyncEventView(AddressLimitationMixin, View):
             return HttpResponse(status=200)
 
     def log_database(self, dpid, level, log, json=None):
-
+        """
+        Stores log event in the database.
+        :param dpid: Switch datapath ID
+        :param level: log level
+        :param message: main message to display when retrieveing the error
+        :param json: Data send by the controller, which could be used to decode the content later
+        """
         message = LogSwitch(idswitch_id=dpid, level=level, message=log, json=json)
         message.save()
 

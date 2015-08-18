@@ -16,7 +16,10 @@ from Deployment.JSONResponseMixin import JSONResponseMixin
 
 
 class RulesDeploymentConfirmView(AdminVerificationMixin, FormView):
-
+    """
+    Add a confirmation view for applying rules in the topology.
+    This view is restricted for super users only.
+    """
     form_class = ConfirmForm
     template_name = "rules_confirm.html"
 
@@ -33,6 +36,10 @@ class RulesDeploymentConfirmView(AdminVerificationMixin, FormView):
 
 
 class RulesRestorationView(AddressLimitationMixin, JSONResponseMixin, ListView):
+    """
+    View used by the controller for asking up-to-date rules which need to be applied on a switch.
+    This view use a Address limitation restriction, for using this view on some LAN only.
+    """
     model = Regles
 
     @method_decorator(csrf_exempt)

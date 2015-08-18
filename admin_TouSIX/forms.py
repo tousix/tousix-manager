@@ -5,12 +5,22 @@ from django import forms
 from database.models import Hote, Port, Switch, Pop, Membre, ConnectionType
 from django.forms.utils import ErrorList
 
+
 class PortChoiceField(forms.ModelChoiceField):
+    """
+    ModelChoiceField modification for display complete port information.
+    """
     def label_from_instance(self, obj):
         return "%s" % obj.string_description()
 
-class HoteForm(forms.ModelForm):
 
+class HoteForm(forms.ModelForm):
+    """
+    ModelForm with custom router display.
+    This form handles the link between :model:`database.Port` and :model:`database.Hote`.
+    Depending of the context (relationship non-established, initial value), it will
+    create a custom list with complete description all the ports avaliable.
+    """
     idport = PortChoiceField(queryset=Port.objects
                              .filter(usable=True)
                              .exclude(idport__in=(Hote.objects.values("idport"))), empty_label=None)
@@ -35,26 +45,38 @@ class HoteForm(forms.ModelForm):
         model = Hote
         exclude = ["idmembre"]
 
+
 class PopChoiceField(forms.ModelChoiceField):
+    """
+    ModelChoiceField modification for display POP name instead of complete object.
+    """
     def label_from_instance(self, obj):
         return "%s" % obj.nompop
 
+
 class SwitchForm(forms.ModelForm):
+    """
+    ModelForm for modify :model:`database.Switch` with custom fields.
+    """
     idpop = PopChoiceField(queryset=Pop.objects.all(), empty_label=None)
 
     class Meta:
         model = Switch
         fields = ['nomswitch', 'idswitch', 'ipswitch', 'idpop']
 
-class PopChoiceField(forms.ModelChoiceField):
-    def label_from_instance(self, obj):
-        return "%s" % obj.nompop
 
 class ConnexionChoiceField(forms.ModelChoiceField):
+    """
+    ModelChoiceField modification for display Connection type name instead of complete object.
+    """
     def label_from_instance(self, obj):
         return "%s" % obj.connection_type
 
+
 class MembreForm(forms.ModelForm):
+    """
+    ModelForm for modify :model:`database.Membre` with custom fields.
+    """
     idpop = PopChoiceField(queryset=Pop.objects.all())
     connexion_type = ConnexionChoiceField(queryset=ConnectionType.objects.all())
 

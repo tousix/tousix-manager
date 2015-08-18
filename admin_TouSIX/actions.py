@@ -45,6 +45,9 @@ generate_openflow_rules.short_description = "Générer la configuration Openflow
 
 
 def get_rules_list(modeladmin, request, queryset):
+    """
+    Action for display plain text rules selected in admin view.
+    """
     text = ""
     for rule in queryset:
         text += rule.regle + "\n"
@@ -54,6 +57,10 @@ get_rules_list.short_description = "Afficher une liste des règles sélectionné
 
 
 def change_hote_status(modeladmin, request, queryset):
+    """
+    This action is only present because the change status button
+    of an django application does not seem to work (django-fsm-admin).
+    """
     for hote in queryset:
         if hote.etat == "Changing":
             hote.Apply()

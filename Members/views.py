@@ -2,7 +2,7 @@
 __author__ = 'remy'
 from formtools.wizard.views import SessionWizardView
 from django.views.generic.edit import UpdateView, FormView
-from Members.forms import MemberForm, BillingForm, TechnicalForm, NOCForm, RouterForm, UserForm
+from Members.forms import MemberForm, BillingForm, TechnicalForm, NOCForm, RouterForm
 from Authentication.LoginMixin import LoginRequiredMixin
 from database.models import Membre, Hote, Contact
 from django.contrib.auth.forms import PasswordChangeForm
@@ -12,11 +12,20 @@ from django.shortcuts import render
 
 
 class CreateMemberView(LoginRequiredMixin, SessionWizardView):
-
+    """
+    View for creating all the elements needed for add a member (this includes Membre, Hote, Contact model objects)
+    """
     template_name = 'inscription_membre.html'
     form_list = [MemberForm, BillingForm, NOCForm, TechnicalForm, RouterForm]
 
     def done(self, form_list, form_dict, **kwargs):
+        """
+        This method insert all the forms into the datatbase following a pattern (foreign key constraints).
+        :param form_list:
+        :param form_dict:
+        :param kwargs:
+        :return:
+        """
         # Create object for filling missing values
         member = form_dict['0'].save(commit=False)
 
@@ -41,6 +50,11 @@ class CreateMemberView(LoginRequiredMixin, SessionWizardView):
 
 
 class UpdateMemberView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
+    """
+    This view is for testing purposes.
+    It is an attempt to receive all the data posted for one url, and process only on changed values.
+    A much simpler approach is currently used, on the other update views present in this module.
+    """
     model = Membre
     form_class = MemberForm
     template_name = "update_member.html"
@@ -78,6 +92,9 @@ class UpdateMemberView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
 
 
 class TechnicalUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
+    """
+    This view updates technical contact associated with the requesting user.
+    """
     model = Contact
     form_class = TechnicalForm
     template_name = "update_member.html"
@@ -99,6 +116,9 @@ class TechnicalUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
 
 
 class NOCUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
+    """
+    This view updates NOC contact associated with the requesting user.
+    """
     model = Contact
     form_class = NOCForm
     template_name = "update_member.html"
@@ -120,6 +140,9 @@ class NOCUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
 
 
 class BillingUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
+    """
+    This view updates billing contact associated with the requesting user.
+    """
     model = Contact
     form_class = BillingForm
     template_name = "update_member.html"
@@ -141,6 +164,9 @@ class BillingUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
 
 
 class RouterUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
+    """
+    This view updates router associated with the requesting user.
+    """
     model = Hote
     form_class = RouterForm
     template_name = "update_member.html"
@@ -165,6 +191,9 @@ class RouterUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
 
 
 class PasswordChangeView(LoginRequiredMixin, FormView, SuccessMessageMixin):
+    """
+    THis view permits an uner to change his password.
+    """
     form_class = PasswordChangeForm
     success_message = "Changement mdp réussi."
     template_name = "update_member.html"

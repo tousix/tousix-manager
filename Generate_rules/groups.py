@@ -5,6 +5,7 @@ __author__ = 'remy'
 class groups(object):
     """
     This class has the same purpose as the configuration class.
+    It is based on REST definition of groups in Ryu.
     """
     groups = {
         2221123978211977908: [

@@ -16,6 +16,13 @@ class RecieveStatsForm(AddressLimitationMixin, View):
     """
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
+        """
+        Enter in the flow process class if all the requirements are avaliable.
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         if self.verify_address() is not None:
             raise Http404
         if request.method == "POST":

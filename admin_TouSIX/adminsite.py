@@ -4,6 +4,9 @@ from django.contrib.admin import AdminSite
 
 
 class TouSIXAdmin(AdminSite):
+    """
+    Special admin site, created for display widgets in the main panel.
+    """
     site_header = "TouIX - Administration de TouSIX"
     site_title = "TouIX"
     index_template = "index_touSIX.html"

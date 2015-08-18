@@ -46,7 +46,7 @@ class FlowProcess(object):
 
     def get_flow_id(self, source=0, destination=0, flow_type="IPv4"):
         """
-        Retrieve flox id from the database.
+        Retrieve flow id from the database.
         :param source: source host ID
         :param destination: destination host ID
         :param flow_type: flow type

@@ -10,6 +10,12 @@ from Deployment.rules import RulesDeployment
 
 @receiver(post_save, sender=Hote)
 def post_save_hote(sender, **kwargs):
+    """
+    Signal used for creating flux objects in the database (for statistic purposes)
+    :param sender:
+    :param kwargs:
+    :return:
+    """
     if kwargs['created'] is True:
         db_flux = list()
         db_flux.append(Flux(hote_src=None, hote_dst=kwargs['instance'], type="ICMPv6"))
@@ -25,6 +31,12 @@ def post_save_hote(sender, **kwargs):
 
 @receiver(pre_delete, sender=Hote)
 def pre_delete_hote(sender, **kwargs):
+    """
+    Clean-up all traces of the router in the database.
+    :param sender:
+    :param kwargs:
+    :return:
+    """
     # Retrieve all flux where the deleted host is present
     flux_list = Flux.objects.filter(Q(hote_src=kwargs['instance']) | Q(hote_dst=kwargs['instance']))
     # Remove stats from these flux

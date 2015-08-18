@@ -4,10 +4,12 @@ from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
+
 class UserCreationForm(forms.ModelForm):
     """
     A form that creates a user, with no privileges, from the given username and
     password.
+    Only used for registering purposes.
     """
     error_messages = {
         'password_mismatch': _("The two password fields didn't match."),
