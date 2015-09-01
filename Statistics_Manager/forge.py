@@ -26,6 +26,7 @@ class forgeData(object):
     def get_data(self, source, destination, flow_type, period, unit):
         """
         Main method for construct the dataset based on user input.
+        If multiple flows are present in the results, it will be aggregated based on time differential between values.
         :param source: source host ID
         :param destination: destination host ID
         :param flow_type: Flow type
