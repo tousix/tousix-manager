@@ -3,7 +3,8 @@ __author__ = 'remy'
 
 
 import requests
-
+import logging
+LOG = logging.getLogger("BGP_Configuration")
 
 def bird_proxy(host, port, proto, service, query):
     """Retreive data of a service from a running lgproxy on a remote node
@@ -26,11 +27,14 @@ def bird_proxy(host, port, proto, service, query):
     elif not path:
         return False, 'Proto "%s" invalid' % proto
     else:
-        url = "http://%s:%d/%s?q=%s" % (host, port, path, query)
-
+        url = 'http://{host}:{port}/{path}'.format(host=host,
+                                                   port=int(port),
+                                                   path=path)
+        query = "'{}'".format(query)
+        param = {'q': query}
         try:
-            f = requests.get(url)
-            resultat = f.content
+            f = requests.get(url, params=param)
+            resultat = f.text
             status = True                # retreive remote status
         except requests.ConnectionError:
             resultat = "Failed retreive url: %s" % url

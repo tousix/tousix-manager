@@ -29,6 +29,7 @@ from BGP_Configuration.birdlg import bird_proxy
 
 LOG = logging.getLogger("BGP_Configuration")
 
+
 class SelectionMemberView(FormView):
     """
     This view is only used for testing purposes.
@@ -64,8 +65,10 @@ def render_conf_members(request, members):
             peers.append(peer)
     render_ipv4 = render(request, "ipv4.conf", context={"peers": peers})
     render_ipv6 = render(request, "ipv6.conf", context={"peers": peers})
-    return {"ipv4": render_ipv4.content,
-            "ipv6": render_ipv6.content}
+    send_bgp_config(render_ipv4.content, render_ipv6.content)
+    results = reload_bgp_config()
+    return {"ipv4": results,
+            "ipv6": results}
 
 
 def render_conf_hosts(request, hosts):
@@ -86,10 +89,12 @@ def render_conf_hosts(request, hosts):
         peers.append(peer)
     render_ipv4 = render(request, "ipv4.conf", context={"peers": peers})
     render_ipv6 = render(request, "ipv6.conf", context={"peers": peers})
-    # return {"ipv4": render_ipv4.content,
-    #         "ipv6": render_ipv6.content}
+
     send_bgp_config(render_ipv4.content, render_ipv6.content)
-    reload_bgp_config()
+    results = reload_bgp_config()
+    return {"ipv4": results,
+            "ipv6": results}
+
 
 def send_bgp_config(config_ipv4, config_ipv6):
     # rewrite bgp configuration file
@@ -97,26 +102,28 @@ def send_bgp_config(config_ipv4, config_ipv6):
         write_config_file(server["filepath"], config_ipv4)
         write_config_file(server["filepath6"], config_ipv6)
 
+
 def write_config_file(filepath, config_file):
     try:
-        file = open(filepath, mode="wt")
+        file = open(filepath, mode="wb")
     except OSError:
         LOG.error("Error when trying to access the file.")
         return
     file.write(config_file)
     file.close()
 
+
 def reload_bgp_config():
     results = []
     for server in settings.BGP_CONFIG:
-        reload_ipv4 = bird_proxy(server["host"], server["port"], "ipv4","bird","reload")
+        reload_ipv4 = bird_proxy(server["host"], server["port"], "ipv4", "bird", "configure")
         if reload_ipv4[0] is False:
             LOG.error(reload_ipv4[1])
         else:
             results.append({server["name"] + "_ipv4": reload_ipv4[1]})
-        reload_ipv6 = bird_proxy(server["host"], server["port"], "ipv6","bird","reload")
+        reload_ipv6 = bird_proxy(server["host"], server["port"], "ipv6", "bird", "configure")
         if reload_ipv6[0] is False:
             LOG.error(reload_ipv6[1])
         else:
-            results.append({server["name"] + "ipv6": reload_ipv6[1]})
+            results.append({server["name"] + "_ipv6": reload_ipv6[1]})
     return results
