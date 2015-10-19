@@ -25,7 +25,7 @@ from Database.models import Hote
 
 from django.conf import settings
 import logging
-from bird_lg.lg import bird_proxy
+from BGP_Configuration.birdlg import bird_proxy
 
 LOG = logging.getLogger("BGP_Configuration")
 
@@ -99,7 +99,7 @@ def send_bgp_config(config_ipv4, config_ipv6):
 
 def write_config_file(filepath, config_file):
     try:
-        file = open(filepath,mode="wt")
+        file = open(filepath, mode="wt")
     except OSError:
         LOG.error("Error when trying to access the file.")
         return
@@ -109,12 +109,12 @@ def write_config_file(filepath, config_file):
 def reload_bgp_config():
     results = []
     for server in settings.BGP_CONFIG:
-        reload_ipv4 = bird_proxy(server["host"],"ipv4","bird","reload")
+        reload_ipv4 = bird_proxy(server["host"], server["port"], "ipv4","bird","reload")
         if reload_ipv4[0] is False:
             LOG.error(reload_ipv4[1])
         else:
             results.append({server["name"] + "_ipv4": reload_ipv4[1]})
-        reload_ipv6 = bird_proxy(server["host"],"ipv6","bird","reload")
+        reload_ipv6 = bird_proxy(server["host"], server["port"], "ipv6","bird","reload")
         if reload_ipv6[0] is False:
             LOG.error(reload_ipv6[1])
         else:
