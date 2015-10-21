@@ -132,7 +132,6 @@ MG.data_graphic = function(args) {
         x_accessor: 'date',
         xax_units: '',
         x_label: '',
-        x_sort: true,
         x_axis: true,
         y_axis: true,
         y_accessor: 'value',
@@ -1381,22 +1380,22 @@ function x_axis_categorical(args) {
         .attr('text-anchor', 'middle')
         .text(String);
 
+    if (args.rotate_x_labels) {
+        labels.attr({
+            dy: 0,
+            'text-anchor': 'end',
+            transform: function() {
+                var elem = d3.select(this);
+                return 'rotate('+args.rotate_x_labels+' '+elem.attr('x')+','+elem.attr('y')+')';
+            }
+        });
+    }
+
     if (args.truncate_x_labels) {
         labels.each(function(d, idx) {
             var elem = this,
                 width = args.scales.X.rangeBand();
             truncate_text(elem, d, width);
-        });
-    }
-
-    if (args.rotate_x_labels) {
-        labels.attr({
-            dy: 0,
-            'text-anchor': (args.rotate_x_labels + 360) % 360 > 180 ? 'end' : 'start',
-            transform: function() {
-                var elem = d3.select(this);
-                return 'rotate('+args.rotate_x_labels+' '+elem.attr('x')+','+elem.attr('y')+')';
-            }
         });
     }
 
@@ -4495,7 +4494,7 @@ function raw_data_transformation(args) {
     }
 
     //sort x-axis data
-    if (args.chart_type === 'line' && args.x_sort === true) {
+    if (args.chart_type === 'line') {
         for (var i = 0; i < args.data.length; i++) {
             args.data[i].sort(function(a, b) {
                 return a[args.x_accessor] - b[args.x_accessor];
@@ -4579,10 +4578,10 @@ function process_line(args) {
                         o[args.y_accessor] = 0;
                         o['_missing'] = true; //we want to distinguish between zero-value and missing observations
                         processed_data.push(o);
-                    }
-                    //if the data point has, say, a 'missing' attribute set or if its
+                    } 
+                    //if the data point has, say, a 'missing' attribute set or if its 
                     //y-value is null identify it internally as missing
-                    else if (existing_o[args.missing_is_hidden_accessor]
+                    else if (existing_o[args.missing_is_hidden_accessor] 
                             || existing_o[args.y_accessor] == null
                         ) {
                         existing_o['_missing'] = true;
