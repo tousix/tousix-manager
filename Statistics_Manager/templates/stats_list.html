@@ -61,6 +61,7 @@
             width: 600,
             y_accessor: "value",
             x_accessor: "time",
+            xax_start_at_min: true,
             missing_is_zero: true,
             missing_text: 'Aucune donnée disponible pour ce flux',
             missing_resolution: miss_resolution,
@@ -82,7 +83,7 @@
                 }
                 var prefix = d3.formatPrefix(d.value);
                 d3.select('#Chart svg .mg-active-datapoint')
-                        .text(d.time.toUTCString() + ' '+ prefix.scale(d.value).toFixed(2) + ' '+ prefix.symbol + label );
+                        .text(d.time.toLocaleString() + ' '+ prefix.scale(d.value).toFixed(2) + ' '+ prefix.symbol + label );
             },
             target: '#Chart'
         });
