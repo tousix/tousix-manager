@@ -97,7 +97,7 @@ class DestinationForm(forms.Form):
         return self.cleaned_data["destination"]
 
 
-class FluxSelectionForm(SourceForm, DestinationForm, TypeForm, PeriodFrom):
+class FluxSelectionForm(DestinationForm, SourceForm, TypeForm, PeriodFrom):
     """
     Form for authenticated users
     """

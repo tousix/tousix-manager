@@ -155,7 +155,7 @@ class forgeData(object):
             # average value in an time interval (second based)
             value = ((next.get('bytes') - stat.get('bytes')) / self.diff_seconds(next.get('time'), stat.get('time')))
             if unit == 'bits':
-                value *= 8
+                value /= 8
             data = {'time': next.get('time'),
                     'value': int(value)}
             data_list.append(data)
