@@ -33,8 +33,7 @@
     function FormChanged(dataForm){
         var data_serialized = $("#Fluxpost").serialize();
         var period = dataForm.elements['id_period'].value;
-        var unit = dataForm.elements["id_unit"].value;
-        jQuery.post("{% url "charts" %}", data_serialized, function datarecieved(data){dataUpdated(data,period,unit);}, "json");
+        jQuery.post("{% url "charts" %}", data_serialized, function datarecieved(data){dataUpdated(data,period);}, "json");
     }
     function dataUpdated(stats, period, unit) {
         // example : 2015-06-22T16:12:57+00:00
@@ -72,15 +71,7 @@
             xax_count: 4,
             mouseover: function (d, i) {
                 // custom format the rollover text, show days
-                var label = "ND";
-                if (unit == "packets")
-                {
-                    label = "packets/sec";
-                }
-                else if (unit == "bytes")
-                {
-                   label = "o/sec";
-                }
+                var label = "bits/sec";
                 var prefix = d3.formatPrefix(d.value);
                 d3.select('#Chart svg .mg-active-datapoint')
                         .text(d.time.toLocaleString() + ' '+ prefix.scale(d.value).toFixed(2) + ' '+ prefix.symbol + label );

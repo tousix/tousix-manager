@@ -56,7 +56,7 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
 
     def form_valid(self, form):
         forge = forgeData()
-        data = forge.get_data(form.get_source(), form.get_destination(), form.get_type(), form.get_period(), form.get_unit())
+        data = forge.get_data(form.get_source(), form.get_destination(), form.get_type(), form.get_period(), 'bits')
 
         return JSONResponseMixin.render_to_response(self, data)
 

@@ -130,7 +130,9 @@ class forgeData(object):
         query = query.order_by("time")
 
         # sum on all the flow with the same time
-        query = query.values("time").annotate(bytes=Sum('bytes'), packets=Sum('packets'))
+        query = query.values("time").annotate(bytes=Sum('bytes')
+                                              #,packets=Sum('packets')
+                                              )
 
         return query
 
@@ -151,8 +153,9 @@ class forgeData(object):
                 break
 
             # average value in an time interval (second based)
-            value = ((next.get(unit) - stat.get(unit)) / self.diff_seconds(next.get('time'), stat.get('time')))
-
+            value = ((next.get('bytes') - stat.get('bytes')) / self.diff_seconds(next.get('time'), stat.get('time')))
+            if unit == 'bits':
+                value *= 8
             data = {'time': next.get('time'),
                     'value': int(value)}
             data_list.append(data)
