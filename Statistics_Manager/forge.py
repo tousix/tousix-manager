@@ -52,13 +52,10 @@ class forgeData(object):
         """
         self.now = now()
         pk = self.get_flow_id(source, destination, flow_type)
-        switches = Switch.objects.all()
         datas_non_aggregated = []
-        # get statistics per switch (sum on same time values)
-        for switch in switches:
-            query = self.forge_query(pk, switch.pk, period)
-            data = self.forge_data(query, unit)
-            datas_non_aggregated.extend(data)
+        query = self.forge_query(pk, period)
+        data = self.forge_data(query, unit)
+        datas_non_aggregated.extend(data)
         #
         # # only one flow to extract => no need for supplementary aggregations
         # if pk.count() == 1:
@@ -110,7 +107,7 @@ class forgeData(object):
         liste_pk = query.values('idflux')
         return liste_pk
 
-    def forge_query(self, pk, dpid, period='day'):
+    def forge_query(self, pk, period='day'):
         """
         Create Django query and retrieve values.
         :param pk:
@@ -122,7 +119,7 @@ class forgeData(object):
         for primary in pk:
             liste_pk.append(primary.get('idflux'))
         # filter stats by flow and switch origin
-        query = Stats.objects.filter(idflux__in=liste_pk).filter(idswitch_id=dpid)
+        query = Stats.objects.filter(idflux__in=liste_pk)
 
         query = query.filter(time__gte=self.get_start_time(period))
 
