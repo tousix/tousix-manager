@@ -17,21 +17,11 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf import settings
+from django import forms
 
 
-class AddressLimitationMixin(object):
+class ConfirmForm(forms.Form):
     """
-    Class used for verifying if the emitter of the request is in the IP address whitelist.
-
-    It is only suitable for private addresses and/or LAN addresses (proxies can bypass that security
-    if an public IP address is defined in the whitelist).
-
-    You need to add a ADDRESS_WHITELIST list variable with string addresses in your django settings file.
+    Confirmation form for verification views, it could be inserted into a submit button for example.
     """
-
-    def verify_address(self):
-        if self.request.META["HTTP_X_REAL_IP"] in settings.ADDRESS_WHITELIST:
-            return None
-        else:
-            return "Confirmed"
+    confirm = forms.BooleanField(widget=forms.HiddenInput(), initial=True)

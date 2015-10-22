@@ -17,20 +17,32 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.contrib.auth.decorators import login_required
+from django.views.generic.base import View
+from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from Log_Statistics.flows import FlowProcess
+from django.shortcuts import HttpResponse, Http404
+from Authentication.AddressMixin import AddressLimitationMixin
+import json
 
-# Thanks to : http://stackoverflow.com/questions/6069070/how-to-use-permission-required-decorators-on-django-class-based-views
-# For clean implementation of this decorator
 
-class LoginRequiredMixin(object):
+class RecieveStatsForm(AddressLimitationMixin, View):
     """
-    This a Mixin created for simplifying the code present in the other views.
-    It only adds the decorator in the subclass.
-    Warning: You need to inherit this class first among the others, otherwise it will be redefined by other views,
-    thus nullify the modification of the method.
+    View for statistics reception, coming from the controller.
     """
-    @method_decorator(login_required)
+    @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
-
+        """
+        Enter in the flow process class if all the requirements are avaliable.
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        if self.verify_address() is not None:
+            raise Http404
+        if request.method == "POST":
+            data = json.loads(request.body.decode(encoding='utf-8'))
+            process = FlowProcess()
+            process.decode_request(data)
+            return HttpResponse(status=200)
