@@ -17,21 +17,24 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf import settings
+from django import forms
+
+from Database.models import Switch
 
 
-class AddressLimitationMixin(object):
+class SwitchMultipleSelectField(forms.ModelMultipleChoiceField):
     """
-    Class used for verifying if the emitter of the request is in the IP address whitelist.
-
-    It is only suitable for private addresses and/or LAN addresses (proxies can bypass that security
-    if an public IP address is defined in the whitelist).
-
-    You need to add a ADDRESS_WHITELIST list variable with string addresses in your django settings file.
+    This class rewrites the original behavior of ModelMultipleChoiceField for showing the switch name as label.
     """
+    def label_from_instance(self, obj):
+        return "%s" % obj.nomswitch
 
-    def verify_address(self):
-        if self.request.META["HTTP_X_REAL_IP"] in settings.ADDRESS_WHITELIST:
-            return None
-        else:
-            return "Confirmed"
+class SwitchChoiceForm(forms.Form):
+    """
+    A form that shows all the avaliables switches for a imple selection (not necessary with the admin integration)
+    """
+    switches = SwitchMultipleSelectField(widget=forms.CheckboxSelectMultiple(),
+                                         queryset=Switch.objects.all())
+
+    def get_selected(self):
+        return self.cleaned_data["switches"]

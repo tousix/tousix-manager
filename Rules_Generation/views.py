@@ -17,21 +17,25 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf import settings
+from django.views.generic.edit import FormView
+from django.shortcuts import render
+from Rules_Generation.manager import Manager
+from Rules_Generation.forms import SwitchChoiceForm
+from Database.models import Regles
 
 
-class AddressLimitationMixin(object):
+class SelectionSwitchView(FormView):
     """
-    Class used for verifying if the emitter of the request is in the IP address whitelist.
-
-    It is only suitable for private addresses and/or LAN addresses (proxies can bypass that security
-    if an public IP address is defined in the whitelist).
-
-    You need to add a ADDRESS_WHITELIST list variable with string addresses in your django settings file.
+    Testing view for Rules_Generation app
     """
+    form_class = SwitchChoiceForm
+    template_name = "switches_list.html"
 
-    def verify_address(self):
-        if self.request.META["HTTP_X_REAL_IP"] in settings.ADDRESS_WHITELIST:
-            return None
-        else:
-            return "Confirmed"
+    def form_valid(self, form):
+        switches = form.get_selected()
+        manager = Manager()
+        manager.create_rules(switches)
+        rules = Regles.objects.values('regles')
+        return render(self.request, "switches_list.html", context={"rules": rules})
+
+

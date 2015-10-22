@@ -17,21 +17,25 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf import settings
+from Rules_Generation.Production.Umbrella.interface import Interface
 
-
-class AddressLimitationMixin(object):
+class IPv4(Interface):
     """
-    Class used for verifying if the emitter of the request is in the IP address whitelist.
-
-    It is only suitable for private addresses and/or LAN addresses (proxies can bypass that security
-    if an public IP address is defined in the whitelist).
-
-    You need to add a ADDRESS_WHITELIST list variable with string addresses in your django settings file.
+    Specialized class for creating IPv4 Umbrella rules.
     """
-
-    def verify_address(self):
-        if self.request.META["HTTP_X_REAL_IP"] in settings.ADDRESS_WHITELIST:
-            return None
-        else:
-            return "Confirmed"
+    def get_match(self, match_ipv4=None, match_ipv6=None):
+        """
+        Forge match object.
+        :param match_ipv4: IPv4 target address
+        :type match_ipv4: str
+        :param match_ipv6: IPv6 target address (not used)
+        :type match_ipv6: str
+        :return: Match object
+        :raises Exception: Bad use case for this class.
+        """
+        if match_ipv4 is None:
+            raise Exception("Bad use case for this class.")
+        match = {"dl_type": 2054,
+                 "arp_op": 1,
+                 "arp_tpa": match_ipv4}
+        return match
