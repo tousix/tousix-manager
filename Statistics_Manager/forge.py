@@ -59,33 +59,33 @@ class forgeData(object):
             query = self.forge_query(pk, switch.pk, period)
             data = self.forge_data(query, unit)
             datas_non_aggregated.extend(data)
-
-        # only one flow to extract => no need for supplementary aggregations
-        if pk.count() == 1:
-            return datas_non_aggregated
-
-        # sort all values in chronological period
-        datas_non_aggregated.sort(key=lambda stat: stat.get("time"))
-
-        datas_aggregated = []
-
-        # set cursor on the earliest stat (done in forge_data)
-        time_cursor = self.time_first_value
-        value = 0
-        for data in datas_non_aggregated:
-            # if the data is in the time interval, add the value
-            if ((data["time"] - time_cursor) >= timedelta(seconds=0)) &\
-                    ((data["time"] - time_cursor) <= timedelta(seconds=self.time_interval)):
-                value += data["value"]
-            # else, register the aggregated data and move the cursor
-            else:
-                datas_aggregated.append({
-                    "value": value,
-                    "time": time_cursor
-                })
-                time_cursor = data["time"]
-                value = data["value"]
-        return datas_aggregated
+        #
+        # # only one flow to extract => no need for supplementary aggregations
+        # if pk.count() == 1:
+        #     return datas_non_aggregated
+        #
+        # # sort all values in chronological period
+        # datas_non_aggregated.sort(key=lambda stat: stat.get("time"))
+        #
+        # datas_aggregated = []
+        #
+        # # set cursor on the earliest stat (done in forge_data)
+        # time_cursor = self.time_first_value
+        # value = 0
+        # for data in datas_non_aggregated:
+        #     # if the data is in the time interval, add the value
+        #     if ((data["time"] - time_cursor) >= timedelta(seconds=0)) &\
+        #             ((data["time"] - time_cursor) <= timedelta(seconds=self.time_interval)):
+        #         value += data["value"]
+        #     # else, register the aggregated data and move the cursor
+        #     else:
+        #         datas_aggregated.append({
+        #             "value": value,
+        #             "time": time_cursor
+        #         })
+        #         time_cursor = data["time"]
+        #         value = data["value"]
+        return datas_non_aggregated
 
     def get_flow_id(self, source="0", destination="0", flow_type="IPv4"):
         """
