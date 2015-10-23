@@ -43,6 +43,9 @@ class RecieveStatsForm(AddressLimitationMixin, View):
             raise Http404
         if request.method == "POST":
             data = json.loads(request.body.decode(encoding='utf-8'))
-            process = FlowProcess()
-            process.decode_request(data)
-            return HttpResponse(status=200)
+            if request.GET.__contains__("time"):
+                process = FlowProcess()
+                process.decode_request(data, request.GET.__getitem__("time"))
+                return HttpResponse(status=200)
+            else:
+                return HttpResponse(status=400)

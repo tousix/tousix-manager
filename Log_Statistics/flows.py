@@ -19,7 +19,7 @@
 
 import logging
 from Database.models import Flux, Stats, Switch
-from django.utils.timezone import now
+from django.utils.datetime_safe import datetime
 
 LOG = logging.getLogger("Log_Statistics")
 
@@ -28,7 +28,7 @@ class FlowProcess(object):
     """
     Class for flow statistics processing and commit.
     """
-    def decode_request(self, request):
+    def decode_request(self, request, time):
         datas = []
         for key, value in request.items():
             LOG.info("Stats recieved from : " + key)
@@ -40,7 +40,7 @@ class FlowProcess(object):
                     self.decode_flow(data, stat)
                     self.decode_data(data, stat)
                     datas.append(data)
-            self.save_stat(datas)
+            self.save_stat(datas, datetime.strptime(time, "%Y-%m-%dT%H:%M:%S.%f"))
 
     def decode_data(self, data, stat):
         data['bytes'] = stat.get('byte_count')
@@ -99,14 +99,13 @@ class FlowProcess(object):
             else:
                 return "ICMPv6"
 
-    def save_stat(self, datas):
+    def save_stat(self, datas, time):
         """
         Save statistics into the Database.
         :param datas:
         :return:
         """
         stats = []
-        time = now()
         for data in datas:
             stats.append(Stats(time=time, bytes=data.get('bytes'), packets=data.get('packets'),
                                idflux_id=data.get('flow'), idswitch_id=data.get("dpid")))
