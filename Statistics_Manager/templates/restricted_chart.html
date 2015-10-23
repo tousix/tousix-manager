@@ -31,10 +31,6 @@
         jQuery.post("{% url "restricted stats" %}", data_serialized, function datarecieved(data){dataUpdated(data,period);}, "json");
     }
     function dataUpdated(stats, period) {
-        // example : 2015-06-22T16:12:57+00:00
-        if (stats.length == 0) {
-            stats = null;
-        }
         MG.convert.date(stats, "time" ,"%Y-%m-%dT%H:%M:%S");
         var miss_resolution = "day";
         switch (period){
@@ -85,7 +81,7 @@
         MG.data_graphic(mgArray);
     }
     jQuery.post("{% url "charts" %}", $("#Fluxpost").serialize(), function datarecieved(data){dataUpdated(data,"year","bits");}, "json");
-    var updateInterval = setInterval(FormChanged(null), 300000);
+    var updateInterval = setInterval(FormChanged, 300000, this.form);
 </script>
 </body>
 </html>
