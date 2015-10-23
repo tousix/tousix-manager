@@ -1,18 +1,14 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 {%  load staticfiles %}
-{% load bootstrap3 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+{% block sb_admin_breadcrumb_active %}
+    <li class="active">
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-<LINK rel=stylesheet type="text/css" href="{% static "css/metricsgraphics.css" %}">
-<a href="{% url "auth_logout" %}?next=/">Logout</a>
+        <i class="fa fa-play"></i> Statistiques
 
+    </li>
+{% endblock sb_admin_breadcrumb_active %}
+{% block sb_admin_subheading %}Statistiques{% endblock sb_admin_subheading %}
+{% block content %}
 {% if not_member %}
     {% if member %}
         Le compte n'a pas encore été approuvé par l'administrateur.
@@ -25,8 +21,27 @@
         {% csrf_token %}
         {{ form.as_p }}
     </form>
-    <div id="Chart"></div>
-    <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+
+                    <div class="row">
+                    <div class="col-lg-7">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Result</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="chart">
+                                    <div class="chart-content" id="Chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+    {% endif %}
+
+    {% endblock content %}
+
+{% block sb_admin_custom_js %}
+        {%  if not not_member %}
 <script type="text/javascript" src="{% static "js/d3.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/metricsgraphics.min.js" %}"></script>
 <script type="text/javascript">
@@ -55,8 +70,7 @@
 
         }
         var mgArray = {
-            title: "Result",
-            width: 600,
+            height: 800,
             y_accessor: "value",
             y_label: "bits/second",
             x_accessor: "time",
@@ -64,9 +78,8 @@
             missing_is_zero: true,
             missing_text: 'Aucune donnée disponible pour ce flux',
             missing_resolution: miss_resolution,
-            height: 200,
+            full_width: true,
             interpolate: "linear",
-            right: 40,
             min_y: 0,
             xax_count: 4,
             mouseover: function (d, i) {
@@ -89,6 +102,5 @@
     jQuery.post("{% url "charts" %}", $("#Fluxpost").serialize(), function datarecieved(data){dataUpdated(data,"year","bytes");}, "json");
     var updateInterval = setInterval(FormChanged, 300000, this.form);
 </script>
-{% endif %}
-</body>
-</html>
+        {% endif %}
+{% endblock sb_admin_custom_js %}

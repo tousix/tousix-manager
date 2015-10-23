@@ -3,12 +3,21 @@
 {% block sb_admin_header_url %}/{% endblock sb_admin_header_url %}
 {% block sb_admin_title %}{% block title %}{% endblock title %}{% endblock sb_admin_title %}
 {% block sb_admin_sidebar %}<!-- left sidebar -->{% endblock sb_admin_sidebar %}
-{% block sb_admin_navbar_right %}<ul class="nav navbar-right top-nav">
+{% block sb_admin_breadcrumb %}<i class="fa fa-dashboard"></i>  <a href="index.html">Accueil</a>{% endblock sb_admin_breadcrumb %}
+{% block sb_admin_breadcrumb_active %}
+    <li class="active">
+
+        <i class="fa fa-play"></i> Need some change here !
+
+    </li>
+{% endblock sb_admin_breadcrumb_active %}
+{% block sb_admin_navbar_right %}
+    <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {% if user.username %}{{ user.username }}{% else %}Anonymous{% endif %} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            <a href="{% url "auth_logout" %}?next=/"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                         </li>
                     </ul>
                 </li>

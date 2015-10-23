@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 {% load i18n %}
 
-{% block head %}
+{% block sb_admin_header %}
 {{ wizard.form.media }}
-{% endblock %}
+{% endblock sb_admin_header%}
 
 {% block content %}
 <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
@@ -25,5 +25,4 @@
 {% endif %}
 <input type="submit" value="{% trans "submit" %}"/>
 </form>
-{% endblock %}
-</html>
+{% endblock content %}

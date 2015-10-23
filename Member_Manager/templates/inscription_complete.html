@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-L'inscription a été compété avec succès. Néamoins, un administrateur doit approuver cette inscription avant tout autre démarrage de procédure.
-<a href="{% url "charts" %}">Retourner à l'accueil</a>
+{% extends "base.html" %}
+{% block content %}
+    L'inscription a été compété avec succès. Néamoins, un administrateur doit approuver cette inscription avant tout autre démarrage de procédure.
+{% endblock content %}
+{% block sb_admin_breadcrumb_active %}
+    <li class="active">
 
-</body>
-</html>
+        <i class="fa fa-play"></i> Inscription
+
+    </li>
+{% endblock sb_admin_breadcrumb_active %}
