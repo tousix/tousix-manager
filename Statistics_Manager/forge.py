@@ -184,8 +184,8 @@ class forgeData(object):
         :param period:
         :return:
         """
-        if period == "hour":
-            return self.now - timedelta(hours=1)
+        if period == "week":
+            return self.now - timedelta(days=8)
         elif period == "day":
             return self.now - timedelta(days=1)
         elif period == "month":

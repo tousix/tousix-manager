@@ -54,8 +54,8 @@ class PeriodFrom(forms.Form):
     Choice form for select the period.
     """
     period = forms.ChoiceField(widget=forms.Select(attrs={"onchange": "FormChanged(this.form);"}),
-                               choices=(('hour', 'hour',),
-                                      ('day', 'day',),
+                               choices=(('day', 'day',),
+                                      ('week', 'week',),
                                       ('month', 'month',),
                                       ('year', 'year',),))
 
