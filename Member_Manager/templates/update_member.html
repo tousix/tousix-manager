@@ -10,8 +10,8 @@
     <form id="MembersForm" method="post">
         {% csrf_token %}
         {{ membre.as_p  }}
-            <button class="btn btn-primary" type="submit">Submit Button</button>
-            <button class="btn btn-default" type="reset">Reset Button</button>
+            <button class="btn btn-primary" type="submit">Envoyer</button>
+            <button class="btn btn-default" type="reset">Réinitialiser</button>
         </form>
         </div>
     </div>
@@ -26,8 +26,8 @@
         <form action="{% url "update technical" %}" id="TechnicalForm" method="post">
         {% csrf_token %}
         {{ technical.as_p }}
-            <button class="btn btn-primary" type="submit">Submit Button</button>
-            <button class="btn btn-default" type="reset">Reset Button</button>
+            <button class="btn btn-primary" type="submit">Envoyer</button>
+            <button class="btn btn-default" type="reset">Réinitialiser</button>
     </form>
             </div>
     </div>
@@ -41,8 +41,8 @@
     <form action="{% url "update noc" %}"id="NocForm" method="post">
         {% csrf_token %}
         {{ noc.as_p }}
-        <button class="btn btn-primary" type="submit">Submit Button</button>
-            <button class="btn btn-default" type="reset">Reset Button</button>
+        <button class="btn btn-primary" type="submit">Envoyer</button>
+            <button class="btn btn-default" type="reset">Réinitialiser</button>
     </form>
                 </div>
     </div>
@@ -56,8 +56,8 @@
         <form action="{% url "update billing" %}"id="BillingForm" method="post">
         {% csrf_token %}
         {{ billing.as_p }}
-            <button class="btn btn-primary" type="submit">Submit Button</button>
-            <button class="btn btn-default" type="reset">Reset Button</button>
+            <button class="btn btn-primary" type="submit">Envoyer</button>
+            <button class="btn btn-default" type="reset">Réinitialiser</button>
     </form>
                     </div>
     </div>
@@ -71,8 +71,8 @@
             <form action="{% url "update router" %}" id="RouterForm" method="post">
         {% csrf_token %}
         {{ router.as_p }}
-            <button class="btn btn-primary" type="submit">Submit Button</button>
-            <button class="btn btn-default" type="reset">Reset Button</button>
+            <button class="btn btn-primary" type="submit">Envoyer</button>
+            <button class="btn btn-default" type="reset">Réinitialiser</button>
             </form>
                         </div>
     </div>
@@ -86,8 +86,8 @@
     <form action="{% url "update password" %}" id="PasswordrForm" method="post">
         {% csrf_token %}
         {{ password.as_p }}
-            <button class="btn btn-primary" type="submit">Submit Button</button>
-            <button class="btn btn-default" type="reset">Reset Button</button>
+            <button class="btn btn-primary" type="submit">Envoyer</button>
+            <button class="btn btn-default" type="reset">Réinitialiser</button>
     </form>
                             </div>
     </div>
