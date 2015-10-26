@@ -12,6 +12,7 @@
     </li>
 {% endblock sb_admin_breadcrumb_active %}
 {% block sb_admin_navbar_right %}
+    {% if user.username %}
     <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {% if user.username %}{{ user.username }}{% else %}Anonymous{% endif %} <b class="caret"></b></a>
@@ -21,5 +22,21 @@
                         </li>
                     </ul>
                 </li>
-            </ul>{% endblock sb_admin_navbar_right %}
+            </ul>
+    {% else %}
+        <ul class="nav navbar-right top-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+ <a href="{% url "auth_login" %}">Login</a>
+                        </li>
+                        <li>
+    <a href="{% url "registration_register" %}">Register</a>
+                        </li>
+                    </ul>
+                </li>
+</ul>
+    {% endif %}
+{% endblock sb_admin_navbar_right %}
 {% block sb_admin_content %}{% block content %}{% endblock content %}{% endblock sb_admin_content %}
