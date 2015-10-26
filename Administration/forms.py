@@ -18,8 +18,9 @@
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
 from django import forms
-from Database.models import Hote, Port, Switch, Pop, Membre, ConnectionType
+from Database.models import Hote, Port, Switch, Pop, Membre, ConnectionType, User_TouSIX
 from django.forms.utils import ErrorList
+from django.contrib.auth.forms import UserChangeForm
 
 
 class PortChoiceField(forms.ModelChoiceField):
@@ -99,3 +100,19 @@ class MembreForm(forms.ModelForm):
     class Meta:
         model = Membre
         fields = ["nommembre", "asnumber", "connexion_type", "fqdn_host", "idpop", "approved"]
+
+
+class MemberChoiceField(forms.ModelChoiceField):
+    """
+    ModelChoiceField modification for display member name instead of complete object.
+    """
+    def label_from_instance(self, obj):
+        return "%s" % obj.nommembre
+
+
+class UserForm(UserChangeForm):
+    membre = MemberChoiceField(queryset=Membre.objects.all(), widget=forms.RadioSelect)
+
+    class Meta:
+        model = User_TouSIX
+        fields = ["membre"]
