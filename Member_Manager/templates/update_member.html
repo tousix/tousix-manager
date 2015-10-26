@@ -9,7 +9,7 @@
         <div class="panel-body">
     <form id="MembersForm" method="post">
         {% csrf_token %}
-        {{ membre.as_p  }}
+        {{ member.as_p  }}
             <button class="btn btn-primary" type="submit">Envoyer</button>
             <button class="btn btn-default" type="reset">Réinitialiser</button>
         </form>
