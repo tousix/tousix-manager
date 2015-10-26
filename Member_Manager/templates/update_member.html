@@ -1,55 +1,96 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-{% load bootstrap3 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-<body>
-{% bootstrap_messages %}
+{% extends "base.html" %}
+{% block content %}
+    <div class="col-sm-4">
 {% if form %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Modification membre</h3>
+        </div>
+        <div class="panel-body">
     <form id="MembersForm" method="post">
         {% csrf_token %}
-        {% bootstrap_form form %}
-    {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+        {{ membre.as_p  }}
+            <button class="btn btn-primary" type="submit">Submit Button</button>
+            <button class="btn btn-default" type="reset">Reset Button</button>
         </form>
+        </div>
+    </div>
+
 {% endif %}
 {% if technical %}
+        <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Modification technique</h3>
+        </div>
+        <div class="panel-body">
         <form action="{% url "update technical" %}" id="TechnicalForm" method="post">
         {% csrf_token %}
-        {% bootstrap_form technical %}
-            {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+        {{ technical.as_p }}
+            <button class="btn btn-primary" type="submit">Submit Button</button>
+            <button class="btn btn-default" type="reset">Reset Button</button>
     </form>
+            </div>
+    </div>
 {% endif %}
 {% if noc %}
+        <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Modification NOC</h3>
+        </div>
+        <div class="panel-body">
     <form action="{% url "update noc" %}"id="NocForm" method="post">
         {% csrf_token %}
-        {% bootstrap_form noc %}
-            {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+        {{ noc.as_p }}
+        <button class="btn btn-primary" type="submit">Submit Button</button>
+            <button class="btn btn-default" type="reset">Reset Button</button>
     </form>
+                </div>
+    </div>
 {% endif %}
 {% if billing %}
+            <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Modification billing</h3>
+        </div>
+        <div class="panel-body">
         <form action="{% url "update billing" %}"id="BillingForm" method="post">
         {% csrf_token %}
-        {% bootstrap_form billing %}
-                {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+        {{ billing.as_p }}
+            <button class="btn btn-primary" type="submit">Submit Button</button>
+            <button class="btn btn-default" type="reset">Reset Button</button>
     </form>
+                    </div>
+    </div>
 {% endif %}
 {% if router %}
+                <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Modification routeur</h3>
+        </div>
+        <div class="panel-body">
             <form action="{% url "update router" %}" id="RouterForm" method="post">
         {% csrf_token %}
-        {% bootstrap_form router %}
-        {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+        {{ router.as_p }}
+            <button class="btn btn-primary" type="submit">Submit Button</button>
+            <button class="btn btn-default" type="reset">Reset Button</button>
             </form>
+                        </div>
+    </div>
 {% endif %}
 {% if password %}
+                    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Modification Mot de passe</h3>
+        </div>
+        <div class="panel-body">
     <form action="{% url "update password" %}" id="PasswordrForm" method="post">
         {% csrf_token %}
-        {% bootstrap_form password %}
-        {% buttons submit='Envoyer' reset="Réinitialiser" %}{% endbuttons %}
+        {{ password.as_p }}
+            <button class="btn btn-primary" type="submit">Submit Button</button>
+            <button class="btn btn-default" type="reset">Reset Button</button>
     </form>
+                            </div>
+    </div>
 {% endif %}
-</body>
-</html>
+    </div>
+{% endblock content %}
