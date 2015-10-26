@@ -11,7 +11,7 @@
 </head>
 <body>
 <LINK rel=stylesheet type="text/css" href="{% static "css/metricsgraphics.css" %}">
-<a href="{% url "auth_logout" %}?next=/">Logout</a>
+<a href="{% url "auth_logout" %}">Logout</a>
 
 {% if not_member %}
     {% if member %}
@@ -55,16 +55,14 @@
 
         }
         var mgArray = {
-            title: "Result",
-            width: 600,
+            width: 900,
             y_accessor: "value",
-            y_label: "bits/second",
             x_accessor: "time",
             xax_start_at_min: true,
             missing_is_zero: true,
             missing_text: 'Aucune donnée disponible pour ce flux',
             missing_resolution: miss_resolution,
-            height: 200,
+            height: 500,
             interpolate: "linear",
             right: 40,
             min_y: 0,
