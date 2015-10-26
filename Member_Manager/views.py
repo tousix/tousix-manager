@@ -54,9 +54,9 @@ class CreateMemberView(LoginRequiredMixin, SessionWizardView):
         technical = form_dict['3'].save()
         member.technical_id = technical.pk
 
-        member.user = self.request.user
-        member.approved = False
         member.save()
+        self.request.user.membre = member
+        self.request.user.save()
 
         router = form_dict['4'].save(commit=False)
         router.idmembre_id = member.pk
@@ -78,7 +78,7 @@ class UpdateMemberView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
     success_message = "Changement contact facturation enregistré."
 
     def get_object(self, queryset=None):
-        return Membre.objects.filter(user=self.request.user).first()
+        return self.request.user.membre
 
     def get_form(self, form_class=None):
         return MemberForm(instance=self.get_object(), prefix="member")
@@ -119,7 +119,7 @@ class TechnicalUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
     context_object_name = "technical"
 
     def get_object(self, queryset=None):
-        return Membre.objects.filter(user=self.request.user).first().technical
+        return self.request.user.membre.technical
 
     def get_form(self, form_class=None):
         return TechnicalForm(instance=self.get_object(), prefix="technical")
@@ -143,7 +143,7 @@ class NOCUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
     context_object_name = "noc"
 
     def get_object(self, queryset=None):
-        return Membre.objects.filter(user=self.request.user).first().noc
+        return self.request.user.membre.noc
 
     def get_form(self, form_class=None):
         return NOCForm(instance=self.get_object(), prefix="noc")
@@ -167,7 +167,7 @@ class BillingUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
     context_object_name = "billing"
 
     def get_object(self, queryset=None):
-        return Membre.objects.filter(user=self.request.user).first().billing
+        return self.request.user.membre.billing
 
     def get_form(self, form_class=None):
         return TechnicalForm(instance=self.get_object(), prefix="billing")
@@ -191,7 +191,7 @@ class RouterUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
     context_object_name = "router"
 
     def get_object(self, queryset=None):
-        return Hote.objects.filter(idmembre=Membre.objects.filter(user=self.request.user).first()).first()
+        return Hote.objects.filter(idmembre=self.request.user.membre).first()
 
     def get_form(self, form_class=None):
         return RouterForm(instance=self.get_object(), prefix="router")
