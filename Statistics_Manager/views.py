@@ -37,9 +37,9 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
 
     def get(self, request, *args, **kwargs):
 
-        membre = Membre.objects.filter(user=self.request.user)
-        if membre.count() > 0:
-            if membre.first().approved is True:
+        membre = self.request.user.Membre
+        if membre is not None:
+            if membre.approved is True:
                 return super(StatsMembersList, self).get(request, *args, **kwargs)
             else:
                 return render(request, self.template_name, context={"not_member": True,
@@ -48,9 +48,9 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
         return render(request, self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-        membre = Membre.objects.filter(user=self.request.user)
-        if membre.count() > 0:
-            if membre.first().approved is True:
+        membre = self.request.user.Membre
+        if membre is not None:
+            if membre.approved is True:
                 return super(StatsMembersList, self).post(request, *args, **kwargs)
         return JSONResponseMixin.render_to_response(self, [])
 

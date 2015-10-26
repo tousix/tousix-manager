@@ -17,7 +17,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 from django import forms
-from django.contrib.auth.models import User
+from Database.models import User_TouSIX
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -37,7 +37,7 @@ class UserCreationForm(forms.ModelForm):
         help_text=_("Enter the same password as above, for verification."))
 
     class Meta:
-        model = User
+        model = User_TouSIX
         fields = ("username", "email")
 
     def clean_password2(self):

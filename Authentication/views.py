@@ -18,7 +18,7 @@
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.views.generic.edit import CreateView
-from django.contrib.auth.models import User
+from Database.models import User_TouSIX
 from Authentication.forms import UserCreationForm
 
 
@@ -27,6 +27,6 @@ class RegisterView(CreateView):
     Simple user creation view.
     Now replaced by django-registration-redux, this view is kept for testing purposes.
     """
-    model = User
+    model = User_TouSIX
     form_class = UserCreationForm
     template_name = 'registration/create_user.html'
