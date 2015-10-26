@@ -4,9 +4,17 @@
 {% block sb_admin_header %}
 {{ wizard.form.media }}
 {% endblock sb_admin_header%}
+{% block sb_admin_breadcrumb %}<i class="fa fa-dashboard"></i>  <a href="{% url "Create member" %}">Inscription membre</a>{% endblock sb_admin_breadcrumb %}
+
+{% block sb_admin_breadcrumb_active %}
+        <li class="active">
+
+        <i class="fa"></i> Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}
+
+    </li>
+{% endblock sb_admin_breadcrumb_active %}
 
 {% block content %}
-<p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
 <form action="" method="post">{% csrf_token %}
 <table>
 {{ wizard.management_form }}
@@ -20,9 +28,9 @@
 {% endif %}
 </table>
 {% if wizard.steps.prev %}
-<button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% trans "first step" %}</button>
-<button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
+<button class="btn btn-danger" name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% trans "first step" %}</button>
+<button class="btn btn-info" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
 {% endif %}
-<input type="submit" value="{% trans "submit" %}"/>
+<input class="btn btn-primary" type="submit" value="{% trans "submit" %}"/>
 </form>
 {% endblock content %}

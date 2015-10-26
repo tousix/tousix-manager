@@ -16,7 +16,6 @@
     <a href="{% url "Create member" %}">S'inscrire en tant que membre</a>
         {% endif %}
     {% else %}
-    <a href="{% url "update member" %}">Mise à jour des paramètres</a>
     <form id="Fluxpost" method="post">
         {% csrf_token %}
         {{ form.as_p }}

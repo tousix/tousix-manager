@@ -2,7 +2,19 @@
 {% block sb_admin_header %}TouSIX-Manager{% endblock sb_admin_header %}
 {% block sb_admin_header_url %}/{% endblock sb_admin_header_url %}
 {% block sb_admin_title %}{% block title %}{% endblock title %}{% endblock sb_admin_title %}
-{% block sb_admin_sidebar %}<!-- left sidebar -->{% endblock sb_admin_sidebar %}
+{% block sb_admin_sidebar %}
+    <ul class="nav navbar-nav side-nav">
+    {% if user.membre.approved %}
+        <li {% if user.username %}class="active"{% endif %}>
+            <a href="{% url "update member" %}"><i class="fa fa-fw fa-play"></i> Paramètres membre</a>
+        </li>
+    {% else %}
+        <li {% if user.username %}class="active"{% endif %}>
+            <a href="{% url "Create member" %}"><i class="fa fa-fw fa-play"></i> S'inscrire en tant que membre</a>
+        </li>
+        {% endif %}
+        </ul>
+{% endblock sb_admin_sidebar %}
 {% block sb_admin_breadcrumb %}<i class="fa fa-dashboard"></i>  <a href="index.html">Accueil</a>{% endblock sb_admin_breadcrumb %}
 {% block sb_admin_breadcrumb_active %}
     <li class="active">
