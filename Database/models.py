@@ -87,7 +87,7 @@ class Membre(models.Model):
 
 
 class User_TouSIX(AbstractUser):
-    Membre = models.ForeignKey(Membre, null=True)
+    membre = models.ForeignKey(Membre, null=True)
     class Meta:
         db_table = 'User'
 
