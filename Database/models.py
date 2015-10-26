@@ -90,6 +90,7 @@ class User_TouSIX(AbstractUser):
     membre = models.ForeignKey(Membre, null=True)
     class Meta:
         db_table = 'User'
+        verbose_name = "User"
 
 class Controleur(models.Model):
     """
@@ -325,6 +326,7 @@ class Regles(models.Model):
 
     class Meta:
         db_table = 'Règles'
+        verbose_name = "Règle"
 
 
 class Stats(models.Model):
