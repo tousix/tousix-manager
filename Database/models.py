@@ -19,7 +19,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 from Database.fields import PositiveBigIntegerField, MACAddressField
 from django_fsm import FSMField, transition
 from django.db.models import Q
@@ -72,6 +72,7 @@ class Membre(models.Model):
     idmembre = models.AutoField(db_column='idMembre', primary_key=True)
     nommembre = models.CharField(db_column='NomMembre', max_length=30, blank=True, null=True, verbose_name="Nom membre")
     url = models.URLField(null=True, verbose_name="Lien site web")
+    user = models.OneToOneField(User, null=True)
     statut = models.CharField(db_column='Statut', max_length=12, blank=True, null=True)
     asnumber = models.PositiveIntegerField(db_column='ASNumber', verbose_name="N°AS")
     connexion_type = models.ForeignKey(ConnectionType, blank=True, null=True, verbose_name="Type de connexion")
@@ -85,12 +86,6 @@ class Membre(models.Model):
     class Meta:
         db_table = 'Membre'
 
-
-class User_TouSIX(AbstractUser):
-    membre = models.ForeignKey(Membre, null=True)
-    class Meta:
-        db_table = 'User'
-        verbose_name = "User"
 
 class Controleur(models.Model):
     """
