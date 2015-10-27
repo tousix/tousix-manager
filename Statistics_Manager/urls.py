@@ -36,7 +36,7 @@ from Statistics_Manager.views import *
 
 urlpatterns = [
 
-    url(r'^stats', StatsMembersList.as_view(), name='charts'),
-    url(r'^stats/restricted', RestrictedStats.as_view(), name='restricted stats'),
+    url(r'^stats/complete', StatsMembersList.as_view(), name='charts'),
+    url(r'^stats', RestrictedStats.as_view(), name='restricted stats'),
 
 ]
