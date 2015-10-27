@@ -17,10 +17,17 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from Member_Manager.create import CreateMemberView
-from Member_Manager.update.view import UpdateMemberView
-from Member_Manager.update.noc import NOCUpdateView
-from Member_Manager.update.billing import BillingUpdateView
-from Member_Manager.update.password import PasswordChangeView
-from Member_Manager.update.technical import TechnicalUpdateView
-from Member_Manager.update.router import RouterUpdateView
+from django import forms
+from Database.models import Contact
+from localflavor.fr.forms import FRPhoneNumberField
+
+
+class BillingForm(forms.ModelForm):
+    """
+    ModelForm for billing contact model.
+    """
+    telcontact = FRPhoneNumberField()
+
+    class Meta:
+        model = Contact
+        exclude = ['idcontact']

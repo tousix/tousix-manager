@@ -17,10 +17,23 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from Member_Manager.create import CreateMemberView
-from Member_Manager.update.view import UpdateMemberView
-from Member_Manager.update.noc import NOCUpdateView
-from Member_Manager.update.billing import BillingUpdateView
-from Member_Manager.update.password import PasswordChangeView
-from Member_Manager.update.technical import TechnicalUpdateView
-from Member_Manager.update.router import RouterUpdateView
+from django.views.generic.edit import FormView
+from Authentication.LoginMixin import LoginRequiredMixin
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import HttpResponseRedirect
+
+
+class PasswordChangeView(LoginRequiredMixin, FormView, SuccessMessageMixin):
+    """
+    THis view permits an uner to change his password.
+    """
+    form_class = PasswordChangeForm
+    success_message = "Changement mdp réussi."
+    template_name = "update_member.html"
+
+    def get_form(self, form_class=None):
+        return PasswordChangeForm(self.request.user, prefix="password")
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect("/member/update")

@@ -18,8 +18,7 @@
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
 from django import forms
-from Database.models import Membre, Contact, Hote, ConnectionType
-from localflavor.fr.forms import FRPhoneNumberField
+from Database.models import Membre, ConnectionType
 
 
 class ConnexionChoiceField(forms.ModelChoiceField):
@@ -39,45 +38,3 @@ class MemberForm(forms.ModelForm):
     class Meta:
         model = Membre
         fields = ['nommembre', 'url', 'asnumber', 'connexion_type', 'fqdn_host']
-
-
-class BillingForm(forms.ModelForm):
-    """
-    ModelForm for billing contact model.
-    """
-    telcontact = FRPhoneNumberField()
-
-    class Meta:
-        model = Contact
-        exclude = ['idcontact']
-
-
-class NOCForm(forms.ModelForm):
-    """
-    ModelForm for NOC contact model.
-    """
-    telcontact = FRPhoneNumberField()
-
-    class Meta:
-        model = Contact
-        exclude = ['idcontact']
-
-
-class TechnicalForm(forms.ModelForm):
-    """
-    ModelForm for technical contact model.
-    """
-    telcontact = FRPhoneNumberField()
-
-    class Meta:
-        model = Contact
-        exclude = ['idcontact']
-
-
-class RouterForm(forms.ModelForm):
-    """
-    ModelForm for router model.
-    """
-    class Meta:
-        model = Hote
-        fields = ['nomhote', 'machote']

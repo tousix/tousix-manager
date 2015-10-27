@@ -16,7 +16,9 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
-"""Member_Manager URL Configuration
+
+"""
+Member_Manager URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.8/topics/http/urls/
@@ -32,7 +34,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import url
-from Member_Manager.views import CreateMemberView, UpdateMemberView, NOCUpdateView, BillingUpdateView, TechnicalUpdateView, RouterUpdateView, PasswordChangeView
+from Member_Manager.views import *
 
 urlpatterns = [
 
