@@ -54,31 +54,14 @@
     function dataUpdated(stats, period, unit) {
         // example : 2015-06-22T16:12:57+00:00
         MG.convert.date(stats, "time" ,"%Y-%m-%dT%H:%M:%S");
-        var miss_resolution = "day";
-        switch (period){
 
-            case "hour":
-                miss_resolution = "second";
-                break;
-            case "day":
-                miss_resolution = "minute";
-                break;
-            case "month":
-                miss_resolution = "hour";
-                break;
-            case "year":
-                miss_resolution = "day";
-
-        }
         var mgArray = {
             full_width: true,
             y_accessor: "value",
             y_label: "bits/second",
             x_accessor: "time",
             xax_start_at_min: true,
-            missing_is_zero: true,
             missing_text: 'Aucune donnée disponible pour ce flux',
-            missing_resolution: miss_resolution,
             height: 600,
             interpolate: "linear",
             min_y: 0,
