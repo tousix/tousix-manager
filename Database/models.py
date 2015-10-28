@@ -72,7 +72,6 @@ class Membre(models.Model):
     idmembre = models.AutoField(db_column='idMembre', primary_key=True)
     nommembre = models.CharField(db_column='NomMembre', max_length=30, blank=True, null=True, verbose_name="Nom membre")
     url = models.URLField(null=True, verbose_name="Lien site web")
-    user = models.OneToOneField(User, null=True)
     statut = models.CharField(db_column='Statut', max_length=12, blank=True, null=True)
     asnumber = models.PositiveIntegerField(db_column='ASNumber', verbose_name="N°AS")
     connexion_type = models.ForeignKey(ConnectionType, blank=True, null=True, verbose_name="Type de connexion")
@@ -85,6 +84,14 @@ class Membre(models.Model):
 
     class Meta:
         db_table = 'Membre'
+
+
+class UserMembre(models.Model):
+    user = models.OneToOneField(User, unique=True)
+    membre = models.ForeignKey(Membre)
+
+    class Meta:
+        db_table = 'UserMembre'
 
 
 class Controleur(models.Model):

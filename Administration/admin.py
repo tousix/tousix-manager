@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from Database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch, Regles, User_TouSIX
-from Administration.forms import HoteForm, SwitchForm, MembreForm, UserForm
+from Database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch, Regles
+from Administration.forms import HoteForm, SwitchForm, MembreForm
 from Administration.actions import generate_routeserver_conf, generate_openflow_rules, get_rules_list, change_hote_status
 from fsm_admin.mixins import FSMTransitionMixin
 from Administration.adminsite import admin_tousix
@@ -19,16 +19,6 @@ class HoteInLine(admin.TabularInline):
     form = HoteForm
 
 
-@admin.register(User_TouSIX)
-class UserAdmin(UserAdmin):
-    form = UserForm
-    fieldsets = (
-        (None, {'fields': ('username', 'password')}),
-        ('Personal info', {'fields': ('membre', 'first_name', 'last_name', 'email')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser',
-                                       'groups', 'user_permissions')}),
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
-    )
 @admin.register(Membre)
 class MembreAdmin(admin.ModelAdmin):
     """

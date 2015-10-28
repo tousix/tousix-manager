@@ -19,12 +19,12 @@
 
 from django.views.generic.edit import FormView
 from Statistics_Manager.forge import forgeData
-from Database.models import Membre
-from django.shortcuts import render, redirect
+from Database.models import UserMembre
 from Statistics_Manager.forms import FluxSelectionForm, RestrictedFluxSelectionForm
 from Statistics_Manager.JSONResponseMixin import JSONResponseMixin
 from Authentication.LoginMixin import LoginRequiredMixin
 from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect
 # Create your views here.
 
 
@@ -37,7 +37,7 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
 
     def get(self, request, *args, **kwargs):
 
-        membre = self.request.user.membre
+        membre = UserMembre.objects.filter(user=self.request.user).first().membre
         if membre is not None:
             if membre.approved is True:
                 return super(StatsMembersList, self).get(request, *args, **kwargs)
@@ -48,7 +48,7 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
         return render(request, self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-        membre = self.request.user.membre
+        membre = UserMembre.objects.filter(user=self.request.user).first().membre
         if membre is not None:
             if membre.approved is True:
                 return super(StatsMembersList, self).post(request, *args, **kwargs)

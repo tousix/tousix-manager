@@ -19,6 +19,7 @@
 
 from formtools.wizard.views import SessionWizardView
 from Member_Manager.forms.forms import *
+from Database.models import UserMembre
 from Authentication.LoginMixin import LoginRequiredMixin
 from django.shortcuts import render
 
@@ -51,8 +52,8 @@ class CreateMemberView(LoginRequiredMixin, SessionWizardView):
         member.technical_id = technical.pk
 
         member.save()
-        self.request.user.membre = member
-        self.request.user.save()
+        user_membre = UserMembre(user=self.request.user, membre=member)
+        user_membre.save()
 
         router = form_dict['4'].save(commit=False)
         router.idmembre_id = member.pk
