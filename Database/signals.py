@@ -20,6 +20,7 @@
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from Database.models import Hote, Flux, Stats
+from BGP_Configuration.views import render_conf_hosts
 from django.db.models import Q
 from Rules_Deployment.rules import RulesDeployment
 
@@ -44,6 +45,9 @@ def post_save_hote(sender, **kwargs):
                 db_flux.append(Flux(hote_src=kwargs['instance'], hote_dst=peer_dst, type="IPv6"))
         Flux.objects.bulk_create(db_flux)
 
+        # Deploy BGP configuration with the new host
+        render_conf_hosts(Hote.objects.all())
+
 
 @receiver(pre_delete, sender=Hote)
 def pre_delete_hote(sender, **kwargs):
@@ -63,3 +67,7 @@ def pre_delete_hote(sender, **kwargs):
     # remove rules for designated host
     deployment = RulesDeployment()
     deployment.remove_host([kwargs['instance']])
+
+    # Remove host from the BGP configuration
+    render_conf_hosts(Hote.objects.exclude(idhote=kwargs['instance'].idhote))
+
