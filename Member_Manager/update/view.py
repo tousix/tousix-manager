@@ -20,7 +20,7 @@
 from django.views.generic.edit import UpdateView
 from Authentication.LoginMixin import LoginRequiredMixin
 from Member_Manager.forms.forms import *
-from Database.models import Membre, Hote
+from Database.models import Membre, Hote, UserMembre
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.messages.views import SuccessMessageMixin
 
@@ -38,7 +38,7 @@ class UpdateMemberView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
     success_message = "Changement contact facturation enregistré."
 
     def get_object(self, queryset=None):
-        return self.request.user.membre
+        return UserMembre.objects.filter(user=self.request.user).first().membre
 
     def get_form(self, form_class=None):
         return MemberForm(instance=self.get_object(), prefix="member")
