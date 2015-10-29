@@ -20,7 +20,7 @@
 from django.views.generic.edit import UpdateView
 from Member_Manager.forms.technical import TechnicalForm
 from Authentication.LoginMixin import LoginRequiredMixin
-from Database.models import Contact
+from Database.models import Contact, UserMembre
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import HttpResponseRedirect
 
@@ -37,7 +37,7 @@ class TechnicalUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
     context_object_name = "technical"
 
     def get_object(self, queryset=None):
-        return self.request.user.membre.technical
+        return UserMembre.objects.filter(user=self.request.user).first().membre.technical
 
     def get_form(self, form_class=None):
         return TechnicalForm(instance=self.get_object(), prefix="technical")

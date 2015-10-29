@@ -20,7 +20,7 @@
 from django.views.generic.edit import UpdateView
 from Member_Manager.forms.router import RouterForm
 from Authentication.LoginMixin import LoginRequiredMixin
-from Database.models import Hote
+from Database.models import Hote, UserMembre
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import HttpResponseRedirect
 
@@ -37,7 +37,7 @@ class RouterUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
     context_object_name = "router"
 
     def get_object(self, queryset=None):
-        return Hote.objects.filter(idmembre=self.request.user.membre).first()
+        return Hote.objects.filter(idmembre=UserMembre.objects.filter(user=self.request.user).first().membre.idmembre).first()
 
     def get_form(self, form_class=None):
         return RouterForm(instance=self.get_object(), prefix="router")

@@ -20,7 +20,7 @@
 from django.views.generic.edit import UpdateView
 from Member_Manager.forms.noc import NOCForm
 from Authentication.LoginMixin import LoginRequiredMixin
-from Database.models import Contact
+from Database.models import Contact, UserMembre
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import HttpResponseRedirect
 
@@ -37,7 +37,7 @@ class NOCUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
     context_object_name = "noc"
 
     def get_object(self, queryset=None):
-        return self.request.user.membre.noc
+        return UserMembre.objects.filter(user=self.request.user).first().membre.noc
 
     def get_form(self, form_class=None):
         return NOCForm(instance=self.get_object(), prefix="noc")
