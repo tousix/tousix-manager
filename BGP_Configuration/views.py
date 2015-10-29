@@ -18,7 +18,7 @@
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.views.generic.edit import FormView
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 
 from BGP_Configuration.forms import MembersChoiceForm
 from Database.models import Hote
@@ -40,14 +40,13 @@ class SelectionMemberView(FormView):
 
     def form_valid(self, form):
         members = form.get_selected().filter(approved=True)
-        data = render_conf_members(self.request, members)
+        data = render_conf_members(members)
         return render(self.request, "members_list.html", context=data)
 
 
-def render_conf_members(request, members):
+def render_conf_members(members):
     """
     Render the BIRD config files with the members selected
-    :param request: HTTP request
     :param members: List of member model objects
     :return:
     """
@@ -63,18 +62,17 @@ def render_conf_members(request, members):
                     'peer': host.nomhote,
                     "as": member.asnumber}
             peers.append(peer)
-    render_ipv4 = render(request, "ipv4.conf", context={"peers": peers})
-    render_ipv6 = render(request, "ipv6.conf", context={"peers": peers})
+    render_ipv4 = render_to_response("ipv4.conf", context={"peers": peers})
+    render_ipv6 = render_to_response("ipv6.conf", context={"peers": peers})
     send_bgp_config(render_ipv4.content, render_ipv6.content)
     results = reload_bgp_config()
     return {"ipv4": results,
             "ipv6": results}
 
 
-def render_conf_hosts(request, hosts):
+def render_conf_hosts(hosts):
     """
     Render the BIRD config files with the hosts selected
-    :param request: HTTP request
     :param hosts: List of hosts model objects
     :return:
     """
@@ -87,8 +85,8 @@ def render_conf_hosts(request, hosts):
                 'peer': host.nomhote,
                 "as": host.idmembre.asnumber}
         peers.append(peer)
-    render_ipv4 = render(request, "ipv4.conf", context={"peers": peers})
-    render_ipv6 = render(request, "ipv6.conf", context={"peers": peers})
+    render_ipv4 = render_to_response("ipv4.conf", context={"peers": peers})
+    render_ipv6 = render_to_response("ipv6.conf", context={"peers": peers})
 
     send_bgp_config(render_ipv4.content, render_ipv6.content)
     results = reload_bgp_config()
