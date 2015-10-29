@@ -1,12 +1,12 @@
 from django.contrib import admin
 
 from Database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch, Regles
-from Administration.forms import HoteForm, SwitchForm, MembreForm
+from Administration.forms import HoteForm, SwitchForm, MembreForm, CustomUserForm
 from Administration.actions import generate_routeserver_conf, generate_openflow_rules, get_rules_list, change_hote_status
 from fsm_admin.mixins import FSMTransitionMixin
 from Administration.adminsite import admin_tousix
 from django.contrib.auth.admin import UserAdmin
-from registration.admin import RegistrationAdmin
+from django.contrib.auth.models import User
 # Register your models here.
 
 
@@ -17,6 +17,13 @@ class HoteInLine(admin.TabularInline):
     model = Hote
     max_num = 2
     form = HoteForm
+
+
+class CustomUser(UserAdmin):
+    form = CustomUserForm
+
+admin.site.unregister(User)
+admin.site.register(User, CustomUser)
 
 
 @admin.register(Membre)
