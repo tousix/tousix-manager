@@ -19,12 +19,38 @@
 
 from django import forms
 from Database.models import Hote
+from django.forms.utils import ErrorList
 
 
 class RouterForm(forms.ModelForm):
     """
     ModelForm for router model.
     """
+    def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
+                 initial=None, error_class=ErrorList, label_suffix=None,
+                 empty_permitted=False, instance=None):
+
+        super(RouterForm, self).__init__(data, files, auto_id, prefix,
+                                         initial, error_class, label_suffix,
+                                         empty_permitted, instance)
+
+        self.fields['ipv4hote'].widget.attrs['readonly'] = True
+        self.fields['ipv6hote'].widget.attrs['readonly'] = True
+
+    def clean_ipv4hote(self):
+        instance = getattr(self, 'instance', None)
+        if instance and instance.pk:
+            return instance.ipv4hote
+        else:
+            return self.cleaned_data['ipv4hote']
+
+    def clean_ipv6hote(self):
+        instance = getattr(self, 'instance', None)
+        if instance and instance.pk:
+            return instance.ipv6hote
+        else:
+            return self.cleaned_data['ipv6hote']
+
     class Meta:
         model = Hote
-        fields = ['nomhote', 'machote']
+        fields = ['nomhote', 'ipv4hote', 'ipv6hote', 'machote']
