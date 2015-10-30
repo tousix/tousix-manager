@@ -17,9 +17,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.views.generic.base import TemplateView
+from Authentication.ContentMixin import MemberMixin
 
 
-class WelcomeView(TemplateView):
+class WelcomeView(MemberMixin):
 
     template_name = "index.html"
