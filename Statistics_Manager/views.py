@@ -42,7 +42,7 @@ class StatsMembersList(LoginRequiredMixin, FormView, MemberMixin, JSONResponseMi
             membre = UserMembre.objects.filter(user=self.request.user).first().membre
             if membre is not None:
                 if membre.approved is True:
-                    return super(StatsMembersList, self).get(request, *args, **kwargs)
+                    return render(request, self.template_name, context={"form": self.form_class})
         return redirect(reverse("restricted stats"))
 
     def post(self, request, *args, **kwargs):
