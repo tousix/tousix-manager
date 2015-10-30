@@ -45,7 +45,7 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
                 return render(request, self.template_name, context={"not_member": True,
                                                                     "member": membre.first()})
         context = {"not_member": True}
-        return render(request, self.template_name, context=context)
+        return render(request, "restricted_chart.html", context=context)
 
     def post(self, request, *args, **kwargs):
         membre = UserMembre.objects.filter(user=self.request.user).first().membre
