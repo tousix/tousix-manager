@@ -21,7 +21,8 @@ from django.views.generic.edit import FormView
 from Authentication.LoginMixin import LoginRequiredMixin
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import HttpResponseRedirect
+from django.shortcuts import redirect
+from django.core.urlresolvers import reverse
 
 
 class PasswordChangeView(LoginRequiredMixin, FormView, SuccessMessageMixin):
@@ -36,4 +37,4 @@ class PasswordChangeView(LoginRequiredMixin, FormView, SuccessMessageMixin):
         return PasswordChangeForm(self.request.user, prefix="password")
 
     def get(self, request, *args, **kwargs):
-        return HttpResponseRedirect("/member/update")
+        return redirect(reverse("update member"))
