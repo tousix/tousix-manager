@@ -9,13 +9,6 @@
 {% endblock sb_admin_breadcrumb_active %}
 {% block sb_admin_subheading %}Statistiques{% endblock sb_admin_subheading %}
 {% block content %}
-{% if not_member %}
-    {% if member %}
-        Le compte n'a pas encore été approuvé par l'administrateur.
-    {% else %}
-    <a href="{% url "Create member" %}">S'inscrire en tant que membre</a>
-        {% endif %}
-    {% else %}
     <form id="Fluxpost" method="post">
         {% csrf_token %}
         {{ form.as_p }}
@@ -35,8 +28,6 @@
                         </div>
                     </div>
                     </div>
-    {% endif %}
-
     {% endblock content %}
 {% block sb_admin_custom_css %}
     <LINK rel=stylesheet type="text/css" href="{% static "css/metricsgraphics.css" %}">

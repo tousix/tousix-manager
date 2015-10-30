@@ -22,13 +22,14 @@ from Statistics_Manager.forge import forgeData
 from Database.models import UserMembre
 from Statistics_Manager.forms import FluxSelectionForm, RestrictedFluxSelectionForm
 from Statistics_Manager.JSONResponseMixin import JSONResponseMixin
+from Authentication.ContentMixin import MemberMixin
 from Authentication.LoginMixin import LoginRequiredMixin
 from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 # Create your views here.
 
 
-class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
+class StatsMembersList(LoginRequiredMixin, FormView, MemberMixin, JSONResponseMixin):
     """
     View for display network statistics (authenticated users only)
     """
@@ -37,15 +38,12 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
 
     def get(self, request, *args, **kwargs):
 
-        membre = UserMembre.objects.filter(user=self.request.user).first().membre
-        if membre is not None:
-            if membre.approved is True:
-                return super(StatsMembersList, self).get(request, *args, **kwargs)
-            else:
-                return render(request, self.template_name, context={"not_member": True,
-                                                                    "member": membre.first()})
-        context = {"not_member": True}
-        return render(request, "restricted_chart.html", context=context)
+        if UserMembre.objects.filter(user=self.request.user).count() > 0:
+            membre = UserMembre.objects.filter(user=self.request.user).first().membre
+            if membre is not None:
+                if membre.approved is True:
+                    return super(StatsMembersList, self).get(request, *args, **kwargs)
+        return redirect(reverse("restricted stats"))
 
     def post(self, request, *args, **kwargs):
         membre = UserMembre.objects.filter(user=self.request.user).first().membre
@@ -61,7 +59,7 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
         return JSONResponseMixin.render_to_response(self, data)
 
 
-class RestrictedStats(FormView, JSONResponseMixin):
+class RestrictedStats(FormView, MemberMixin, JSONResponseMixin):
     """
     View for display network statistics (non-authenticated users only)
     This view is the same as StatsMembersList, but with restricted options.
@@ -70,8 +68,8 @@ class RestrictedStats(FormView, JSONResponseMixin):
     form_class = RestrictedFluxSelectionForm
 
     def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated():
-            return super(RestrictedStats, self).get(request, *args, **kwargs)
+        if not request.user.is_authenticated() or UserMembre.objects.filter(user=self.request.user).count() == 0:
+            return render(request, self.template_name, context={"form": self.form_class})
         return redirect(reverse("charts"))
 
     def form_valid(self, form):
