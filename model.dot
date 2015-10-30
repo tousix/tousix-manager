@@ -1,6 +1,6 @@
 digraph model_graph {
   // Dotfile by Django-Extensions graph_models
-  // Created: 2015-07-30 14:26
+  // Created: 2015-10-30 16:44
   // Cli Options: -a
 
   fontname = "Helvetica"
@@ -19,6 +19,37 @@ digraph model_graph {
   ]
 
   // Labels
+
+
+  registration_models_RegistrationProfile [label=<
+    <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+    <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
+    <FONT FACE="Helvetica Bold" COLOR="white">
+    RegistrationProfile
+    </FONT></TD></TR>
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT FACE="Helvetica Bold">id</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT FACE="Helvetica Bold">AutoField</FONT>
+    </TD></TR>
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT FACE="Helvetica Bold">user</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT FACE="Helvetica Bold">OneToOneField (id)</FONT>
+    </TD></TR>
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT FACE="Helvetica ">activation_key</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT FACE="Helvetica ">CharField</FONT>
+    </TD></TR>
+  
+    </TABLE>
+    >]
+
+
 
 
   django_contrib_admin_models_LogEntry [label=<
@@ -380,38 +411,7 @@ digraph model_graph {
 
 
 
-  registration_models_RegistrationProfile [label=<
-    <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
-    <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
-    <FONT FACE="Helvetica Bold" COLOR="white">
-    RegistrationProfile
-    </FONT></TD></TR>
-  
-    <TR><TD ALIGN="LEFT" BORDER="0">
-    <FONT FACE="Helvetica Bold">id</FONT>
-    </TD><TD ALIGN="LEFT">
-    <FONT FACE="Helvetica Bold">AutoField</FONT>
-    </TD></TR>
-  
-    <TR><TD ALIGN="LEFT" BORDER="0">
-    <FONT FACE="Helvetica Bold">user</FONT>
-    </TD><TD ALIGN="LEFT">
-    <FONT FACE="Helvetica Bold">OneToOneField (id)</FONT>
-    </TD></TR>
-  
-    <TR><TD ALIGN="LEFT" BORDER="0">
-    <FONT FACE="Helvetica ">activation_key</FONT>
-    </TD><TD ALIGN="LEFT">
-    <FONT FACE="Helvetica ">CharField</FONT>
-    </TD></TR>
-  
-    </TABLE>
-    >]
-
-
-
-
-  database_models_ConnectionType [label=<
+  Database_models_ConnectionType [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -433,7 +433,7 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_Contact [label=<
+  Database_models_Contact [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -479,7 +479,7 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_Pop [label=<
+  Database_models_Pop [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -507,7 +507,7 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_Membre [label=<
+  Database_models_Membre [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -551,12 +551,6 @@ digraph model_graph {
     </TD></TR>
   
     <TR><TD ALIGN="LEFT" BORDER="0">
-    <FONT FACE="Helvetica Bold">user</FONT>
-    </TD><TD ALIGN="LEFT">
-    <FONT FACE="Helvetica Bold">OneToOneField (id)</FONT>
-    </TD></TR>
-  
-    <TR><TD ALIGN="LEFT" BORDER="0">
     <FONT COLOR="#7B7B7B" FACE="Helvetica ">approved</FONT>
     </TD><TD ALIGN="LEFT">
     <FONT COLOR="#7B7B7B" FACE="Helvetica ">BooleanField</FONT>
@@ -595,7 +589,35 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_Controleur [label=<
+  Database_models_UserMembre [label=<
+    <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+    <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
+    <FONT FACE="Helvetica Bold" COLOR="white">
+    UserMembre
+    </FONT></TD></TR>
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT FACE="Helvetica Bold">id</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT FACE="Helvetica Bold">AutoField</FONT>
+    </TD></TR>
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT FACE="Helvetica Bold">membre</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT FACE="Helvetica Bold">ForeignKey (idmembre)</FONT>
+    </TD></TR>
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT FACE="Helvetica Bold">user</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT FACE="Helvetica Bold">OneToOneField (id)</FONT>
+    </TD></TR>
+  
+    </TABLE>
+    >]
+
+  Database_models_Controleur [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -623,7 +645,7 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_Switch [label=<
+  Database_models_Switch [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -657,7 +679,7 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_LogSwitch [label=<
+  Database_models_LogSwitch [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -703,7 +725,7 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_Contorleswitch [label=<
+  Database_models_Contorleswitch [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -731,7 +753,7 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_Port [label=<
+  Database_models_Port [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -771,7 +793,7 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_Hote [label=<
+  Database_models_Hote [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -835,7 +857,7 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_Flux [label=<
+  Database_models_Flux [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -869,7 +891,7 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_Regles [label=<
+  Database_models_Regles [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -921,7 +943,7 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_Stats [label=<
+  Database_models_Stats [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -967,7 +989,7 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_Statsport [label=<
+  Database_models_Statsport [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -995,7 +1017,7 @@ digraph model_graph {
     </TABLE>
     >]
 
-  database_models_Switchlink [label=<
+  Database_models_Switchlink [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
     <FONT FACE="Helvetica Bold" COLOR="white">
@@ -1027,6 +1049,9 @@ digraph model_graph {
 
 
   // Relations
+
+  registration_models_RegistrationProfile -> django_contrib_auth_models_User
+  [label="user (registrationprofile)"] [arrowhead=none, arrowtail=none, dir=both];
 
   django_contrib_admin_models_LogEntry -> django_contrib_auth_models_User
   [label="user (logentry)"] [arrowhead=none, arrowtail=dot, dir=both];
@@ -1067,79 +1092,79 @@ digraph model_graph {
   django_contrib_auth_models_User -> django_contrib_auth_models_AbstractUser
   [label="abstract\ninheritance"] [arrowhead=empty, arrowtail=none, dir=both];
 
-  registration_models_RegistrationProfile -> django_contrib_auth_models_User
-  [label="user (registrationprofile)"] [arrowhead=none, arrowtail=none, dir=both];
-
-  database_models_Membre -> django_contrib_auth_models_User
-  [label="user (membre)"] [arrowhead=none, arrowtail=none, dir=both];
-
-  database_models_Membre -> database_models_ConnectionType
+  Database_models_Membre -> Database_models_ConnectionType
   [label="connexion_type (membre)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Membre -> database_models_Pop
+  Database_models_Membre -> Database_models_Pop
   [label="idpop (membre)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Membre -> database_models_Contact
+  Database_models_Membre -> Database_models_Contact
   [label="billing (billing)"] [arrowhead=none, arrowtail=none, dir=both];
 
-  database_models_Membre -> database_models_Contact
+  Database_models_Membre -> Database_models_Contact
   [label="noc (noc)"] [arrowhead=none, arrowtail=none, dir=both];
 
-  database_models_Membre -> database_models_Contact
+  Database_models_Membre -> Database_models_Contact
   [label="technical (technical)"] [arrowhead=none, arrowtail=none, dir=both];
 
-  database_models_Controleur -> database_models_Pop
+  Database_models_UserMembre -> django_contrib_auth_models_User
+  [label="user (usermembre)"] [arrowhead=none, arrowtail=none, dir=both];
+
+  Database_models_UserMembre -> Database_models_Membre
+  [label="membre (usermembre)"] [arrowhead=none, arrowtail=dot, dir=both];
+
+  Database_models_Controleur -> Database_models_Pop
   [label="idpop (controleur)"] [arrowhead=none, arrowtail=none, dir=both];
 
-  database_models_Switch -> database_models_Pop
+  Database_models_Switch -> Database_models_Pop
   [label="idpop (switch)"] [arrowhead=none, arrowtail=none, dir=both];
 
-  database_models_LogSwitch -> database_models_Switch
+  Database_models_LogSwitch -> Database_models_Switch
   [label="idswitch (logswitch)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Contorleswitch -> database_models_Controleur
+  Database_models_Contorleswitch -> Database_models_Controleur
   [label="idctrl (contorleswitch)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Contorleswitch -> database_models_Switch
+  Database_models_Contorleswitch -> Database_models_Switch
   [label="idswitch (contorleswitch)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Port -> database_models_Switch
+  Database_models_Port -> Database_models_Switch
   [label="idswitch (port)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Hote -> database_models_Membre
+  Database_models_Hote -> Database_models_Membre
   [label="idmembre (hote)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Hote -> database_models_Port
+  Database_models_Hote -> Database_models_Port
   [label="idport (hote)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Flux -> database_models_Hote
+  Database_models_Flux -> Database_models_Hote
   [label="hote_dst (hote_dst)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Flux -> database_models_Hote
+  Database_models_Flux -> Database_models_Hote
   [label="hote_src (hote_src)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Regles -> database_models_Switch
+  Database_models_Regles -> Database_models_Switch
   [label="idswitch (regles)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Regles -> database_models_Hote
+  Database_models_Regles -> Database_models_Hote
   [label="source (source)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Regles -> database_models_Hote
+  Database_models_Regles -> Database_models_Hote
   [label="destination (destination)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Stats -> database_models_Flux
+  Database_models_Stats -> Database_models_Flux
   [label="idflux (stats)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Stats -> database_models_Switch
+  Database_models_Stats -> Database_models_Switch
   [label="idswitch (stats)"] [arrowhead=none, arrowtail=dot, dir=both];
 
-  database_models_Statsport -> database_models_Port
+  Database_models_Statsport -> Database_models_Port
   [label="port_idport (statsport)"] [arrowhead=none, arrowtail=none, dir=both];
 
-  database_models_Switchlink -> database_models_Port
+  Database_models_Switchlink -> Database_models_Port
   [label="idport1 (idport1)"] [arrowhead=none, arrowtail=none, dir=both];
 
-  database_models_Switchlink -> database_models_Port
+  Database_models_Switchlink -> Database_models_Port
   [label="idport2 (idport2)"] [arrowhead=none, arrowtail=none, dir=both];
 
 }
