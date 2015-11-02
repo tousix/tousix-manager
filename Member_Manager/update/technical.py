@@ -23,16 +23,16 @@ from Authentication.LoginMixin import LoginRequiredMixin
 from Database.models import Contact, UserMembre
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import HttpResponseRedirect
+from Member_Manager.update.UpdateMixin import UpdateUrlMixin
 
 
-class TechnicalUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
+class TechnicalUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMessageMixin):
     """
     This view updates technical contact associated with the requesting user.
     """
     model = Contact
     form_class = TechnicalForm
     template_name = "update_member.html"
-    success_url = "/member/update"
     success_message = "Changement contact technique enregistré."
     context_object_name = "technical"
 

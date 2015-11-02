@@ -23,9 +23,10 @@ from Authentication.LoginMixin import LoginRequiredMixin
 from Database.models import Contact, UserMembre
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import HttpResponseRedirect
+from Member_Manager.update.UpdateMixin import UpdateUrlMixin
 
 
-class NOCUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
+class NOCUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMessageMixin):
     """
     This view updates NOC contact associated with the requesting user.
     """

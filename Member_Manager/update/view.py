@@ -23,9 +23,10 @@ from Member_Manager.forms.forms import *
 from Database.models import Membre, Hote, UserMembre
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.messages.views import SuccessMessageMixin
+from Member_Manager.update.UpdateMixin import UpdateUrlMixin
 
 
-class UpdateMemberView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
+class UpdateMemberView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMessageMixin):
     """
     This view is for testing purposes.
     It is an attempt to receive all the data posted for one url, and process only on changed values.
@@ -34,7 +35,6 @@ class UpdateMemberView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
     model = Membre
     form_class = MemberForm
     template_name = "update_member.html"
-    success_url = "/member/update"
     success_message = "Changement contact facturation enregistré."
 
     def get_object(self, queryset=None):

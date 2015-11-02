@@ -23,9 +23,10 @@ from Authentication.LoginMixin import LoginRequiredMixin
 from Database.models import Contact, UserMembre
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import HttpResponseRedirect
+from Member_Manager.update.UpdateMixin import UpdateUrlMixin
 
 
-class BillingUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
+class BillingUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMessageMixin):
     """
     This view updates billing contact associated with the requesting user.
     """

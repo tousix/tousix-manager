@@ -17,25 +17,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.views.generic.edit import FormView
-from Authentication.LoginMixin import LoginRequiredMixin
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import redirect
+from django.views.generic.edit import BaseUpdateView
 from django.core.urlresolvers import reverse
-from Member_Manager.update.UpdateMixin import UpdateUrlMixin
 
 
-class PasswordChangeView(LoginRequiredMixin, FormView, UpdateUrlMixin, SuccessMessageMixin):
-    """
-    THis view permits an uner to change his password.
-    """
-    form_class = PasswordChangeForm
-    success_message = "Changement mdp réussi."
-    template_name = "update_member.html"
+class UpdateUrlMixin(BaseUpdateView):
 
-    def get_form(self, form_class=None):
-        return PasswordChangeForm(self.request.user, prefix="password")
+    def get_success_url(self):
+        return reverse("update member")
 
-    def get(self, request, *args, **kwargs):
-        return redirect(reverse("update member"))

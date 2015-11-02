@@ -23,16 +23,16 @@ from Authentication.LoginMixin import LoginRequiredMixin
 from Database.models import Hote, UserMembre
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import HttpResponseRedirect
+from Member_Manager.update.UpdateMixin import UpdateUrlMixin
 
 
-class RouterUpdateView(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
+class RouterUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMessageMixin):
     """
     This view updates router associated with the requesting user.
     """
     model = Hote
     form_class = RouterForm
     template_name = "update_member.html"
-    success_url = "/member/update"
     success_message = "Changement routeur enregistré. Un administrateur doit confirmer."
     context_object_name = "router"
 
