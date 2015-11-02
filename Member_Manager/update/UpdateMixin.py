@@ -21,7 +21,7 @@ from django.views.generic.edit import BaseUpdateView
 from django.core.urlresolvers import reverse
 
 
-class UpdateUrlMixin(BaseUpdateView):
+class UpdateUrlMixin(object):
 
     def get_success_url(self):
         return reverse("update member")
