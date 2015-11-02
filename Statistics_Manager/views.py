@@ -22,14 +22,13 @@ from Statistics_Manager.forge import forgeData
 from Database.models import UserMembre
 from Statistics_Manager.forms import FluxSelectionForm, RestrictedFluxSelectionForm
 from Statistics_Manager.JSONResponseMixin import JSONResponseMixin
-from Authentication.ContentMixin import MemberMixin
 from Authentication.LoginMixin import LoginRequiredMixin
 from django.core.urlresolvers import reverse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 # Create your views here.
 
 
-class StatsMembersList(LoginRequiredMixin, FormView, MemberMixin, JSONResponseMixin):
+class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
     """
     View for display network statistics (authenticated users only)
     """
@@ -42,7 +41,7 @@ class StatsMembersList(LoginRequiredMixin, FormView, MemberMixin, JSONResponseMi
             membre = UserMembre.objects.filter(user=self.request.user).first().membre
             if membre is not None:
                 if membre.approved is True:
-                    return render(request, self.template_name, context={"form": self.form_class})
+                    return super(StatsMembersList, self).get(request, *args, **kwargs)
         return redirect(reverse("restricted stats"))
 
     def post(self, request, *args, **kwargs):
@@ -59,7 +58,7 @@ class StatsMembersList(LoginRequiredMixin, FormView, MemberMixin, JSONResponseMi
         return JSONResponseMixin.render_to_response(self, data)
 
 
-class RestrictedStats(FormView, MemberMixin, JSONResponseMixin):
+class RestrictedStats(FormView, JSONResponseMixin):
     """
     View for display network statistics (non-authenticated users only)
     This view is the same as StatsMembersList, but with restricted options.
@@ -69,7 +68,7 @@ class RestrictedStats(FormView, MemberMixin, JSONResponseMixin):
 
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated() or UserMembre.objects.filter(user=self.request.user).count() == 0:
-            return render(request, self.template_name, context={"form": self.form_class})
+            return super(RestrictedStats, self).get(request, *args, **kwargs)
         return redirect(reverse("charts"))
 
     def form_valid(self, form):

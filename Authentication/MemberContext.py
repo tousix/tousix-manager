@@ -17,16 +17,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.views.generic.base import TemplateView
 from Database.models import UserMembre
 
 
-class MemberMixin(TemplateView):
+def context(request):
+    if request.user.is_authenticated() and UserMembre.objects.filter(user=request.user).count() > 0:
+        c = {"member": UserMembre.objects.filter(user=request.user).first().membre}
+    else:
+        c = {"member": None}
+    return c
 
-    def get_context_data(self, **kwargs):
-        context = super(MemberMixin, self).get_context_data(**kwargs)
 
-        if self.request.user.is_authenticated():
-            if UserMembre.objects.filter(user=self.request.user).count() > 0:
-                context["member"] = UserMembre.objects.filter(user=self.request.user).first().membre
-        return context
