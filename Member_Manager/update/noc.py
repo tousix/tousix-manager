@@ -22,8 +22,9 @@ from Member_Manager.forms.noc import NOCForm
 from Authentication.LoginMixin import LoginRequiredMixin
 from Database.models import Contact, UserMembre
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import HttpResponseRedirect
 from Member_Manager.update.UpdateMixin import UpdateUrlMixin
+from django.shortcuts import redirect
+from django.core.urlresolvers import reverse
 
 
 class NOCUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMessageMixin):
@@ -33,7 +34,6 @@ class NOCUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMessa
     model = Contact
     form_class = NOCForm
     template_name = "update_member.html"
-    success_url = "/member/update"
     success_message = "Changement contact NOC enregistré."
     context_object_name = "noc"
 
@@ -44,7 +44,19 @@ class NOCUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMessa
         return NOCForm(instance=self.get_object(), prefix="noc")
 
     def get(self, request, *args, **kwargs):
-        return HttpResponseRedirect("/member/update")
+        return redirect(reverse("update member"))
 
     def form_valid(self, form):
         form.save()
+        return redirect(reverse("update member"))
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.create_context_data({"noc": form}))
+
+    def post(self, request, *args, **kwargs):
+        noc = NOCForm(data=request.POST, instance=self.get_object(), prefix="noc")
+
+        if noc.is_valid():
+            return self.form_valid(noc)
+        else:
+            return self.form_invalid(noc)

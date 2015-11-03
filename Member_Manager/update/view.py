@@ -44,7 +44,7 @@ class UpdateMemberView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMe
         return MemberForm(instance=self.get_object(), prefix="member")
 
     def get_context_data(self, **kwargs):
-        context = super(UpdateMemberView, self).get_context_data(**kwargs)
+        context = {"member": self.get_form()}
         context["technical"] = TechnicalForm(instance=self.get_object().technical, prefix="technical")
         if context["technical"].instance.pk is not None:
             context["technical"].empty = False

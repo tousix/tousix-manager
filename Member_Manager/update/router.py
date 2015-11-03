@@ -22,8 +22,9 @@ from Member_Manager.forms.router import RouterForm
 from Authentication.LoginMixin import LoginRequiredMixin
 from Database.models import Hote, UserMembre
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import HttpResponseRedirect
 from Member_Manager.update.UpdateMixin import UpdateUrlMixin
+from django.shortcuts import redirect
+from django.core.urlresolvers import reverse
 
 
 class RouterUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMessageMixin):
@@ -43,10 +44,22 @@ class RouterUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMe
         return RouterForm(instance=self.get_object(), prefix="router")
 
     def get(self, request, *args, **kwargs):
-        return HttpResponseRedirect("/member/update")
+        return redirect(reverse("update member"))
 
     def form_valid(self, form):
         form.instance.valid = False
         form.save()
-        form.Prepare()
+        form.instance.Prepare()
         form.save()
+        return redirect(reverse("update member"))
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.create_context_data({"router": form}))
+
+    def post(self, request, *args, **kwargs):
+        router = RouterForm(data=request.POST, instance=self.get_object(), prefix="router")
+
+        if router.is_valid():
+            return self.form_valid(router)
+        else:
+            return self.form_invalid(router)

@@ -22,8 +22,9 @@ from Member_Manager.forms.billing import BillingForm
 from Authentication.LoginMixin import LoginRequiredMixin
 from Database.models import Contact, UserMembre
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import HttpResponseRedirect
 from Member_Manager.update.UpdateMixin import UpdateUrlMixin
+from django.shortcuts import redirect
+from django.core.urlresolvers import reverse
 
 
 class BillingUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMessageMixin):
@@ -44,7 +45,19 @@ class BillingUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessM
         return BillingForm(instance=self.get_object(), prefix="billing")
 
     def get(self, request, *args, **kwargs):
-        return HttpResponseRedirect("/member/update")
+        return redirect(reverse("update member"))
 
     def form_valid(self, form):
         form.save()
+        return redirect(reverse("update member"))
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.create_context_data({"billing": form}))
+
+    def post(self, request, *args, **kwargs):
+        billing = BillingForm(data=request.POST, instance=self.get_object(), prefix="billing")
+
+        if billing.is_valid():
+            return self.form_valid(billing)
+        else:
+            return self.form_invalid(billing)

@@ -39,3 +39,14 @@ class PasswordChangeView(LoginRequiredMixin, FormView, UpdateUrlMixin, SuccessMe
 
     def get(self, request, *args, **kwargs):
         return redirect(reverse("update member"))
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.create_context_data({"password": form}))
+
+    def post(self, request, *args, **kwargs):
+        password = PasswordChangeForm(data=request.POST, instance=self.get_object(), prefix="password")
+
+        if password.is_valid():
+            return self.form_valid(password)
+        else:
+            return self.form_invalid(password)
