@@ -4,19 +4,22 @@
 {% block sb_admin_title %}{% block title %}{% endblock title %}{% endblock sb_admin_title %}
 {% block sb_admin_sidebar %}
     <ul class="nav navbar-nav side-nav">
+        <li>
+            <a href="{% url "restricted stats" %}"><i class="fa fa-fw fa-bar-chart-o"></i> Statistiques</a>
+        </li>
     {% if member.approved %}
-        <li class="active">
-            <a href="{% url "update member" %}"><i class="fa fa-fw fa-play"></i> Paramètres membre</a>
+        <li>
+            <a href="{% url "update member" %}"><i class="fa fa-fw fa-edit"></i> Paramètres membre</a>
         </li>
     {% endif %}
     {% if user.username and not member.approved %}
-        <li class="active">
+        <li>
             <a href="{% url "Create member" %}"><i class="fa fa-fw fa-play"></i> S'inscrire en tant que membre</a>
         </li>
     {% endif %}
     {% if user.is_superuser %}
-        <li class="active">
-            <a href="{% url "admin:index" %}"><i class="fa fa-fw fa-play"></i> Panneau administration</a>
+        <li>
+            <a href="{% url "admin:index" %}"><i class="fa fa-fw fa-wrench"></i> Panneau administration</a>
         </li>
     {% endif %}
         </ul>
