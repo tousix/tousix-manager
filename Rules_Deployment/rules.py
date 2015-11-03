@@ -58,11 +58,16 @@ class RulesDeployment(object):
         success = 0
         fails = 0
         for group in rules:
-            request = requests.post(self.host+"/stats/groupentry/add", json=json.loads(group.regle))
-            if request.status_code is not 200:
-                fails += 1
-            else:
-                success += 1
+            try:
+                request = requests.post(self.host+"/stats/groupentry/add", json=json.loads(group.regle))
+                if request.status_code is not 200:
+                    fails += 1
+                else:
+                    success += 1
+            except requests.ConnectionError:
+                return{"success": 0,
+                       "fails": 0
+                       }
         return {"success": success,
                 "fails": fails}
 
@@ -75,11 +80,16 @@ class RulesDeployment(object):
         success = 0
         fails = 0
         for flow in rules:
-            request = requests.post(self.host+"/stats/flowentry/add", json=json.loads(flow.regle))
-            if request.status_code is not 200:
-                fails += 1
-            else:
-                success += 1
+            try:
+                request = requests.post(self.host+"/stats/flowentry/add", json=json.loads(flow.regle))
+                if request.status_code is not 200:
+                    fails += 1
+                else:
+                    success += 1
+            except requests.ConnectionError:
+                return{"success": 0,
+                       "fails": 0
+                       }
         return {"success": success,
                 "fails": fails}
 
@@ -94,12 +104,17 @@ class RulesDeployment(object):
         success = 0
         fails = 0
         for rule in rules:
-            # strict comparaison
-            request = requests.post(self.host+"/stats/flowentry/delete_strict", json=json.loads(rule.regle))
-            if request.status_code is not 200:
-                fails += 1
-            else:
-                success += 1
+            try:
+                # strict comparaison
+                request = requests.post(self.host+"/stats/flowentry/delete_strict", json=json.loads(rule.regle))
+                if request.status_code is not 200:
+                    fails += 1
+                else:
+                    success += 1
+            except requests.ConnectionError:
+                return{"success": 0,
+                       "fails": 0
+                       }
         return {"success": success,
                 "fails": fails}
 
