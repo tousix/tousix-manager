@@ -1,96 +1,107 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="col-sm-4">
-{% if member %}
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">Modification membre</h3>
-        </div>
-        <div class="panel-body">
-    <form action="{% url "update member" %}" id="MembersForm" method="post">
-        {% csrf_token %}
-        {{ member.as_p }}
-            <button class="btn btn-primary" type="submit">Envoyer</button>
-            <button class="btn btn-default" type="reset">Réinitialiser</button>
-        </form>
-        </div>
-    </div>
-
-{% endif %}
-{% if technical %}
-        <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">Modification technique</h3>
-        </div>
-        <div class="panel-body">
-        <form action="{% url "update technical" %}" id="TechnicalForm" method="post">
-        {% csrf_token %}
-        {{ technical.as_p }}
-            <button class="btn btn-primary" type="submit">Envoyer</button>
-            <button class="btn btn-default" type="reset">Réinitialiser</button>
-    </form>
-            </div>
-    </div>
-{% endif %}
-{% if noc %}
-        <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">Modification NOC</h3>
-        </div>
-        <div class="panel-body">
-    <form action="{% url "update noc" %}"id="NocForm" method="post">
-        {% csrf_token %}
-        {{ noc.as_p }}
-        <button class="btn btn-primary" type="submit">Envoyer</button>
-            <button class="btn btn-default" type="reset">Réinitialiser</button>
-    </form>
-                </div>
-    </div>
-{% endif %}
-{% if billing %}
-            <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">Modification billing</h3>
-        </div>
-        <div class="panel-body">
-        <form action="{% url "update billing" %}"id="BillingForm" method="post">
-        {% csrf_token %}
-        {{ billing.as_p }}
-            <button class="btn btn-primary" type="submit">Envoyer</button>
-            <button class="btn btn-default" type="reset">Réinitialiser</button>
-    </form>
-                    </div>
-    </div>
-{% endif %}
-{% if router %}
+    <div class="row">
+        {% if member %}
+            <div class="col-lg-4 col-sm-4">
                 <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">Modification routeur</h3>
-        </div>
-        <div class="panel-body">
-            <form action="{% url "update router" %}" id="RouterForm" method="post">
-        {% csrf_token %}
-        {{ router.as_p }}
-            <button class="btn btn-primary" type="submit">Envoyer</button>
-            <button class="btn btn-default" type="reset">Réinitialiser</button>
-            </form>
-                        </div>
-    </div>
-{% endif %}
-{% if password %}
-                    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">Modification Mot de passe</h3>
-        </div>
-        <div class="panel-body">
-    <form action="{% url "update password" %}" id="PasswordrForm" method="post">
-        {% csrf_token %}
-        {{ password.as_p }}
-            <button class="btn btn-primary" type="submit">Envoyer</button>
-            <button class="btn btn-default" type="reset">Réinitialiser</button>
-    </form>
-                            </div>
-    </div>
-{% endif %}
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Modification membre</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form action="{% url "update member" %}" id="MembersForm" method="post">
+                            {% csrf_token %}
+                            {{ member.as_p }}
+                            <button class="btn btn-primary" type="submit">Envoyer</button>
+                            <button class="btn btn-default" type="reset">Réinitialiser</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if technical %}
+            <div class="col-lg-4 col-sm-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Modification technique</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form action="{% url "update technical" %}" id="TechnicalForm" method="post">
+                            {% csrf_token %}
+                            {{ technical.as_p }}
+                            <button class="btn btn-primary" type="submit">Envoyer</button>
+                            <button class="btn btn-default" type="reset">Réinitialiser</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if noc %}
+            <div class="col-lg-4 col-sm-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Modification NOC</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form action="{% url "update noc" %}" id="NocForm" method="post">
+                            {% csrf_token %}
+                            {{ noc.as_p }}
+                            <button class="btn btn-primary" type="submit">Envoyer</button>
+                            <button class="btn btn-default" type="reset">Réinitialiser</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if billing %}
+            <div class="col-lg-4 col-sm-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Modification billing</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form action="{% url "update billing" %}" id="BillingForm" method="post">
+                            {% csrf_token %}
+                            {{ billing.as_p }}
+                            <button class="btn btn-primary" type="submit">Envoyer</button>
+                            <button class="btn btn-default" type="reset">Réinitialiser</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if router %}
+            <div class="col-lg-4 col-sm-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Modification routeur</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form action="{% url "update router" %}" id="RouterForm" method="post">
+                            {% csrf_token %}
+                            {{ router.as_p }}
+                            <button class="btn btn-primary" type="submit">Envoyer</button>
+                            <button class="btn btn-default" type="reset">Réinitialiser</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if password %}
+            <div class="col-lg-4 col-sm-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Modification Mot de passe</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form action="{% url "update password" %}" id="PasswordrForm" method="post">
+                            {% csrf_token %}
+                            {{ password.as_p }}
+                            <button class="btn btn-primary" type="submit">Envoyer</button>
+                            <button class="btn btn-default" type="reset">Réinitialiser</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock content %}
