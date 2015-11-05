@@ -22,7 +22,8 @@ from Rules_Generation.Statistics.arp import ARP
 from Rules_Generation.Statistics.icmpv6 import ICMPv6
 from Rules_Generation.Statistics.ipv6 import IPv6
 from Rules_Generation.Statistics.ipv4 import IPv4
-from Rules_Generation.configuration import configuration as conf
+from django.conf import settings
+
 class Manager(object):
     """
     Manager class for creating dataflow rules.
@@ -37,6 +38,7 @@ class Manager(object):
         :return: Flow rules array
         """
         rules = []
+        enabled = settings.RULES_GENERATION_ENABLED
         ipv4 = IPv4()
         ipv6 = IPv6()
         icmpv6 = ICMPv6()
@@ -44,13 +46,13 @@ class Manager(object):
 
         for peer_dst in peers:
             if peer_dst.Egress is True:
-                if conf.enabled["Stats"].get('ICMPv6') is True:
+                if enabled["Stats"].get('ICMPv6') is True:
                     rule = {"module": "Statistics_ICMPv6",
                             "rule": icmpv6.create_stat(dpid, None, peer_dst),
                             "source": None,
                             "destination": peer_dst.idPeer}
                     rules.append(rule)
-                if conf.enabled["Stats"].get('ARP') is True:
+                if enabled["Stats"].get('ARP') is True:
                     rule = {"module": "Statistics_ARP",
                             "rule": arp.create_stat(dpid, None, peer_dst),
                             "source": None,
@@ -59,13 +61,13 @@ class Manager(object):
 
                 for peer_src in peers:
                     if peer_src != peer_dst:
-                        if conf.enabled["Stats"].get('IPv6') is True:
+                        if enabled["Stats"].get('IPv6') is True:
                             rule = {"module": "Statistics_IPv6",
                                     "rule": ipv6.create_stat(dpid, peer_src, peer_dst),
                                     "source": peer_src.idPeer,
                                     "destination": peer_dst.idPeer}
                             rules.append(rule)
-                        if conf.enabled["Stats"].get('IPv4') is True:
+                        if enabled["Stats"].get('IPv4') is True:
                             rule = {"module": "Statistics_IPv4",
                                     "rule": ipv4.create_stat(dpid, peer_src, peer_dst),
                                     "source": peer_src.idPeer,

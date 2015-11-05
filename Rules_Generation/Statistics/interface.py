@@ -17,12 +17,18 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from Rules_Generation.configuration import configuration as conf
+from django.conf import settings
+
 
 class Interface(object):
     """
     Abstract class for creating statistics rules.
     """
+
+    def __init__(self):
+        self.priority = settings.RULES_GENERATION_PRIORITIES
+        self.groups = settings.RULES_GENERATION_GROUPS
+
     def create_stat(self, dpid, member_src, member_dst):
         """
         Create stat rule.
@@ -45,7 +51,7 @@ class Interface(object):
         :return: priority
         """
 
-        return conf.priority["Stats"].get(type)
+        return self.priority["Stats"].get(type)
 
     def forge_cookie(self, idmember_src, idmember_dst):
         """

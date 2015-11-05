@@ -21,6 +21,7 @@
 from Rules_Generation.Production.Umbrella.ipv4 import IPv4
 from Rules_Generation.Production.Umbrella.ipv6 import IPv6
 from Rules_Generation.configuration import configuration as conf
+from django.conf import settings
 
 class Manager(object):
     """
@@ -38,13 +39,14 @@ class Manager(object):
         ipv6 = IPv6()
         ipv4 = IPv4()
         rules = []
-        if (conf.enabled["Production"].get('Umbrella').get('IPv6')) is True:
+        enabled = settings.RULES_GENERATION_ENABLED
+        if (enabled["Production"].get('Umbrella').get('IPv6')) is True:
             rule = {"module": "Production_Umbrella_IPv6",
                     "rule": ipv6.create_umbrella(dpid, peer),
                     "source": None,
                     "destination": peer.idPeer}
             rules.append(rule)
-        if (conf.enabled["Production"].get('Umbrella').get('IPv4')) is True:
+        if (enabled["Production"].get('Umbrella').get('IPv4')) is True:
             rule = {"module": "Production_Umbrella_IPv4",
                     "rule": ipv4.create_umbrella(dpid, peer),
                     "source": None,

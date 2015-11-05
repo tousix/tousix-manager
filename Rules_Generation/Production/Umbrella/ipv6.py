@@ -20,6 +20,7 @@
 from Rules_Generation.Production.Umbrella.interface import Interface
 from Rules_Generation.configuration import Peer
 
+
 class IPv6(Interface):
     """
     Specialized class for creating IPv6 Umbrella rules.

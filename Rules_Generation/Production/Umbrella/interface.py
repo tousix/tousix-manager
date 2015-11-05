@@ -17,13 +17,18 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from Rules_Generation.configuration import configuration as conf
+from django.conf import settings
 from Rules_Generation.configuration import Peer
+
 
 class Interface(object):
     """
     Interface for creating Umbrella rules. It should never be used, only inherited.
     """
+    def __init__(self):
+        self.priority = settings.RULES_GENERATION_PRIORITIES
+        self.groups = settings.RULES_GENERATION_GROUPS
+
     def create_umbrella(self, dpid, peer):
         """
         Create an Umbrella rule based on DPID and a Peer object
@@ -57,7 +62,7 @@ class Interface(object):
         :type dpid: int
         :return: group_id
         """
-        return conf.groups[dpid]
+        return self.groups[dpid]
 
     def find_priority(self, type):
         """
@@ -66,7 +71,7 @@ class Interface(object):
         :type type: str
         :returns: priority
         """
-        umbrella = conf.priority["Production"].get("Umbrella")
+        umbrella = self.priority["Production"].get("Umbrella")
         return umbrella[type]
 
     def forge_cookie(self, idmember):

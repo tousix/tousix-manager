@@ -17,13 +17,17 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from Rules_Generation.configuration import configuration as conf
 from Rules_Generation.configuration import Peer
+from django.conf import settings
 
 class interface(object):
     """
     Interface for generating productions rules. It should never be used, only inherited.
     """
+    def __init__(self):
+        self.priority = settings.RULES_GENERATION_PRIORITIES
+        self.groups = settings.RULES_GENERATION_GROUPS
+
     def create_dataflow(self, dpid, peer):
         """
         Create a complete flow rule based on an DPID and a member object
@@ -57,14 +61,14 @@ class interface(object):
         :type dpid: int
         :return: group_id
         """
-        return conf.groups[dpid]
+        return self.groups[dpid]
 
     def find_priority(self):
         """
         Find the priority for dataflow rules on the config file.
         :return: priority
         """
-        return conf.priority["Production"].get("Dataflow")
+        return self.priority["Production"].get("Dataflow")
 
     def forge_cookie(self, idpeer):
         """
