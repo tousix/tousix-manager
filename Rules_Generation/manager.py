@@ -19,7 +19,6 @@
 
 from Database.models import Hote, Regles
 from Rules_Generation.configuration import Peer
-from Rules_Generation.groups import groups
 from Rules_Generation.Production.manager import Manager as Production
 from Rules_Generation.Statistics.manager import Manager as Statistics
 import json
@@ -72,12 +71,6 @@ class Manager(object):
                 db_rules.append(Regles(idswitch=switch, typeregle=rule.get("module"), regle=json.dumps(rule.get("rule")),
                                        source_id=rule.get("source"), destination_id=rule.get("destination")))
             Regles.objects.bulk_create(db_rules)
-            # Copy raw group rules into database
-            groups_switch = groups.groups[switch.idswitch]
-            db_groups = []
-            for group in groups_switch:
-                db_groups.append(Regles(idswitch=switch, typeregle="Group", regle=json.dumps(group)))
-            Regles.objects.bulk_create(db_groups)
 
     def call_managers(self, dpid, peers):
         """
