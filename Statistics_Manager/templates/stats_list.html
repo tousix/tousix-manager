@@ -29,13 +29,11 @@
                     </div>
                     </div>
     {% endblock content %}
-{% block sb_admin_custom_css %}
-    <LINK rel=stylesheet type="text/css" href="{% static "css/metricsgraphics.css" %}">
-{% endblock sb_admin_custom_css %}
 {% block sb_admin_custom_js %}
         {%  if not not_member %}
-<script type="text/javascript" src="{% static "js/d3.min.js" %}"></script>
-<script type="text/javascript" src="{% static "js/metricsgraphics.min.js" %}"></script>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+            <script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script type="text/javascript">
     function FormChanged(dataForm){
         var data_serialized = $("#Fluxpost").serialize();
@@ -43,39 +41,72 @@
         jQuery.post("{% url "charts" %}", data_serialized, function datarecieved(data){dataUpdated(data,period);}, "json");
     }
     function dataUpdated(stats, period, unit) {
-        // example : 2015-06-22T16:12:57+00:00
-        MG.convert.date(stats, "time" ,"%Y-%m-%dT%H:%M:%S");
-
-        var mgArray = {
-            full_width: true,
-            y_accessor: "value",
-            y_label: "bits/second",
-            x_accessor: "time",
-            xax_start_at_min: true,
-            missing_text: 'Aucune donnée disponible pour ce flux',
-            height: 600,
-            interpolate: "linear",
-            min_y: 0,
-            xax_count: 4,
-            mouseover: function (d, i) {
-                // custom format the rollover text, show days
-                var label = "bits/sec";
-                var prefix = d3.formatPrefix(d.value);
-                d3.select('#Chart svg .mg-active-datapoint')
-                        .text(d.time.toLocaleString() + ' '+ prefix.scale(d.value).toFixed(2) + ' '+ prefix.symbol + label );
+        var statsDef = []
+    for (i = 0; i < stats.length; i++) {
+        statsDef[i] = [Date.parse(stats[i].time), stats[i].value]
+    };
+        $('#Chart').highcharts({
+            chart: {
+                zoomType: 'x'
             },
-            target: '#Chart'
-        };
-        if (stats.length != 0) {
-            mgArray.data = stats;
-        }else
-        {
-            mgArray.chart_type = 'missing-data';
-        }
-        MG.data_graphic(mgArray);
-    }
+            title: {
+                text: ""
+            },
+            subtitle: {
+                text: document.ontouchstart === undefined ?
+                        'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'Bandwidth'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                area: {
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    },
+                    marker: {
+                        radius: 2
+                    },
+                    lineWidth: 1,
+                    states: {
+                        hover: {
+                            lineWidth: 1
+                        }
+                    },
+                    threshold: null
+                }
+            },
+
+            series: [{
+                type: 'area',
+                name: 'Bandwidth',
+                data: statsDef,
+                tooltip: {
+                    valueSuffix: "Bits/sec"
+                }
+            }]
+        });
+    };
     jQuery.post("{% url "charts" %}", $("#Fluxpost").serialize(), function datarecieved(data){dataUpdated(data,"year","bits");}, "json");
     var updateInterval = setInterval(FormChanged, 300000, this.form);
+
 </script>
         {% endif %}
 {% endblock sb_admin_custom_js %}
