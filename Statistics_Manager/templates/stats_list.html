@@ -31,9 +31,9 @@
     {% endblock content %}
 {% block sb_admin_custom_js %}
         {%  if not not_member %}
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-            <script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+            <script type="text/javascript" src="{% static "js/highcharts.js" %}"></script>
+<script type="text/javascript" src="{% static "js/modules_highcharts/exporting.js" %}"></script>
 <script type="text/javascript">
     function FormChanged(dataForm){
         var data_serialized = $("#Fluxpost").serialize();
