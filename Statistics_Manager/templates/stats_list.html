@@ -47,7 +47,7 @@
     function formatNumber(n) {
       for (var i = 0; i < ranges.length; i++) {
         if (n >= ranges[i].divider) {
-          return (n / ranges[i].divider).toFixed(2).toString() + ranges[i].suffix;
+          return (n / ranges[i].divider).toFixed(2).toString() + ' ' + ranges[i].suffix;
         }
       }
       return n.toString();
@@ -119,7 +119,7 @@
                 tooltip: {
                     pointFormatter: function() {
 
-                        return '<b>'+ this.series.name+'</b> : '+ formatNumber(this.y) + ' Bit/sec';
+                        return '<b>'+ this.series.name+'</b> : '+ formatNumber(this.y) + 'Bit/sec';
                     },
                 }
             }]
