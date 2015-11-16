@@ -33,7 +33,23 @@
             <script type="text/javascript" src="{% static "js/highcharts.js" %}"></script>
 <script type="text/javascript" src="{% static "js/modules_highcharts/exporting.js" %}"></script>
 <script type="text/javascript">
+    var ranges = [
+      { divider: 1e18 , suffix: 'P' },
+      { divider: 1e15 , suffix: 'E' },
+      { divider: 1e12 , suffix: 'T' },
+      { divider: 1e9 , suffix: 'G' },
+      { divider: 1e6 , suffix: 'M' },
+      { divider: 1e3 , suffix: 'k' }
+    ];
 
+    function formatNumber(n) {
+      for (var i = 0; i < ranges.length; i++) {
+        if (n >= ranges[i].divider) {
+          return (n / ranges[i].divider).toFixed(2).toString() + ranges[i].suffix;
+        }
+      }
+      return n.toString();
+    }
     function FormChanged(dataForm){
         var data_serialized = $("#Fluxpost").serialize();
         var period = dataForm.elements['id_period'].value;
@@ -99,7 +115,10 @@
                 name: 'Bandwidth',
                 data: statsDef,
                 tooltip: {
-                    valueSuffix: "Bits/sec"
+                    pointFormatter: function() {
+
+                        return '<b>'+ this.series.name+'</b> : '+ formatNumber(this.y) + 'Bit/sec';
+                    },
                 }
             }]
         });
