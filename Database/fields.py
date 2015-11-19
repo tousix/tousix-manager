@@ -73,4 +73,9 @@ class PositiveBigIntegerField(PositiveIntegerField):
 
     def db_type(self, connection):
         # This is how MySQL defines 64 bit unsigned integer data types
-        return "bigint UNSIGNED"
+        if connection.settings_dict['ENGINE'] == 'django.db.backends.mysql':
+            return "bigint UNSIGNED"
+        elif connection.settings_dict['ENGINE'] == 'django.db.backends.postgresql_psycopg2':
+            return "NUMERIC(20)"
+        else:
+            return "NUMERIC(20)"
