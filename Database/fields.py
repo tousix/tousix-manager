@@ -24,7 +24,7 @@ import re
 from django.utils.translation import ugettext_lazy as _
 from django.forms import fields
 from django.db import models
-from django.db.models.fields import PositiveIntegerField
+from django.db.models.fields import BigIntegerField
 
 MAC_RE = r'^([0-9a-fA-F]{2}([:]?|$)){6}$'
 mac_re = re.compile(MAC_RE)
@@ -64,7 +64,7 @@ class MACAddressField(models.Field):
 
 
 # Snippet found in : https://news.numlock.ch/it/django-custom-model-field-for-an-unsigned-bigint-data-type
-class PositiveBigIntegerField(PositiveIntegerField):
+class PositiveBigIntegerField(BigIntegerField):
     """Represents MySQL's unsigned BIGINT data type (works with MySQL only!)"""
     empty_strings_allowed = False
 
@@ -76,6 +76,12 @@ class PositiveBigIntegerField(PositiveIntegerField):
         if connection.settings_dict['ENGINE'] == 'django.db.backends.mysql':
             return "bigint UNSIGNED"
         elif connection.settings_dict['ENGINE'] == 'django.db.backends.postgresql_psycopg2':
-            return "NUMERIC(20)"
+            return "NUMERIC(20,0)"
         else:
-            return "NUMERIC(20)"
+            return "NUMERIC(20,0)"
+
+    def formfield(self, **kwargs):
+        defaults = {'min_value': 0,
+                    'max_value': BigIntegerField.MAX_BIGINT * 2 - 1}
+        defaults.update(kwargs)
+        return super(PositiveBigIntegerField, self).formfield(**defaults)
