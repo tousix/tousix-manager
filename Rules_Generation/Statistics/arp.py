@@ -49,7 +49,8 @@ class ARP(Interface):
         :type idpeer: int
         :return: cookie ID
         """
-        return idpeer + 1024
+        cookie = 1024 << 32
+        return  cookie + idpeer + 1024
 
     def get_match(self, ip_dst):
         """

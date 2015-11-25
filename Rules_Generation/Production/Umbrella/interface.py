@@ -81,7 +81,8 @@ class Interface(object):
         :type idmember: int
         :return: cookie
         """
-        return idmember + 1024
+        cookie = 1024 << 32
+        return cookie + idmember + 1024
 
     def get_action_output(self, type_output, port_number=1, next_dpid=1):
         """
