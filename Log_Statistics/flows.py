@@ -37,9 +37,9 @@ class FlowProcess(object):
             if Switch.objects.filter(pk=key).exists():
                 for stat in value:
                     data = {"dpid": key}
-                    self.decode_flow(data, stat)
-                    self.decode_data(data, stat)
-                    datas.append(data)
+                    if self.decode_flow(data, stat) is None:
+                        self.decode_data(data, stat)
+                        datas.append(data)
             self.save_stat(datas, datetime.strptime(time, "%Y-%m-%dT%H:%M:%S.%f"))
 
     def decode_data(self, data, stat):
@@ -55,11 +55,15 @@ class FlowProcess(object):
         """
         cookie = stat.get('cookie')
         source = (cookie >> 32) - 1024
+        if source < 0:
+            return "IGNORE"
         destination = (cookie & 0x00000000FFFFFFFF) - 1024
+        if destination < 0:
+            return "IGNORE"
         type = self.guess_flow_type(stat)
         flow_id = self.get_flow_id(source, destination, type)
         data['flow'] = flow_id
-
+        return None
     def get_flow_id(self, source=0, destination=0, flow_type="IPv4"):
         """
         Retrieve flow id from the Database.
