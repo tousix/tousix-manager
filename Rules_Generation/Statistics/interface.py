@@ -74,3 +74,11 @@ class Interface(object):
         :returns: Table ID
         """
         return 1
+
+    def create_miss_table(self, dpid):
+        return {
+            "cookie": 0,
+            "table_id": self.set_table_id(),
+            "match": {},
+            "dpid": dpid
+        }

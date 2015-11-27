@@ -73,4 +73,11 @@ class Manager(object):
                                     "source": peer_src.idPeer,
                                     "destination": peer_dst.idPeer}
                             rules.append(rule)
+        rule = {
+            "module": "Miss-table",
+            "rule": ipv4.create_miss_table(dpid),
+            "source": None,
+            "destination": None
+        }
+        rules.append(rule)
         return rules
