@@ -62,8 +62,11 @@ class FlowProcess(object):
             return "IGNORE"
         type = self.guess_flow_type(stat)
         flow_id = self.get_flow_id(source, destination, type)
+        if flow_id is None:
+            return "IGNORE"
         data['flow'] = flow_id
         return None
+
     def get_flow_id(self, source=0, destination=0, flow_type="IPv4"):
         """
         Retrieve flow id from the Database.
@@ -76,15 +79,19 @@ class FlowProcess(object):
 
         if flow_type == "ICMPv6" or flow_type == "ARP":
             query = query.filter(hote_src_id__isnull=True)
-        elif source is not "0":
+        elif source is not 0:
             query = query.filter(hote_src_id=source)
 
-        if destination is not "0":
+        if destination is not 0:
             query = query.filter(hote_dst_id=destination)
 
         query = query.filter(type=flow_type)
         pk = query.values('idflux').first()
-        return pk.get('idflux')
+        try:
+
+            return pk.get('idflux')
+        except AttributeError:
+            return None
 
     def guess_flow_type(self, stat):
         """
