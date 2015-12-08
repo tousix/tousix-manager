@@ -25,6 +25,7 @@ from Statistics_Manager.JSONResponseMixin import JSONResponseMixin
 from Authentication.LoginMixin import LoginRequiredMixin
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
+from django.core.cache import caches
 # Create your views here.
 
 
@@ -52,10 +53,16 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
         return JSONResponseMixin.render_to_response(self, [])
 
     def form_valid(self, form):
-        forge = forgeData()
-        data = forge.get_data(form.get_source(), form.get_destination(), form.get_type(), form.get_period(), 'bits')
-
-        return JSONResponseMixin.render_to_response(self, data)
+        cache_statistics = caches['statistics']
+        composed_request = str(form.get_source()) + str(form.get_destination()) + form.get_type() + form.get_period() + 'bits'
+        cache_value = cache_statistics.get(composed_request, None)
+        if cache_value is None:
+            forge = forgeData()
+            data = forge.get_data(form.get_source(), form.get_destination(), form.get_type(), form.get_period(), 'bits')
+            cache_statistics.set(composed_request, data)
+            return JSONResponseMixin.render_to_response(self, data)
+        else:
+            return JSONResponseMixin.render_to_response(self, cache_value)
 
 
 class RestrictedStats(FormView, JSONResponseMixin):
@@ -72,7 +79,13 @@ class RestrictedStats(FormView, JSONResponseMixin):
         return redirect(reverse("charts"))
 
     def form_valid(self, form):
-        forge = forgeData()
-        data = forge.get_data('0', '0', form.get_type(), form.get_period(), 'bits')
-
-        return JSONResponseMixin.render_to_response(self, data)
+        cache_statistics = caches['statistics']
+        composed_request = '0' + '0' + form.get_type() + form.get_period() + 'bits'
+        cache_value = cache_statistics.get(composed_request, None)
+        if cache_value is None:
+            forge = forgeData()
+            data = forge.get_data(0, 0, form.get_type(), form.get_period(), 'bits')
+            cache_statistics.set(composed_request, data)
+            return JSONResponseMixin.render_to_response(self, data)
+        else:
+            return JSONResponseMixin.render_to_response(self, cache_value)
