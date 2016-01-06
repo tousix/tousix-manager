@@ -84,7 +84,7 @@ class RestrictedStats(FormView, JSONResponseMixin):
         cache_value = cache_statistics.get(composed_request, None)
         if cache_value is None:
             forge = forgeData()
-            data = forge.get_data(0, 0, form.get_type(), form.get_period(), 'bits')
+            data = forge.get_data('0', '0', form.get_type(), form.get_period(), 'bits')
             cache_statistics.set(composed_request, data)
             return JSONResponseMixin.render_to_response(self, data)
         else:
