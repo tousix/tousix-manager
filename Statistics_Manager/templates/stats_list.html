@@ -62,7 +62,7 @@
     for (i = 0; i < stats.length; i++) {
         statsDef[i] = [Date.parse(stats[i].time), stats[i].value]
     };
-        $('#Chart').highcharts({
+        $('#Chart').highcharts("StockChart",{
             chart: {
                 zoomType: 'x'
             },
