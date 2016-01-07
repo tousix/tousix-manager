@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+{% extends "base.html" %}
+{%  load staticfiles %}
+{% block sb_admin_content %}
     {%  if not rules %}
     <form id="PeersForm" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <INPUT TYPE="submit" VALUE=" Envoyer ">
+        <button type="submit" class="btn btn-lg btn-default">Envoyer</button>
     </form>
     {%  else %}
         <textarea> {{ rules }}</textarea>
     {% endif %}
-</body>
-</html>
+{% endblock sb_admin_content %}

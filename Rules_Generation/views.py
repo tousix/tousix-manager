@@ -18,13 +18,15 @@
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.views.generic.edit import FormView
+from django.views.generic.base import TemplateView
 from django.shortcuts import render
 from Rules_Generation.manager import Manager
 from Rules_Generation.forms import SwitchChoiceForm
-from Database.models import Regles
+from Database.models import Regles, Switch
+from Authentication.AdminMixin import AdminVerificationMixin
 
 
-class SelectionSwitchView(FormView):
+class SelectionSwitchView(FormView, AdminVerificationMixin):
     """
     Testing view for Rules_Generation app
     """
@@ -35,7 +37,18 @@ class SelectionSwitchView(FormView):
         switches = form.get_selected()
         manager = Manager()
         manager.create_rules(switches)
-        rules = Regles.objects.values('regles')
+        rules = Regles.objects.values('regle')
         return render(self.request, "switches_list.html", context={"rules": rules})
 
 
+class GenerateAllSwitchView(TemplateView, AdminVerificationMixin):
+    template_name = "switches_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(GenerateAllSwitchView, self).get_context_data()
+        switches = Switch.objects.all()
+        manager = Manager()
+        manager.create_rules(switches)
+        rules = Regles.objects.values('regle')
+        context["rules"] = rules
+        return context
