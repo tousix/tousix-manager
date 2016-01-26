@@ -1,0 +1,9 @@
+include LICENSE
+include README.md
+include MANIFEST.in
+include settings.py.example
+recursive-include * *.html
+recursive-include * *.css
+recursive-include * *.js
+prune tousix-manager/Database/migrations
+prune web_TouSIX
