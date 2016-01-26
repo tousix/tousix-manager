@@ -23,7 +23,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.views.generic.edit import FormView
 
-from tousix_manager.Authentication import LoginRequiredMixin
+from tousix_manager.Authentication.LoginMixin import LoginRequiredMixin
 from tousix_manager.Member_Manager.update.UpdateMixin import UpdateUrlMixin
 
 

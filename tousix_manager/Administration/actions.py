@@ -20,7 +20,7 @@
 from django.shortcuts import render, redirect
 from tousix_manager.BGP_Configuration.views import render_conf_members, render_conf_hosts
 from tousix_manager.Database.models import Hote, Membre
-from tousix_manager.Rules_Generation import Manager
+from tousix_manager.Rules_Generation.manager import Manager
 
 
 def generate_routeserver_conf(modeladmin, request, queryset):

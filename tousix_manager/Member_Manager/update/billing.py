@@ -17,13 +17,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from Member_Manager.forms.billing import BillingForm
+from tousix_manager.Member_Manager.forms.billing import BillingForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.views.generic.edit import UpdateView
 
-from tousix_manager.Authentication import LoginRequiredMixin
+from tousix_manager.Authentication.LoginMixin import LoginRequiredMixin
 from tousix_manager.Database.models import Contact, UserMembre
 from tousix_manager.Member_Manager.update.UpdateMixin import UpdateUrlMixin
 

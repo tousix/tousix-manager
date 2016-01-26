@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from tousix_manager.Frontpages import WelcomeView
+from tousix_manager.Frontpages.views import WelcomeView
 from tousix_manager.Log_Controller.views import AsyncEventView
 from tousix_manager.Log_Statistics.views import RecieveStatsForm
 from tousix_manager.Member_Manager import urls as members_urls

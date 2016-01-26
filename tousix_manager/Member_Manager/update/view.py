@@ -17,12 +17,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from Member_Manager.forms.forms import *
+from tousix_manager.Member_Manager.forms.forms import *
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import UpdateView
 
-from tousix_manager.Authentication import LoginRequiredMixin
+from tousix_manager.Authentication.LoginMixin import LoginRequiredMixin
 from tousix_manager.Database.models import Membre, Hote, UserMembre
 from tousix_manager.Member_Manager.update.UpdateMixin import UpdateUrlMixin
 

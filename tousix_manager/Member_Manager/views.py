@@ -17,3 +17,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
+from tousix_manager.Member_Manager.create import CreateMemberView
+from tousix_manager.Member_Manager.update.view import UpdateMemberView
+from tousix_manager.Member_Manager.update.noc import NOCUpdateView
+from tousix_manager.Member_Manager.update.billing import BillingUpdateView
+from tousix_manager.Member_Manager.update.password import PasswordChangeView
+from tousix_manager.Member_Manager.update.technical import TechnicalUpdateView
+from tousix_manager.Member_Manager.update.router import RouterUpdateView

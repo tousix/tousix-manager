@@ -375,5 +375,5 @@ class Switchlink(models.Model):
 from tousix_manager.Database.signals import post_save_hote, pre_delete_hote
 
 #Import other apps class
-from tousix_manager.Rules_Generation import Manager
-from tousix_manager.Rules_Deployment import RulesDeployment
+from tousix_manager.Rules_Generation.manager import Manager
+from tousix_manager.Rules_Deployment.rules import RulesDeployment
