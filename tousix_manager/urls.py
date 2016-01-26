@@ -14,13 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
-from Log_Controller.views import AsyncEventView
-from Log_Statistics.views import RecieveStatsForm
-from Frontpages.views import WelcomeView
-from Member_Manager import urls as members_urls
-from Rules_Deployment import urls as rules_deployment_urls
-from Statistics_Manager import urls as statistics_urls
 from django.contrib import admin
+
+from tousix_manager.Frontpages import WelcomeView
+from tousix_manager.Log_Controller.views import AsyncEventView
+from tousix_manager.Log_Statistics.views import RecieveStatsForm
+from tousix_manager.Member_Manager import urls as members_urls
+from tousix_manager.Rules_Deployment import urls as rules_deployment_urls
+from tousix_manager.Statistics_Manager import urls as statistics_urls
 
 admin.autodiscover()
 
