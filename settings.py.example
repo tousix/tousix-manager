@@ -42,7 +42,6 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.sites',
     'formtools',
-    'django_extensions',
     'django_fsm',
     'debug_toolbar',
     'reversion',
@@ -151,6 +150,7 @@ STATIC_URL = '/static/'
 # STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, "static"),
 # )
+ROOT_URLCONF = 'tousix_manager.urls'
 
 # This is the configuration part for BIRD communications.
 # For now, we assume an bird-lg prox is tunning, and the configuration files are writable in a directory.

@@ -43,9 +43,12 @@ setup(
         'django-debug-toolbar==1.4',
         'django-formtools',
         'django-fsm',
+        'django-localflavor',
+        'django-sb-admin',
         'django-fsm-admin==1.2.2',
         'django-registration-redux',
         'django-reversion',
+        'mysqlclient',
         'requests'
     ],
     classifiers=[
