@@ -37,6 +37,8 @@ class MemberChoiceField(forms.ChoiceField):
             # TODO find a better solution to check if table exists
             self.choices.append(("", "None"))
             return None
+        except Hote.DoesNotExist:
+            LOG.warning("No entries in host model. Statistics app will not perform correctly.")
 
         query = Hote.objects.filter(valid=True)
         self.choices.append(("0", "ALL"))
