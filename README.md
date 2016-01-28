@@ -26,10 +26,8 @@ Quick start
     `url(r'^manager/', include('tousix-manager.urls'))`
 
 5. Run `python manage.py migrate` to create tousix-manager's models.
-   Note this command will add some example objects to your project.
 
-6. Create a super user for your project to tune your database.
+6. You can now run the project : `python manage.py runserver 8000`
 
-7. ???
+Don't forget to create a super user for editing some models in the admin interface.
 
-8. PROFIT !!!
