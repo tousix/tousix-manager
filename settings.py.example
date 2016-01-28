@@ -153,7 +153,7 @@ STATIC_URL = '/static/'
 ROOT_URLCONF = 'tousix_manager.urls'
 
 # This is the configuration part for BIRD communications.
-# For now, we assume an bird-lg prox is tunning, and the configuration files are writable in a directory.
+# For now, we assume an bird-lg proxx is running, and the configuration files are writable in a directory.
 BGP_CONFIG = [{
     "name": "default",
     "filepath": "/etc/bird/ipv4.conf",
@@ -209,7 +209,7 @@ RULES_GENERATION_GROUPS = {
 
 # OpenFlow group generation (and path detections) is not implemented yet.
 # This is a temporary option to define our forwarding groups, and includes them into the database.
-# The format of the group dinition is a JSON-like object.
+# The format of the group definition is a JSON-like object.
 # http://ryu.readthedocs.org/en/latest/app/ofctl_rest.html#add-a-group-entry
 RULES_GENERATION_GROUPS_DEFINITION = {
     22211208: [

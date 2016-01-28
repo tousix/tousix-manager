@@ -6,3 +6,4 @@ recursive-include * *.html
 recursive-include * *.css
 recursive-include * *.js
 prune web_TouSIX
+prune ryu-apps
