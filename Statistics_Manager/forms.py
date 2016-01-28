@@ -19,7 +19,7 @@
 from django import forms
 
 from Database.models import Hote
-
+from django.db.utils import ProgrammingError
 
 class MemberChoiceField(forms.ChoiceField):
     """
@@ -30,6 +30,14 @@ class MemberChoiceField(forms.ChoiceField):
                  initial=None, help_text='', *args, **kwargs):
 
         super(MemberChoiceField, self).__init__(choices, required, widget, label, initial, help_text, *args, **kwargs)
+        # Check if table exists
+        try:
+            Hote.objects.all().get()
+        except ProgrammingError:
+            # TODO find a better solution to check if table exists
+            self.choices.append(("", "None"))
+            return None
+
         query = Hote.objects.filter(valid=True)
         self.choices.append(("0", "ALL"))
 
