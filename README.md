@@ -73,7 +73,7 @@ You will need Ryu and requests python packages to launch these applications :
 
 It is possible to launch all the applications in one instance. Here is a launch command example :
 
-    ryu-manager --config-file ./ryu-apps/ryu.conf --verbose ./ryu-apps/send_event_async.py                 ./ryu-apps/ofctl_rest_tousix.py ./ryu-apps/stateful_ctrl.py ./ryu-apps/send_stats.py
+    ryu-manager --config-file ./ryu-apps/ryu.conf --verbose ./ryu-apps/send_event_async.py ./ryu-apps/ofctl_rest_tousix.py ./ryu-apps/stateful_ctrl.py ./ryu-apps/send_stats.py
    
 For any questions please contact us !
 
