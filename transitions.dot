@@ -1,0 +1,22 @@
+digraph {
+  rankdir=LR;
+	subgraph cluster_Database_Hote {
+		graph [label="Database.Hote"]
+			"Database.hote.etat.Inactive" [label=Inactive shape=circle]
+			"." [shape=point]
+				"." -> "Database.hote.etat.Inactive"
+			"Database.hote.etat.Changing" [label=Changing shape=circle]
+			"Database.hote.etat.Production" [label=Production shape=circle]
+				"Database.hote.etat.Changing" -> "Database.hote.etat.Production" [label=Apply]
+				"Database.hote.etat.Production" -> "Database.hote.etat.Changing" [label=Prepare]
+				"Database.hote.etat.Inactive" -> "Database.hote.etat.Production" [label=Deploy]
+	}
+	subgraph cluster_Database_Regles {
+		graph [label="Database.Regles"]
+			"Database.regles.etat.Deprecated" [label=Deprecated shape=doublecircle]
+			"Database.regles.etat.Production" [label=Production shape=circle]
+			"." [shape=point]
+				"." -> "Database.regles.etat.Production"
+				"Database.regles.etat.Production" -> "Database.regles.etat.Deprecated" [label=ChangeRulesStatus]
+	}
+}
