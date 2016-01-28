@@ -17,7 +17,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 from django import forms
-
+from django.db.utils import ProgrammingError
 from tousix_manager.Database.models import Hote
 
 
@@ -28,11 +28,17 @@ class MemberChoiceField(forms.ChoiceField):
     """
     def __init__(self, choices=(), required=True, widget=None, label=None,
                  initial=None, help_text='', *args, **kwargs):
-
         super(MemberChoiceField, self).__init__(choices, required, widget, label, initial, help_text, *args, **kwargs)
+        # Check if table exists
+        try:
+            Hote.objects.all().get()
+        except ProgrammingError:
+            # TODO find a better solution to check if table exists
+            self.choices.append(("", "None"))
+            return None
+
         query = Hote.objects.filter(valid=True)
         self.choices.append(("0", "ALL"))
-
         for member in query:
             self.choices.append((str(member.pk), member.nomhote))
 
