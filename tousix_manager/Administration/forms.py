@@ -83,6 +83,25 @@ class SwitchForm(forms.ModelForm):
         fields = ['nomswitch', 'idswitch', 'ipswitch', 'idpop']
 
 
+class SwitchChoiceField(forms.ModelChoiceField):
+    """
+    ModelChoiceField modification for display Switch name instead of complete object.
+    """
+    def label_from_instance(self, obj):
+        return "%s" % obj.nomswitch
+
+
+class PortForm(forms.ModelForm):
+    """
+    ModelForm for modify :model:`Database.Port` with custom fields.
+    """
+    idswitch = SwitchChoiceField(queryset=Switch.objects.all(), empty_label=None)
+
+    class Meta:
+        model = Port
+        fields = ['idswitch', 'numport', 'typeport', 'usable']
+
+
 class ConnexionChoiceField(forms.ModelChoiceField):
     """
     ModelChoiceField modification for display Connection type name instead of complete object.

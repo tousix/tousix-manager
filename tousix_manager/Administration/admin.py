@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from fsm_admin.mixins import FSMTransitionMixin
-from tousix_manager.Administration.forms import HoteForm, SwitchForm, MembreForm, CustomUserForm
+from tousix_manager.Administration.forms import HoteForm, SwitchForm, MembreForm, CustomUserForm, PortForm
 from tousix_manager.Database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch, Regles
 
 
@@ -78,7 +78,7 @@ class PortAdmin(admin.ModelAdmin):
     """
     list_display = ["idport", "switch", "numport", "typeport", "usable"]
     inlines = [HoteInLine]
-    exclude = ["idswitch"]
+    form = PortForm
     list_filter = ["idswitch__nomswitch"]
     search_fields = ["numport", 'idswitch__nomswitch']
 
