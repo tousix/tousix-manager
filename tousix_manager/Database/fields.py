@@ -69,7 +69,7 @@ class PositiveBigIntegerField(BigIntegerField):
     empty_strings_allowed = False
 
     def get_internal_type(self):
-        return "PositiveBigIntegerField"
+        return "BigIntegerField"
 
     def db_type(self, connection):
         # This is how MySQL defines 64 bit unsigned integer data types
