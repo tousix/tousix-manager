@@ -41,7 +41,9 @@ class MemberChoiceField(forms.ChoiceField):
             return None
         except Hote.DoesNotExist:
             LOG.warning("No entries in host model. Statistics app will not perform correctly.")
-
+        except Hote.MultipleObjectsReturned:
+            # Not an error in this scenario
+            pass
         query = Hote.objects.filter(valid=True)
         self.choices.append(("0", "ALL"))
 
