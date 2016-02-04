@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from fsm_admin.mixins import FSMTransitionMixin
 from tousix_manager.Administration.forms import HoteForm, SwitchForm, MembreForm, CustomUserForm, PortForm
-from tousix_manager.Database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch, Regles
+from tousix_manager.Database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch, Regles, ConnectionType
 
 
 # Register your models here.
@@ -16,7 +16,8 @@ class HoteInLine(admin.TabularInline):
     Class which permits host visibility in other models related.
     """
     model = Hote
-    max_num = 2
+    max_num = 1
+    min_num = 1
     form = HoteForm
 
 
@@ -135,6 +136,14 @@ class ReglesField(FSMTransitionMixin, admin.ModelAdmin):
     actions = [get_rules_list]
     fsm_field = ['etat']
 
+
+@admin.register(ConnectionType)
+class ConnectionTypeAdmin(admin.ModelAdmin):
+    """
+    Class for ConnectionType visibility in admin panel
+    """
+    list_display = ["connection_type"]
+
 admin_tousix.register(Regles, ReglesField)
 admin_tousix.register(LogSwitch, LogSwitchAdmin)
 admin_tousix.register(Switch, SwitchAdmin)
@@ -143,3 +152,4 @@ admin_tousix.register(Pop, PopAdmin)
 admin_tousix.register(Port, PortAdmin)
 admin_tousix.register(Hote, HoteAdmin)
 admin_tousix.register(Membre, MembreAdmin)
+admin_tousix.register(ConnectionType, ConnectionTypeAdmin)
