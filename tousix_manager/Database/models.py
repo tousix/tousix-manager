@@ -114,7 +114,7 @@ class Switch(models.Model):
     idswitch = PositiveBigIntegerField(db_column='idSwitch', primary_key=True)
     nomswitch = models.CharField(db_column='nomSwitch', max_length=20, blank=True, null=True)
     ipswitch = models.CharField(db_column='IPSwitch', max_length=39, blank=True, null=True)
-    idpop = models.OneToOneField(Pop, to_field='idpop', db_column='idPOP', unique=True, blank=True, null=True)
+    idpop = models.ForeignKey(Pop, to_field='idpop', db_column='idPOP', blank=True, null=True)
 
     class Meta:
         db_table = 'Switch'
