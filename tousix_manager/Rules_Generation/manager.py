@@ -37,7 +37,7 @@ class Manager(object):
         :param switch: Switch model
         :return list(Peer): Peer array
         """
-        hotes = Hote.objects.filter(valid=True)
+        hotes = Hote.objects.filter(valid=True).exclude(etat="Inactive")
         peers = []
         for hote in hotes:
             peer = Peer()
