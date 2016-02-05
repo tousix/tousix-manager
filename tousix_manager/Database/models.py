@@ -189,7 +189,7 @@ class Hote(models.Model):
     This fields is linked with side effect methods.
     """
     idhote = models.AutoField(db_column='IdHote', primary_key=True)
-    nomhote = models.CharField(db_column='NomHote', max_length=30, blank=True, verbose_name="Nom routeur")
+    nomhote = models.CharField(db_column='NomHote', max_length=30, blank=False, null=False, verbose_name="Nom routeur")
     machote = MACAddressField(db_column='MACHote', verbose_name="Adresse MAC", blank=False, null=False)
     ipv4hote = models.GenericIPAddressField(db_column='IPv4Hote', verbose_name="Adresse IPv4", null=True)
     ipv6hote = models.GenericIPAddressField(db_column='IPv6Hote', verbose_name="Adresse IPv6", null=True)
