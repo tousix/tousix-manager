@@ -239,7 +239,7 @@ class Hote(models.Model):
         db_table = 'Hôte'
         unique_together = (('idhote', 'idmembre'),)
 
-    @transition(field=etat, source="Inactive", target="Production", custom={"admin":False})
+    @transition(field=etat, source="Inactive", target="Production")
     def Deploy(self):
         """
         Transition method for deploy a router in the topology, pushing all the rules necessary.
