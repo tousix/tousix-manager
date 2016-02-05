@@ -16,8 +16,9 @@ class HoteInLine(admin.TabularInline):
     Class which permits host visibility in other models related.
     """
     model = Hote
-    max_num = 1
-    min_num = 1
+    max_num = 3
+    min_num = 0
+    extra = 1
     form = HoteForm
 
 
