@@ -43,4 +43,16 @@ The life cycle of the state machine is defined in this schema:
 Let's decrypt Model status for the host:
 
     The inactive state is used to create the Host object, but not apply it in the production.
-    It requres an admin action to get out of this state, and apply the Deploy transition method.
+    It requires an admin action to get out of this state, and apply the Deploy transition method.
+
+    The production state guarantee the actual object saved in the database is applied exactly on the production.
+    If some important modification occurs on the object,
+    TouSIX-Manager will apply the modifications provided, and keep the ancient configuration in production (via the Prepare transition method).
+
+    Changing state for a host means he could be on two states.
+    This limbo state is used to let the member doing his part of the modification (hardware or software).
+    When this is done, the administrator can apply the Apply transition method to remove the old configuration.
+
+A state machine is also applied for the Rules model.
+Its purpose is for make  the maintenance (by a human or a program) easier.
+It separates the actual rules needed to run the topology, and the ones which will not be useful later.
