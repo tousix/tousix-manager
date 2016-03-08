@@ -14,6 +14,7 @@ Contents:
    overview
    basic-installation
    tutorial
+   admin
    ryu-link
    api
    contact
