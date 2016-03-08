@@ -114,7 +114,7 @@ class Switch(models.Model):
     idswitch = PositiveBigIntegerField(db_column='idSwitch', primary_key=True)
     nomswitch = models.CharField(db_column='nomSwitch', max_length=20, blank=True, null=True)
     ipswitch = models.CharField(db_column='IPSwitch', max_length=39, blank=True, null=True)
-    idpop = models.OneToOneField(Pop, to_field='idpop', db_column='idPOP', unique=True, blank=True, null=True)
+    idpop = models.ForeignKey(Pop, to_field='idpop', db_column='idPOP', blank=True, null=True)
 
     class Meta:
         db_table = 'Switch'
@@ -189,7 +189,7 @@ class Hote(models.Model):
     This fields is linked with side effect methods.
     """
     idhote = models.AutoField(db_column='IdHote', primary_key=True)
-    nomhote = models.CharField(db_column='NomHote', max_length=30, blank=True, verbose_name="Nom routeur")
+    nomhote = models.CharField(db_column='NomHote', max_length=30, blank=False, null=False, verbose_name="Nom routeur")
     machote = MACAddressField(db_column='MACHote', verbose_name="Adresse MAC", blank=False, null=False)
     ipv4hote = models.GenericIPAddressField(db_column='IPv4Hote', verbose_name="Adresse IPv4", null=True)
     ipv6hote = models.GenericIPAddressField(db_column='IPv6Hote', verbose_name="Adresse IPv6", null=True)
@@ -239,7 +239,7 @@ class Hote(models.Model):
         db_table = 'Hôte'
         unique_together = (('idhote', 'idmembre'),)
 
-    @transition(field=etat, source="Inactive", target="Production", custom={"admin":False})
+    @transition(field=etat, source="Inactive", target="Production")
     def Deploy(self):
         """
         Transition method for deploy a router in the topology, pushing all the rules necessary.

@@ -34,11 +34,11 @@ def generate_routeserver_conf(modeladmin, request, queryset):
     # remove keyboard-chair errors
     if modeladmin.model is Membre:
         queryset = queryset.exclude(nommembre="TouIX")
-        data = render_conf_members(request, queryset)
+        data = render_conf_members(queryset)
         return render(request, "members_list.html", context=data)
     elif modeladmin.model is Hote:
         queryset = queryset.exclude(idmembre__nommembre="TouIX")
-        data = render_conf_hosts(request, queryset)
+        data = render_conf_hosts(queryset)
         return render(request, "members_list.html", context=data)
 
 generate_routeserver_conf.short_description = "Générer la configuration BIRD pour la sélection"

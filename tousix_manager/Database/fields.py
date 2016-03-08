@@ -25,6 +25,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms import fields
 from django.db import models
 from django.db.models.fields import BigIntegerField
+from django.core import validators
+from django.utils.functional import cached_property
 
 MAC_RE = r'^([0-9a-fA-F]{2}([:]?|$)){6}$'
 mac_re = re.compile(MAC_RE)
@@ -66,10 +68,20 @@ class MACAddressField(models.Field):
 # Snippet found in : https://news.numlock.ch/it/django-custom-model-field-for-an-unsigned-bigint-data-type
 class PositiveBigIntegerField(BigIntegerField):
     """Represents MySQL's unsigned BIGINT data type (works with MySQL only!)"""
+    min_value = 0
+    max_value = BigIntegerField.MAX_BIGINT * 2 - 1
+
+    @cached_property
+    def validators(self):
+        range_validators = []
+        range_validators.append(validators.MinValueValidator(self.min_value))
+        range_validators.append(validators.MaxValueValidator(self.max_value))
+        return range_validators
+
     empty_strings_allowed = False
 
     def get_internal_type(self):
-        return "PositiveBigIntegerField"
+        return "BigIntegerField"
 
     def db_type(self, connection):
         # This is how MySQL defines 64 bit unsigned integer data types
@@ -81,7 +93,7 @@ class PositiveBigIntegerField(BigIntegerField):
             return "NUMERIC(20,0)"
 
     def formfield(self, **kwargs):
-        defaults = {'min_value': 0,
-                    'max_value': BigIntegerField.MAX_BIGINT * 2 - 1}
+        defaults = {'min_value': self.min_value,
+                    'max_value': self.max_value}
         defaults.update(kwargs)
         return super(PositiveBigIntegerField, self).formfield(**defaults)
