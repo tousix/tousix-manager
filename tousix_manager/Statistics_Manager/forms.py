@@ -82,8 +82,8 @@ class TypeForm(forms.Form):
     Choice form for select the flow type.
     """
     type = forms.ChoiceField(widget=forms.Select(attrs={"onchange": "FormChanged(this.form);"}),
-                             choices=(('IPv6', 'IPv6',),
-                                    ('IPv4', 'IPv4',),
+                             choices=(('IPv4', 'IPv4',),
+                                    ('IPv6', 'IPv6',),
                                     ('ARP', 'ARP',),
                                     ('ICMPv6', 'ICMPv6',),))
 
