@@ -31,7 +31,7 @@ class AddressLimitationMixin(object):
     """
 
     def verify_address(self):
-        if self.request.META["HTTP_X_REAL_IP"] in settings.ADDRESS_WHITELIST:
+        if self.request.META[settings.ADDRESS_WHITELIST_HEADER] in settings.ADDRESS_WHITELIST:
             return None
         else:
             return "Confirmed"

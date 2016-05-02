@@ -308,3 +308,4 @@ SITE_ID = 1
 # some views of tousix-manager.
 # Add only trusted addresses which cannot be spoofed
 ADDRESS_WHITELIST = ['127.0.0.1']
+ADDRESS_WHITELIST_HEADER = "HTTP_X_REAL_IP"
