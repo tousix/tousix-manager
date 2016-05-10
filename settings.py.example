@@ -301,7 +301,19 @@ ACCOUNT_ACTIVATION_DAYS = 1
 REGISTRATION_AUTO_LOGIN = True
 LOGIN_REDIRECT_URL = "/"
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SERVER_EMAIL = 'test@example.com'
+EMAIL_SUBJECT_PREFIX = "[TouSIX-Manager] "
+EMAIL_HOST = 'mel.example.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'test@example.com'
+EMAIL_HOST_PASSWORD = 'jsqksn,jsdofnsu'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+
+ADMINS = (('John', 'john@example.com'), ('Mary', 'mary@example.com'))
+
 SITE_ID = 1
 
 # Due to the lack of authentication for programs, we simply uset an IP address whitelist to restrict

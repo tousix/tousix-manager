@@ -25,6 +25,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 from django.views.generic.list import ListView
+from django.core.mail import mail_admins
 
 from tousix_manager.Authentication.AddressMixin import AddressLimitationMixin
 from tousix_manager.Database.models import LogSwitch
@@ -53,16 +54,22 @@ class AsyncEventView(AddressLimitationMixin, View):
 
             data = json.loads(request.body.decode(encoding='utf-8'))
             dpid = int(data.get('dpid'), 16)
+            #TODO simplify code
             if path == base_path + "switch/enter":
                 self.log_database(dpid, 'Warning', "Un switch est entré dans la topologie.", json=data)
+                self.send_admin_alert(dpid, 'Warning', "Un switch est entré dans la topologie.", data)
             elif path == base_path + "switch/leave":
                 self.log_database(dpid, 'Error', "Un switch est sorti de la topologie.", json=data)
+                self.send_admin_alert(dpid, 'Error', "Un switch est sorti de la topologie.", data)
             elif path == base_path + "port/modify":
                 self.log_database(dpid, 'Warning', "Un port a été modifié.", json=data)
+                self.send_admin_alert(dpid, 'Warning', "Un port a été modifié.", data)
             elif path == base_path + "error":
                 self.log_database(dpid, 'Error', "Une erreur a été remonté par l'agent OpenFlow.", json=data)
+                self.send_admin_alert(dpid, 'Error', "Une erreur a été remonté par l'agent OpenFlow.", data)
             elif path == base_path + "error/ryu":
                 self.log_database(None, 'Error', "Erreur remonté par l'application Ryu.")
+                self.send_admin_alert(None, 'Error', "Erreur remonté par l'application Ryu.", data)
             else:
                 LOG.warning("Invalid url path")
                 return HttpResponse(status=404)
@@ -78,6 +85,21 @@ class AsyncEventView(AddressLimitationMixin, View):
         """
         message = LogSwitch(idswitch_id=dpid, level=level, message=log, json=json)
         message.save()
+
+    def send_admin_alert(self, dpid, level, message, JSON=None):
+        subject = "Evènement sur le contrôleur Ryu"
+        message = "Bonjour," \
+                  "\n\n Ceci est un message envoyé automatiquement par le programme TouSIX-Manager.\n" \
+                  "Une alerte a été envoyé par le contrôleur Ryu. Voici les détails:\n\n" \
+                  "Niveau: "+ level + "\n" \
+                  "Message: " + message + "\n"
+
+        if dpid is not None:
+            message = message + "DPID du switch: " + str(dpid) + "\n"
+        if JSON is not None:
+            message = message + "Data JSON: \n" + json.dumps(JSON)
+        mail_admins(subject, message)
+
 
 
 class ShowEventView(ListView):
