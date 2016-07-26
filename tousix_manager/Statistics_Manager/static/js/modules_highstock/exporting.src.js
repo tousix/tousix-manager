@@ -1,8 +1,8 @@
 /**
- * @license Highstock JS v4.2.1 (2015-12-21)
+ * @license Highstock JS v4.2.5 (2016-05-06)
  * Exporting module
  *
- * (c) 2010-2014 Torstein Honsi
+ * (c) 2010-2016 Torstein Honsi
  *
  * License: www.highcharts.com/license
  */
@@ -104,6 +104,7 @@ defaultOptions.exporting = {
 	type: 'image/png',
 	url: 'http://export.highcharts.com/',
 	//width: undefined,
+	printMaxWidth: 780,
 	//scale: 2
 	buttons: {
 		contextButton: {
@@ -306,7 +307,7 @@ extend(Chart.prototype, {
 		// prepare for replicating the chart
 		options.series = [];
 		each(chart.series, function (serie) {
-			seriesOptions = merge(serie.options, {
+			seriesOptions = merge(serie.userOptions, { // #4912
 				animation: false, // turn off animation
 				enableMouseTracking: false,
 				showCheckbox: false,
@@ -424,7 +425,11 @@ extend(Chart.prototype, {
 			origDisplay = [],
 			origParent = container.parentNode,
 			body = doc.body,
-			childNodes = body.childNodes;
+			childNodes = body.childNodes,
+			printMaxWidth = chart.options.exporting.printMaxWidth,
+			hasUserSize,
+			resetParams,
+			handleMaxWidth;
 
 		if (chart.isPrinting) { // block the button while in printing mode
 			return;
@@ -434,6 +439,14 @@ extend(Chart.prototype, {
 		chart.pointer.reset(null, 0);
 
 		fireEvent(chart, 'beforePrint');
+
+		// Handle printMaxWidth
+		handleMaxWidth = printMaxWidth && chart.chartWidth > printMaxWidth;
+		if (handleMaxWidth) {
+			hasUserSize = chart.hasUserSize;
+			resetParams = [chart.chartWidth, chart.chartHeight, false];
+			chart.setSize(printMaxWidth, chart.chartHeight, false);
+		}
 
 		// hide all body content
 		each(childNodes, function (node, i) {
@@ -464,6 +477,12 @@ extend(Chart.prototype, {
 			});
 
 			chart.isPrinting = false;
+
+			// Reset printMaxWidth
+			if (handleMaxWidth) {
+				chart.setSize.apply(chart, resetParams);
+				chart.hasUserSize = hasUserSize;
+			}
 
 			fireEvent(chart, 'afterPrint');
 
@@ -678,7 +697,8 @@ extend(Chart.prototype, {
 		button = renderer.button(btnOptions.text, 0, 0, callback, attr, hover, select)
 			.attr({
 				title: chart.options.lang[btnOptions._titleKey],
-				'stroke-linecap': 'round'
+				'stroke-linecap': 'round',
+				zIndex: 3 // #4955
 			});
 		button.menuClassName = options.menuClassName || PREFIX + 'menu-' + chart.btnCount++;
 
