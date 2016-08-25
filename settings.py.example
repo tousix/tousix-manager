@@ -163,6 +163,18 @@ BGP_CONFIG = [{
     "port": "5333"
 }]
 
+# Part of configuration for handling statistics from an InfluxDB database
+# Be sure to have your database well configured before using any InfluxDB related application
+# Note: There is no writing operations at the moment. You can define a read-only user in your database
+INFLUXDB_CONFIG = {
+    "host": "localhost",
+    "port": 8086,
+    "database": "tousix",
+    "user": "tousix-manager",
+    "password": "changeme",
+    "use_ssl": True
+}
+
 # Enable or disable some modules of the Rules_Generation app
 RULES_GENERATION_ENABLED = {
     "Production": {

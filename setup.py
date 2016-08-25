@@ -49,6 +49,7 @@ setup(
         'django-registration-redux',
         'django-reversion',
         'mysqlclient',
+        'influxdb',
         'requests'
     ],
     classifiers=[
