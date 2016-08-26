@@ -86,7 +86,7 @@ class forgeData(object):
 
         data = influx_client.query(query=query)
 
-        return data.get_points()
+        return list(data.get_points())
 
     def forge_query(self, source='0', destination= '0', flow_type='IPv4', time=now(), period='day', unit='bytes'):
         """
@@ -100,7 +100,7 @@ class forgeData(object):
         :return:
         """
         measurement = "value"
-        query = "select non_negative_derivative(sum({0}),{1})" \
+        query = "select non_negative_derivative(sum({0}),{1}) as value" \
                 " from {2} where " \
                 "{3} " \
                 "group by time({4},{5}) fill({6})"
