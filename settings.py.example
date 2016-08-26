@@ -163,6 +163,10 @@ BGP_CONFIG = [{
     "port": "5333"
 }]
 
+# Choose if inbluxdb will be used to generate statistics
+# Please modify INFLUXDB_CONFIG if enabled
+INFLUXDB_ENABLE = False
+
 # Part of configuration for handling statistics from an InfluxDB database
 # Be sure to have your database well configured before using any InfluxDB related application
 # Note: There is no writing operations at the moment. You can define a read-only user in your database

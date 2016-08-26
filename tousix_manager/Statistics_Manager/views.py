@@ -26,8 +26,9 @@ from tousix_manager.Authentication.LoginMixin import LoginRequiredMixin
 from tousix_manager.Database.models import UserMembre
 from tousix_manager.Statistics_Manager.JSONResponseMixin import JSONResponseMixin
 from tousix_manager.Statistics_Manager.forge import forgeData
+from tousix_manager.Statistics_Manager.forge_influx import forgeData as forgeDataInflux
 from tousix_manager.Statistics_Manager.forms import FluxSelectionForm, RestrictedFluxSelectionForm
-
+from django.conf import  settings
 
 # Create your views here.
 
@@ -60,7 +61,10 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
         composed_request = str(form.get_source()) + str(form.get_destination()) + form.get_type() + form.get_period() + 'bits'
         cache_value = cache_statistics.get(composed_request, None)
         if cache_value is None:
-            forge = forgeData()
+            if settings.INFLUXDB_ENABLE:
+                forge = forgeDataInflux
+            else:
+                forge = forgeData()
             data = forge.get_data(form.get_source(), form.get_destination(), form.get_type(), form.get_period(), 'bits')
             cache_statistics.set(composed_request, data)
             return JSONResponseMixin.render_to_response(self, data)
@@ -86,7 +90,10 @@ class RestrictedStats(FormView, JSONResponseMixin):
         composed_request = '0' + '0' + form.get_type() + form.get_period() + 'bits'
         cache_value = cache_statistics.get(composed_request, None)
         if cache_value is None:
-            forge = forgeData()
+            if settings.INFLUXDB_ENABLE:
+                forge = forgeDataInflux
+            else:
+                forge = forgeData()
             data = forge.get_data('0', '0', form.get_type(), form.get_period(), 'bits')
             cache_statistics.set(composed_request, data)
             return JSONResponseMixin.render_to_response(self, data)
