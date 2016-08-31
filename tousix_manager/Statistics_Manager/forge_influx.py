@@ -74,7 +74,7 @@ class forgeData(object):
         :return:
         """
         self.now = now()
-        query = self.forge_query(source, destination, flow_type, self.now, period, unit)
+        query = self.forge_query(source, destination, flow_type, self.now, period)
 
         settings_influx = settings.INFLUXDB_CONFIG
         influx_client = InfluxDBClient(host=settings_influx.get("host", "localhost"),
