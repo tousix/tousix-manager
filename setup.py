@@ -38,7 +38,7 @@ setup(
     author='Rémy Lapeyrade',
     author_email='rlapeyra@laas.fr',
     install_requires=[
-        'django >= 1.8, < 1.9',
+        'django >= 1.9, < 1.10',
         'django-bootstrap3==6.2.2',
         'django-debug-toolbar==1.4',
         'django-formtools',
@@ -46,9 +46,10 @@ setup(
         'django-localflavor',
         'django-sb-admin',
         'django-fsm-admin==1.2.2',
-        'django-registration-redux',
+        'django-registration-redux >= 1.3',
         'django-reversion',
         'mysqlclient',
+        'pygments',
         'requests'
     ],
     classifiers=[
