@@ -54,13 +54,13 @@ class forgeData(object):
         :return:
         """
         if period == "week":
-            return self.now - timedelta(days=8)
+            return "1w"
         elif period == "day":
-            return self.now - timedelta(days=1)
+            return "1d"
         elif period == "month":
-            return self.now - timedelta(days=31)
+            return "31d"
         elif period == "year":
-            return self.now - timedelta(days=366)
+            return "366d"
 
     def get_data(self, source, destination, flow_type, period, unit):
         """
@@ -79,16 +79,17 @@ class forgeData(object):
         settings_influx = settings.INFLUXDB_CONFIG
         influx_client = InfluxDBClient(host=settings_influx.get("host", "localhost"),
                                        port=settings_influx.get('port',8086),
-                                       username=settings.get("user",'root'),
+                                       username=settings_influx.get("user",'root'),
                                        password=settings_influx.get("password",'root'),
                                        database=settings_influx.get("database","default"),
-                                       ssl=settings_influx.get("use_ssl",False))
+                                       ssl=settings_influx.get("use_ssl",False),
+                                       verify_ssl=settings_influx.get('safe_ssl', True))
 
         data = influx_client.query(query=query)
 
         return list(data.get_points())
 
-    def forge_query(self, source='0', destination= '0', flow_type='IPv4', time=now(), period='day', unit='bytes'):
+    def forge_query(self, source='0', destination= '0', flow_type='IPv4', time=now().isoformat(), period='day', unit='bytes'):
         """
         Create influxDB query and retrieve values.
         :param source:
@@ -103,9 +104,9 @@ class forgeData(object):
         query = "select non_negative_derivative(sum({0}),{1}) as value" \
                 " from {2} where " \
                 "{3} " \
-                "group by time({4},{5}) fill({6})"
+                "group by time({4}) fill({5})"
         rate = "1s"
-        time_start = self.get_start_time(period).isoformat()
+        time_start = self.get_start_time(period)
 
         # forge field
         if unit is "bytes":
@@ -115,8 +116,8 @@ class forgeData(object):
 
         # forge conditions
         conditions = "type='{0}'".format(flow_type)
-        conditions += " and time < '{0}'".format(time.isoformat())
-        conditions += " and time >= '{0}'".format(time_start)
+        conditions += " and time > {0}".format("now()")
+        conditions += " - {0}".format(time_start)
 
         if source is not "0":
             conditions += " and source={0}".format(source)
@@ -126,7 +127,7 @@ class forgeData(object):
         fill = "null"
 
         # format query strign
-        query.format(measurement, rate, field, conditions, group_by, fill)
+        query = query.format(measurement, rate, field, conditions, group_by, fill)
 
         # forge group by (time interval and tolerance)
         return query
@@ -137,12 +138,14 @@ class forgeData(object):
         :param period:
         :return:
         """
-        if period is 'day':
+        if period == 'day':
             return "5m,4m"
-        if period is 'week':
+        elif period == 'week':
             return "40m, 4m"
-        if period is "month":
+        elif period == "month":
             return "1h,4m"
-        if period is "year:":
+        elif period == "year":
             return "18h,4m"
+        else:
+            return "5m,4m"
 

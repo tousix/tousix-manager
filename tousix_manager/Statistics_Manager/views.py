@@ -62,10 +62,14 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
         cache_value = cache_statistics.get(composed_request, None)
         if cache_value is None:
             if settings.INFLUXDB_ENABLE:
-                forge = forgeDataInflux
+                forge = forgeDataInflux()
             else:
                 forge = forgeData()
-            data = forge.get_data(form.get_source(), form.get_destination(), form.get_type(), form.get_period(), 'bytes')
+            data = forge.get_data(source=form.get_source(),
+                                  destination=form.get_destination(),
+                                  flow_type=form.get_type(),
+                                  period=form.get_period(),
+                                  unit='bytes')
             cache_statistics.set(composed_request, data)
             return JSONResponseMixin.render_to_response(self, data)
         else:
@@ -91,7 +95,7 @@ class RestrictedStats(FormView, JSONResponseMixin):
         cache_value = cache_statistics.get(composed_request, None)
         if cache_value is None:
             if settings.INFLUXDB_ENABLE:
-                forge = forgeDataInflux
+                forge = forgeDataInflux()
             else:
                 forge = forgeData()
             data = forge.get_data('0', '0', form.get_type(), form.get_period(), 'bytes')
