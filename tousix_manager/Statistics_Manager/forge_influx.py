@@ -120,9 +120,9 @@ class forgeData(object):
         conditions += " - {0}".format(time_start)
 
         if source is not "0":
-            conditions += " and source={0}".format(source)
+            conditions += " and source='{0}'".format(source)
         if destination is not "0":
-            conditions += " and destination={0}".format(destination)
+            conditions += " and destination='{0}'".format(destination)
         group_by = self.set_time_interval(period)
         fill = "null"
 
