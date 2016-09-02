@@ -101,18 +101,20 @@ class forgeData(object):
         :return:
         """
         measurement = "value"
-        query = "select non_negative_derivative(sum({0}),{1}) as value" \
-                " from {2} where " \
-                "{3} " \
-                "group by time({4}) fill({5})"
+        query = "select non_negative_derivative(sum({0}),{1}){2} as value" \
+                " from {3} where " \
+                "{4} " \
+                "group by time({5}) fill({6})"
         rate = "1s"
         time_start = self.get_start_time(period)
 
         # forge field
         if unit is "bytes":
             field = "byte_count"
+            bit_convert = "*8"
         elif unit is "packets":
             field = "packet_count"
+            bit_convert = "*8"
 
         # forge conditions
         conditions = "type='{0}'".format(flow_type)
@@ -127,7 +129,7 @@ class forgeData(object):
         fill = "null"
 
         # format query strign
-        query = query.format(measurement, rate, field, conditions, group_by, fill)
+        query = query.format(measurement, rate, bit_convert, field, conditions, group_by, fill)
 
         # forge group by (time interval and tolerance)
         return query
