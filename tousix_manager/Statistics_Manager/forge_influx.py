@@ -86,8 +86,11 @@ class forgeData(object):
                                        verify_ssl=settings_influx.get('safe_ssl', True))
 
         data = influx_client.query(query=query)
-
-        return list(data.get_points())
+        points = list(data.get_points())
+        # Remove first value to avoid showing derivative computing error
+        # https://github.com/influxdata/influxdb/issues/5943
+        points[0]['value'] = None
+        return points
 
     def forge_query(self, source='0', destination= '0', flow_type='IPv4', time=now().isoformat(), period='day', unit='bytes'):
         """
@@ -112,9 +115,15 @@ class forgeData(object):
         if unit is "bytes":
             field = "byte_count"
             bit_convert = "*8"
+            if period == 'week':
+                field += "_week"
+            elif period == 'month':
+                field += "_month"
+            elif period == 'year':
+                field += "_year"
+
         elif unit is "packets":
             field = "packet_count"
-            bit_convert = "*8"
 
         # forge conditions
         conditions = "type='{0}'".format(flow_type)
