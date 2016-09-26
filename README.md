@@ -45,7 +45,7 @@ It is possible to create a new django project to automate some procedures:
 
     django-admin startproject ixp-manager
 
-Copy the settings.py.example given in the tousix-manager package into your project settings, and customize it following your needs.
+Copy the settings.py given in the tousix-manager package into your project settings, and customize it following your needs.
 
 Include the tousix-manager URLconf in urls.py:
 
