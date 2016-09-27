@@ -23,14 +23,20 @@ from tousix_manager.Database.models import UserMembre
 from tousix_manager.Authentication.LoginMixin import LoginRequiredMixin
 from django.shortcuts import render
 from formtools.wizard.views import SessionWizardView
+from django.shortcuts import redirect
+from collections import OrderedDict
 
 class CreateMemberView(LoginRequiredMixin, SessionWizardView):
     """
     View for creating all the elements needed for add a member (this includes Membre, Hote, Contact model objects)
     """
     template_name = 'inscription_membre.html'
-    form_list = [MemberForm, BillingForm, NOCForm, TechnicalForm, RouterForm]
-
+    form_list = [MemberForm, BillingForm, NOCForm, TechnicalForm, NewRouterForm]
+    initial_dict = {
+        '1': {'telcontact': "00 00 00 00 00"},
+        '2': {'telcontact': "00 00 00 00 00"},
+        '3': {'telcontact': "00 00 00 00 00"}
+    }
     def done(self, form_list, form_dict, **kwargs):
         """
         This method insert all the forms into the datatbase following a pattern (foreign key constraints).
@@ -42,14 +48,17 @@ class CreateMemberView(LoginRequiredMixin, SessionWizardView):
         # Create object for filling missing values
         member = form_dict['0'].save(commit=False)
 
-        billing = form_dict['1'].save()
-        member.billing_id = billing.pk
+        if form_dict['1'].get_phone() is not "00 00 00 00 00":
+            billing = form_dict['1'].save()
+            member.billing_id = billing.pk
 
-        noc = form_dict['2'].save()
-        member.noc_id = noc.pk
+        if form_dict['2'].get_phone() is not "00 00 00 00 00":
+            noc = form_dict['2'].save()
+            member.noc_id = noc.pk
 
-        technical = form_dict['3'].save()
-        member.technical_id = technical.pk
+        if form_dict['3'].get_phone() is not "00 00 00 00 00":
+            technical = form_dict['3'].save()
+            member.technical_id = technical.pk
 
         member.save()
         user_membre = UserMembre(user=self.request.user, membre=member)

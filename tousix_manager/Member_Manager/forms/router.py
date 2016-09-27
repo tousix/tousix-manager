@@ -55,3 +55,9 @@ class RouterForm(forms.ModelForm):
     class Meta:
         model = Hote
         fields = ['nomhote', 'ipv4hote', 'ipv6hote', 'machote']
+
+class NewRouterForm(forms.ModelForm):
+
+    class Meta:
+        model = Hote
+        fields = ['nomhote', 'machote']

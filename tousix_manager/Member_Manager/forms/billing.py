@@ -29,6 +29,8 @@ class BillingForm(forms.ModelForm):
     """
     telcontact = FRPhoneNumberField()
 
+    def get_phone(self):
+        return self.cleaned_data['telcontact']
     class Meta:
         model = Contact
         exclude = ['idcontact']

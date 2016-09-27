@@ -21,5 +21,5 @@
 from tousix_manager.Member_Manager.forms.technical import TechnicalForm
 from tousix_manager.Member_Manager.forms.member import MemberForm
 from tousix_manager.Member_Manager.forms.billing import BillingForm
-from tousix_manager.Member_Manager.forms.router import RouterForm
+from tousix_manager.Member_Manager.forms.router import RouterForm, NewRouterForm
 from tousix_manager.Member_Manager.forms.noc import NOCForm
