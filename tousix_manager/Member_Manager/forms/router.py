@@ -61,3 +61,4 @@ class NewRouterForm(forms.ModelForm):
     class Meta:
         model = Hote
         fields = ['nomhote', 'machote']
+        exclude = ['ipv4hote', 'ipv6hote']
