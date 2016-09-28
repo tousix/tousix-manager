@@ -82,7 +82,7 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
 
     def verify_data_access(self, id, form):
         if not (form.get_source() is '0' and form.get_destination() is '0'):
-            if not (form.get_source() is str(id) or form.get_destination() is str(id)):
+            if not (form.get_source() == str(id + 1) or form.get_destination() == str(id + 1)):
                 return "Forbidden"
         return None
 
