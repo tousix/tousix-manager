@@ -61,8 +61,8 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
         cache_statistics = caches['statistics']
         composed_request = str(form.get_source()) + str(form.get_destination()) + form.get_type() + form.get_period() + 'bytes'
         cache_value = cache_statistics.get(composed_request, None)
-        id_membre = UserMembre.objects.filter(user=self.request.user).first().membre.id
         if not self.request.user.is_staff:
+            id_membre = UserMembre.objects.filter(user=self.request.user).first().membre.idmembre
             if self.verify_data_access(id_membre, form) is "Forbidden":
                 raise PermissionDenied
         if cache_value is None:
