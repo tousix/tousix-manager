@@ -29,6 +29,7 @@ from tousix_manager.Statistics_Manager.forge import forgeData
 from tousix_manager.Statistics_Manager.forge_influx import forgeData as forgeDataInflux
 from tousix_manager.Statistics_Manager.forms import FluxSelectionForm, RestrictedFluxSelectionForm
 from django.conf import  settings
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 
@@ -60,6 +61,10 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
         cache_statistics = caches['statistics']
         composed_request = str(form.get_source()) + str(form.get_destination()) + form.get_type() + form.get_period() + 'bytes'
         cache_value = cache_statistics.get(composed_request, None)
+        id_membre = UserMembre.objects.filter(user=self.request.user).first().membre.id
+        if not self.request.user.is_staff:
+            if self.verify_data_access(id_membre, form) is "Forbidden":
+                raise PermissionDenied
         if cache_value is None:
             if settings.INFLUXDB_ENABLE:
                 forge = forgeDataInflux()
@@ -75,6 +80,11 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
         else:
             return JSONResponseMixin.render_to_response(self, cache_value)
 
+    def verify_data_access(self, id, form):
+        if not (form.get_source() is '0' and form.get_destination() is '0'):
+            if not (form.get_source() is str(id) or form.get_destination() is str(id)):
+                return "Forbidden"
+        return None
 
 class RestrictedStats(FormView, JSONResponseMixin):
     """
