@@ -186,7 +186,7 @@ class Hote(models.Model):
     to fill all the fields before doing any actions with deployment and rules generation app.
 
     It is also recommended to avoid to modify the etat field, unless you know what you are doing.
-    This fields is linked with side effect methods.
+    This field is linked with side effect methods.
     """
     idhote = models.AutoField(db_column='IdHote', primary_key=True)
     nomhote = models.CharField(db_column='NomHote', max_length=30, blank=False, null=False, verbose_name="Nom routeur")
@@ -196,6 +196,7 @@ class Hote(models.Model):
     idmembre = models.ForeignKey(Membre, to_field='idmembre', db_column='idMembre')
     idport = models.ForeignKey(Port, to_field='idport', db_column='idPort', blank=True, null=True)
     valid = models.BooleanField(default=False)
+    internal_server = models.BooleanField(default=False)
     etat = FSMField(default="Inactive")
 
     def membre(self):

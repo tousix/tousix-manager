@@ -54,13 +54,14 @@ def render_conf_members(members):
     for member in members:
         query = Hote.objects.filter(idmembre=member.pk)
         for host in query:
-            peer = {"member": member.nommembre,
-                    "mac": host.machote,
-                    "ipv4": host.ipv4hote,
-                    "ipv6": host.ipv6hote,
-                    'peer': host.nomhote,
-                    "as": member.asnumber}
-            peers.append(peer)
+            if not host.internal_server:
+                peer = {"member": member.nommembre,
+                        "mac": host.machote,
+                        "ipv4": host.ipv4hote,
+                        "ipv6": host.ipv6hote,
+                        'peer': host.nomhote,
+                        "as": member.asnumber}
+                peers.append(peer)
     render_ipv4 = render_to_response("ipv4.conf", context={"peers": peers})
     render_ipv6 = render_to_response("ipv6.conf", context={"peers": peers})
     send_bgp_config(render_ipv4.content, render_ipv6.content)
@@ -77,13 +78,14 @@ def render_conf_hosts(hosts):
     """
     peers = []
     for host in hosts:
-        peer = {"member": host.idmembre.nommembre,
-                "mac": host.machote,
-                "ipv4": host.ipv4hote,
-                "ipv6": host.ipv6hote,
-                'peer': host.nomhote,
-                "as": host.idmembre.asnumber}
-        peers.append(peer)
+        if not host.internal_server:
+            peer = {"member": member.nommembre,
+                    "mac": host.machote,
+                    "ipv4": host.ipv4hote,
+                    "ipv6": host.ipv6hote,
+                    'peer': host.nomhote,
+                    "as": member.asnumber}
+            peers.append(peer)
     render_ipv4 = render_to_response("ipv4.conf", context={"peers": peers})
     render_ipv6 = render_to_response("ipv6.conf", context={"peers": peers})
 
