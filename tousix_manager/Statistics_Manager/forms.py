@@ -17,7 +17,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 from django import forms
-from django.db.utils import ProgrammingError
+from django.db.utils import ProgrammingError, OperationalError
 from tousix_manager.Database.models import Hote
 import logging
 
@@ -35,6 +35,8 @@ class MemberChoiceField(forms.ChoiceField):
         # Check if table exists
         try:
             Hote.objects.all().get()
+        except OperationalError:
+            LOG.warning("Operationnal error on host model. This either the result of a migration or a corrupt database")
         except ProgrammingError:
             # TODO find a better solution to check if table exists
             self.choices.append(("", "None"))
