@@ -46,11 +46,11 @@ class MemberChoiceField(forms.ChoiceField):
         except Hote.MultipleObjectsReturned:
             # Not an error in this scenario
             pass
-        query = Hote.objects.filter(valid=True)
+        query = Hote.objects.filter(valid=True).only("idhote", "nomhote")
         self.choices.append(("0", "ALL"))
 
         for member in query:
-            self.choices.append((str(member.pk), member.nomhote))
+            self.choices.append((str(member.idhote), member.nomhote))
 
 
 class UnitForm (forms.Form):
