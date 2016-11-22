@@ -60,4 +60,4 @@
 </ul>
     {% endif %}
 {% endblock sb_admin_navbar_right %}
-{% block sb_admin_content %}{% block content %}{% endblock content %}{% endblock sb_admin_content %}
+{% block sb_admin_content %}{% block alert_info %}<div class="alert alert-danger" id="alert_info" style="display: none;">Customize your alert text here</div>{% endblock alert_info %}{% block content %}{% endblock content %}{% endblock sb_admin_content %}
