@@ -55,10 +55,22 @@
     function FormChanged(dataForm){
         var data_serialized = $("#Fluxpost").serialize();
         var period = dataForm.elements['id_period'].value;
-        jQuery.post("{% url "charts" %}", data_serialized, function datarecieved(data){dataUpdated(data,period);}, "json");
+        var jqxhr_post = jQuery.post("{% url "charts" %}", data_serialized, function datarecieved(data){dataUpdated(data,period);}, "json");
+        if (jqxhr_post.statusCode() == 403){
+            document.getElementById("alert_info").innerHTML = "Error: Access forbidden";
+            document.getElementById("alert_info").style.display = "block";
+        }
+        else if(jqxhr_post.statusCode() == 500){
+            document.getElementById("alert_info").innerHTML = "Error: Operation not supported";
+            document.getElementById("alert_info").style.display = "block";
+
+        }
+        else if (jqxhr_post.statusCode() == 200){
+            document.getElementById("alert_info").style.display = "none";
+        }
     }
     function dataUpdated(stats, period, unit) {
-        var statsDef = []
+        var statsDef = [];
     for (i = 0; i < stats.length; i++) {
         statsDef[i] = [Date.parse(stats[i].time), stats[i].value]
     };
@@ -123,12 +135,12 @@
                     pointFormatter: function() {
 
                         return '<b>'+ this.series.name+'</b> : '+ formatNumber(this.y) + 'Bit/sec';
-                    },
+                    }
                 }
             }]
         });
-    };
-    jQuery.post("{% url "charts" %}", $("#Fluxpost").serialize(), function datarecieved(data){dataUpdated(data,"year","bits");}, "json");
+    }
+    var return_post = jQuery.post("{% url "charts" %}", $("#Fluxpost").serialize(), function datarecieved(data){dataUpdated(data,"year","bits");}, "json");
     var updateInterval = setInterval(FormChanged, 300000, this.form);
 
 </script>
