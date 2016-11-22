@@ -56,16 +56,16 @@
         var data_serialized = $("#Fluxpost").serialize();
         var period = dataForm.elements['id_period'].value;
         var jqxhr_post = jQuery.post("{% url "charts" %}", data_serialized, function datarecieved(data){dataUpdated(data,period);}, "json");
-        if (jqxhr_post.statusCode() == 403){
+        if (jqxhr_post.status == 403){
             document.getElementById("alert_info").innerHTML = "Error: Access forbidden";
             document.getElementById("alert_info").style.display = "block";
         }
-        else if(jqxhr_post.statusCode() == 500){
+        else if(jqxhr_post.status == 500){
             document.getElementById("alert_info").innerHTML = "Error: Operation not supported";
             document.getElementById("alert_info").style.display = "block";
 
         }
-        else if (jqxhr_post.statusCode() == 200){
+        else if (jqxhr_post.status == 200){
             document.getElementById("alert_info").style.display = "none";
         }
     }
