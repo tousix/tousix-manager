@@ -60,7 +60,7 @@ class Manager(object):
 
     def create_rules(self, switches):
         """
-        Insert into the database a new set of rules generated .
+        Insert into the database a new set of rules generated (groups included).
         :param switches: list(Switch)
         :return:
         """
@@ -82,9 +82,28 @@ class Manager(object):
                 db_groups.append(Regles(idswitch=switch, typeregle="Group", regle=json.dumps(group)))
             Regles.objects.bulk_create(db_groups)
 
+    def create_rules_single(self, switches, host):
+        """
+        Insert into the database a new set of rules generated for one host.
+        :param switches: list(Switch)
+        :param host: Host on which rules will be generated
+        :return:
+        """
+        for switch in switches:
+            peers = self.get_peers(switch)
+            rules = self.call_managers(switch.idswitch, peers, host.idhote)
+
+            # Remove existing rules for this switch
+            Regles.objects.filter(idswitch=switch.idswitch).filter(etat="Production").exclude(typeregle="Group").delete()
+            db_rules = []
+            for rule in rules:
+                db_rules.append(Regles(idswitch=switch, typeregle=rule.get("module"), regle=json.dumps(rule.get("rule")),
+                                       source_id=rule.get("source"), destination_id=rule.get("destination")))
+            Regles.objects.bulk_create(db_rules)
+
     def call_managers(self, dpid, peers):
         """
-        Method for calling managgers of other modules.
+        Method for calling managers of other modules.
         :param dpid: Target DPID
         :param peers: LIst Peer
         :return:
@@ -98,3 +117,20 @@ class Manager(object):
 
         return rules
 
+    def call_managers_single(self, dpid, peers, peer_id):
+        """
+
+        Method for calling managers of other modules.
+        :param dpid: Target DPID
+        :param peers: LIst Peer
+        :param peer_id: Peer ID on which rules will be generated
+        :return:
+        """
+        rules = []
+
+        production = Production()
+        statistics = Statistics()
+        rules.extend(production.create_rules_member(dpid, peers, peer_id))
+        rules.extend(statistics.create_rules_member(dpid, peers, peer_id))
+
+        return rules
