@@ -51,6 +51,25 @@ class RulesDeployment(object):
         return {"success": success,
                 "fails": fails}
 
+    def send_flowrules_single_host(self, switches, host):
+        """
+        Send OpenFlow flow rules for a specific host.
+
+        :param switches :List of switches for rules deployment
+        :param host: Modified host
+        :return: HTTP statistics
+        """
+        success = 0
+        fails = 0
+        for switch in switches:
+            rules = Regles.objects.filter(idswitch=switch).filter(Q(source=host) | Q(destination=host))\
+                .exclude(typeregle="Group")
+            stat_flows = self.send_flow_rules(rules)
+            success += (stat_flows["success"])
+            fails += (stat_flows["fails"])
+        return {"success": success,
+                "fails": fails}
+
     def send_group_rules(self, rules):
         """
         Method for sending group rules on HTTP.
