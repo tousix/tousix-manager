@@ -19,8 +19,9 @@
 
 from django.shortcuts import render, redirect
 from tousix_manager.BGP_Configuration.views import render_conf_members, render_conf_hosts
-from tousix_manager.Database.models import Hote, Membre
+from tousix_manager.Database.models import Hote, Membre, Switch
 from tousix_manager.Rules_Generation.manager import Manager
+from tousix_manager.Rules_Deployment.rules import RulesDeployment
 
 
 def generate_routeserver_conf(modeladmin, request, queryset):
@@ -88,3 +89,20 @@ def change_hote_status(modeladmin, request, queryset):
             modeladmin.message_user(request, "Le statut du routeur "+hote.nomhote+" a été changé.")
 
 change_hote_status.short_description = "Changer le statut des routeurs sélectionnées"
+
+
+def apply_hote_on_production(modeladmin, request, queryset):
+    """
+    Action to apply openflow flow rules from selected hosts into the controller.
+    """
+    for hote in queryset:
+        if hote.valid is True:
+            manager = Manager()
+            manager.create_rules_single(Switch.objects.all(), hote)
+            deployment = RulesDeployment()
+            deployment.send_flowrules_single_host(Switch.objects.all(), hote)
+            modeladmin.message_user(request, "Les paramètres du router "+hote.nomhote+" ont été appliqués sur la production.")
+        else:
+            raise Exception("Not a valid router.")
+
+change_hote_status.short_description = "Appliquer les changements des hôtes sur la production"
