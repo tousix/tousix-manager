@@ -83,3 +83,69 @@ class Manager(object):
         }
         rules.append(rule)
         return rules
+
+    def create_rules_member(self, dpid, peers, peer_id):
+        """
+        Create Statistics_Manager rules for one specific member.
+        :param dpid: Target DPID
+        :type dpid: int
+        :param peers: Peer object array
+        :type peers: list(Peer)
+        :param peer_id: Peer ID on which rules will be generated
+        :type peer_id: int
+        :return: Flow rules array
+        """
+        rules = []
+        enabled = settings.RULES_GENERATION_ENABLED
+        ipv4 = IPv4()
+        ipv6 = IPv6()
+        icmpv6 = ICMPv6()
+        arp = ARP()
+        # forge new objects before generation
+        peer_lst = []
+
+        for peer_dst in peers:
+            if peer_dst.idPeer is peer_id:
+                peer_lst.append((None, peer_dst))
+            for peer_src in peers:
+                if peer_dst.idPeer is peer_id or peer_src.idPeer is peer_id:
+                    peer_lst.append((peer_src, peer_dst))
+
+        for peer_src, peer_dst in peer_lst:
+            if peer_src is None:
+                # only DST statistics
+                if peer_dst.Egress is True:
+                    if enabled["Stats"].get('ICMPv6') is True:
+                        rule = {"module": "Statistics_ICMPv6",
+                                "rule": icmpv6.create_stat(dpid, None, peer_dst),
+                                "source": None,
+                                "destination": peer_dst.idPeer}
+                        rules.append(rule)
+                    if enabled["Stats"].get('ARP') is True:
+                        rule = {"module": "Statistics_ARP",
+                                "rule": arp.create_stat(dpid, None, peer_dst),
+                                "source": None,
+                                "destination": peer_dst.idPeer}
+                        rules.append(rule)
+                continue
+            if peer_src != peer_dst:
+                if enabled["Stats"].get('IPv6') is True:
+                    rule = {"module": "Statistics_IPv6",
+                            "rule": ipv6.create_stat(dpid, peer_src, peer_dst),
+                            "source": peer_src.idPeer,
+                            "destination": peer_dst.idPeer}
+                    rules.append(rule)
+                if enabled["Stats"].get('IPv4') is True:
+                    rule = {"module": "Statistics_IPv4",
+                            "rule": ipv4.create_stat(dpid, peer_src, peer_dst),
+                            "source": peer_src.idPeer,
+                            "destination": peer_dst.idPeer}
+                    rules.append(rule)
+        rule = {
+            "module": "Miss-table",
+            "rule": ipv4.create_miss_table(dpid),
+            "source": None,
+            "destination": None
+        }
+        rules.append(rule)
+        return rules

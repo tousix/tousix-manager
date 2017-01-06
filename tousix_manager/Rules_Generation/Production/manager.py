@@ -47,3 +47,27 @@ class Manager(object):
                     enabled["Production"].get('Umbrella').get('IPv6')) is True:
                 rules.extend(umbrella.create_rules(dpid, peer))
         return rules
+
+    def create_rules_member(self, dpid, peers, peer_id):
+        """
+        Create Production_Manager rules for one specific member.
+        :param dpid: Target DPID
+        :type dpid: int
+        :param peers: Peer object array
+        :type peers: list(Peer)
+        :param peer_id: Peer ID on which rules will be generated
+        :type peer_id: int
+        :return: Flow rules array
+        """
+        rules = []
+        enabled = settings.RULES_GENERATION_ENABLED
+        dataflow = Dataflow()
+        umbrella = Umbrella()
+        for peer in peers:
+            if peer.idPeer is peer_id:
+                if enabled["Production"].get('Dataflow') is True:
+                    rules.extend(dataflow.create_rules(dpid, peer))
+                if (enabled["Production"].get('Umbrella').get('IPv4') |
+                        enabled["Production"].get('Umbrella').get('IPv6')) is True:
+                    rules.extend(umbrella.create_rules(dpid, peer))
+        return rules
