@@ -18,16 +18,17 @@
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.db.models import Q
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_save, pre_delete, pre_save
 from django.dispatch import receiver
+from django.core.exceptions import ValidationError
 
 from tousix_manager.BGP_Configuration.views import render_conf_hosts
-from tousix_manager.Database.models import Hote, Flux, Stats
+from tousix_manager.Database.models import Hote, Flux, Stats, Switch
 from tousix_manager.Rules_Deployment.rules import RulesDeployment
-
+from tousix_manager.Rules_Generation.manager import Manager
 
 @receiver(post_save, sender=Hote)
-def post_save_hote(sender, **kwargs):
+def post_save_hote_creation(sender, **kwargs):
     """
     Signal used for creating flux objects in the Database (for statistic purposes)
     :param sender:
@@ -49,6 +50,32 @@ def post_save_hote(sender, **kwargs):
         # Deploy BGP configuration with the new host
         render_conf_hosts(Hote.objects.all())
 
+
+@receiver(pre_save, sender=Hote)
+def pre_save_hote_modification(sender, **kwargs):
+    """
+    Signal to enforce modifications on topology for some fields modified in Hote.
+    Actions coded:
+    - Modfiy IP(v4 and v6) informations on topology
+    :param sender:
+    :param kwargs:
+    :return:
+    """
+    if kwargs['created'] is False:
+        instance = kwargs['instance']
+        previous_hote = Hote.objects.get(pk=instance.pk)
+        if previous_hote.ipv6hote != instance.ipv6hote or previous_hote.ipv6hote != previous_hote.ipv4hote:
+            conflict_ip = Hote.objects.filter(Q(ipv4hote=instance.ipv4hote) | Q(ipv6hote=instance.ipv6hote))
+            if conflict_ip.count() is not 0:
+                error_string = "IP address is already assigned to these hosts: "
+                for host_conflict in conflict_ip:
+                    error_string += host_conflict.nomhote + ", "
+                raise ValidationError(error_string)
+
+            manager = Manager()
+            manager.create_rules_single(Switch.objects.all(), instance)
+            deployment = RulesDeployment()
+            deployment.send_flowrules_single_host(Switch.objects.all(), instance)
 
 @receiver(pre_delete, sender=Hote)
 def pre_delete_hote(sender, **kwargs):
