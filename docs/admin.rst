@@ -8,7 +8,7 @@ Philosophy
 The management of your IXP with this tool look like pretty much avy Django app.
 We didn't want to break the base framework completely to provide our solution.
 It is handled like a classic Django project, and many efforts have been provided to do this project "the Django way".
-Thus, Django generic apps developed by the community would still be applicable on this project (especially on the Model side).
+Thus, Django generic apps developed by the community will work on this project (especially on the Model side).
 
 Nevertheless, some automation have been provided directly on the admin side of the app to facilitate workflow and reduce human error.
 
@@ -43,6 +43,7 @@ We will describe each form used in TouSIX-Manager:
 .. _contact:
 * Contact
     This is a list of contacts filled by the members. You can retrieve some information on physical person for some purposes:
+
     * Billing
     * Technical
     * NOC
@@ -55,10 +56,11 @@ We will describe each form used in TouSIX-Manager:
     Any changes or deletion could have an impact on your topology.
 
 * Log switch
-    Contains logs sent by the controller via HTTP. Raw entry of these logs can be avaliable in JSON format.
+    Contains logs sent by the controller via HTTP. Raw entry of these logs can be available in JSON format.
 
 * PoP
     This model defines information on points of presence for the IXP.
+
 * Switch
     This entry have all the switches declared for linking the members.
     Note that the network capabilities have not been defined on this model, but on the :ref:`port` model).
@@ -74,7 +76,7 @@ We will describe each form used in TouSIX-Manager:
     Hereby present all the rules applied in the topology.
     Other than the JSON rule, additional fields are present to make easier the identification of the rule.
     Direct modification of a rule is not advised for automation.
-    You must considerate first adding/removing rules on the databse to keep integrity with the controller.
+    You must considerate first adding/removing rules on the database to keep integrity with the controller.
 
 Actions
 -------
@@ -84,17 +86,20 @@ Admin actions are available to help on handling some database and production ope
 tousix_manager.Administration.actions.generate_routeserver_conf
 Generate the route server configuration and apply it to the BGP server.
 Usually, foe each new member validated, it will be done automatically.
-But if you have some issues with the appliance on the server, or just want to clean the config files, this action is here to de the job.
+But if you have some issues with the appliance on the server, or just want to clean the config files, this action is here to do the job.
 
 tousix_manager.Administration.actions.generate_openflow_rules
 Relaunch the rules generation procedure.
 
 tousix_manager.Administration.actions.get_rules_list
-Display all the OpenFlow rules avaliable in the database in JSON format.
+Display all the OpenFlow rules available in the database in JSON format.
 
 tousix_manager.Administration.actions.change_hote_status
 You can change the state of one or multiple hosts (from Changing to Production, or the other way) with this action.
 All the transitions will be executed for each host.
+
+tousix_manager.Administration.actions.apply_hote_on_production
+This action enforce selected host configuration into the topology.
 
 .. _state-machine:
 
@@ -105,6 +110,7 @@ There are some side-effects which can occur when an administrator or a user modi
 These modifications are ruled by a state machine defined in TouSIX-Manager model.
 
 The life cycle of the state machine is defined in this schema:
+
 .. image:: images/transitions.png
 
 
