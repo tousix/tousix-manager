@@ -35,20 +35,21 @@ def post_save_hote_creation(sender, **kwargs):
     :param kwargs:
     :return:
     """
-    if kwargs['created'] is True:
-        db_flux = list()
-        db_flux.append(Flux(hote_src=None, hote_dst=kwargs['instance'], type="ICMPv6"))
-        db_flux.append(Flux(hote_src=None, hote_dst=kwargs['instance'], type="ARP"))
-        for peer_dst in Hote.objects.all():
-            if peer_dst != kwargs['instance']:
-                db_flux.append(Flux(hote_src=peer_dst, hote_dst=kwargs['instance'], type="IPv4"))
-                db_flux.append(Flux(hote_src=kwargs['instance'], hote_dst=peer_dst, type="IPv4"))
-                db_flux.append(Flux(hote_src=peer_dst, hote_dst=kwargs['instance'], type="IPv6"))
-                db_flux.append(Flux(hote_src=kwargs['instance'], hote_dst=peer_dst, type="IPv6"))
-        Flux.objects.bulk_create(db_flux)
+    if not kwargs.get('raw', False):
+        if kwargs['created'] is True:
+            db_flux = list()
+            db_flux.append(Flux(hote_src=None, hote_dst=kwargs['instance'], type="ICMPv6"))
+            db_flux.append(Flux(hote_src=None, hote_dst=kwargs['instance'], type="ARP"))
+            for peer_dst in Hote.objects.all():
+                if peer_dst != kwargs['instance']:
+                    db_flux.append(Flux(hote_src=peer_dst, hote_dst=kwargs['instance'], type="IPv4"))
+                    db_flux.append(Flux(hote_src=kwargs['instance'], hote_dst=peer_dst, type="IPv4"))
+                    db_flux.append(Flux(hote_src=peer_dst, hote_dst=kwargs['instance'], type="IPv6"))
+                    db_flux.append(Flux(hote_src=kwargs['instance'], hote_dst=peer_dst, type="IPv6"))
+            Flux.objects.bulk_create(db_flux)
 
-        # Deploy BGP configuration with the new host
-        render_conf_hosts(Hote.objects.all())
+            # Deploy BGP configuration with the new host
+            render_conf_hosts(Hote.objects.all())
 
 
 @receiver(pre_save, sender=Hote)

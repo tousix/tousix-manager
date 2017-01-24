@@ -1,0 +1,642 @@
+[
+      {
+        "fields": {
+            "domain": "manager.example.com",
+            "name": "TouSIX-Manager"
+        },
+        "model": "sites.site",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "connection_type": "Ethernet 100M"
+        },
+        "model": "Database.connectiontype",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "connection_type": "FO 10G"
+        },
+        "model": "Database.connectiontype",
+        "pk": 2
+    },
+      {
+        "fields": {
+            "adressepop": null,
+            "nompop": "PoP1"
+        },
+        "model": "Database.pop",
+        "pk": 1
+    },
+      {
+        "fields": {
+            "adressepop": null,
+            "nompop": "PoP2"
+        },
+        "model": "Database.pop",
+        "pk": 2
+    },
+      {
+        "fields": {
+            "adressepop": null,
+            "nompop": "PoP3"
+        },
+        "model": "Database.pop",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "approved": true,
+            "asnumber": 1000,
+            "billing": null,
+            "connexion_type": null,
+            "fqdn_host": "membre1.example.com",
+            "idpop": 1,
+            "noc": null,
+            "nommembre": "Membre 1",
+            "statut": "Membre",
+            "technical": null,
+            "url": null
+        },
+        "model": "Database.membre",
+        "pk": 1
+    },
+    {
+      "fields": {
+          "approved": true,
+          "asnumber": 2000,
+          "billing": null,
+          "connexion_type": null,
+          "fqdn_host": "membre2.example.com",
+          "idpop": 2,
+          "noc": null,
+          "nommembre": "Membre 2",
+          "statut": "Membre",
+          "technical": null,
+          "url": null
+      },
+      "model": "Database.membre",
+      "pk": 2
+  },
+      {
+        "fields": {
+            "approved": true,
+            "asnumber": 3000,
+            "billing": null,
+            "connexion_type": null,
+            "fqdn_host": "membre3.example.com",
+            "idpop": 3,
+            "noc": null,
+            "nommembre": "Membre 3",
+            "statut": "Membre",
+            "technical": null,
+            "url": null
+        },
+        "model": "Database.membre",
+        "pk": 3
+    },
+      {
+        "fields": {
+            "idpop": 1,
+            "ipctrl": "10.10.10.201"
+        },
+        "model": "Database.controleur",
+        "pk": 1
+    },
+      {
+        "fields": {
+            "idpop": 1,
+            "ipswitch": "10.10.10.101",
+            "nomswitch": "Edge 1"
+        },
+        "model": "Database.switch",
+        "pk": 22211208
+    },
+    {
+        "fields": {
+            "idpop": 3,
+            "ipswitch": "10.10.10.103",
+            "nomswitch": "Edge 3"
+        },
+        "model": "Database.switch",
+        "pk": 1092540
+    },
+    {
+        "fields": {
+            "idpop": 2,
+            "ipswitch": "10.10.10.102",
+            "nomswitch": "Edge 2"
+        },
+        "model": "Database.switch",
+        "pk": 16690345153
+    },
+      {
+        "fields": {
+            "idctrl": 1,
+            "idswitch": 16690345153
+        },
+        "model": "Database.contorleswitch",
+        "pk": 1
+    },
+        {
+        "fields": {
+            "idctrl": 1,
+            "idswitch": 22211208
+        },
+        "model": "Database.contorleswitch",
+        "pk": 2
+    },
+        {
+        "fields": {
+            "idctrl": 1,
+            "idswitch": 1092540
+        },
+        "model": "Database.contorleswitch",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "idswitch": 22211208, 
+            "numport": 1, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "idswitch": 22211208, 
+            "numport": 2, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "idswitch": 22211208, 
+            "numport": 3, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "idswitch": 22211208, 
+            "numport": 4, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 4
+    }, 
+    {
+        "fields": {
+            "idswitch": 22211208, 
+            "numport": 5, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 5
+    }, 
+    {
+        "fields": {
+            "idswitch": 22211208, 
+            "numport": 6, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 6
+    }, 
+    {
+        "fields": {
+            "idswitch": 22211208, 
+            "numport": 7, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 7
+    }, 
+    {
+        "fields": {
+            "idswitch": 22211208, 
+            "numport": 8, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 8
+    }, 
+    {
+        "fields": {
+            "idswitch": 22211208, 
+            "numport": 9, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 9
+    }, 
+    {
+        "fields": {
+            "idswitch": 22211208, 
+            "numport": 10, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 10
+    },
+      {
+        "fields": {
+            "idswitch": 1092540, 
+            "numport": 1, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 54
+    }, 
+    {
+        "fields": {
+            "idswitch": 1092540, 
+            "numport": 2, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 55
+    }, 
+    {
+        "fields": {
+            "idswitch": 1092540, 
+            "numport": 3, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 56
+    }, 
+    {
+        "fields": {
+            "idswitch": 1092540, 
+            "numport": 4, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 57
+    }, 
+    {
+        "fields": {
+            "idswitch": 1092540, 
+            "numport": 5, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 58
+    }, 
+    {
+        "fields": {
+            "idswitch": 1092540, 
+            "numport": 6, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 59
+    }, 
+    {
+        "fields": {
+            "idswitch": 1092540, 
+            "numport": 7, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 60
+    }, 
+    {
+        "fields": {
+            "idswitch": 1092540, 
+            "numport": 8, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 61
+    }, 
+    {
+        "fields": {
+            "idswitch": 1092540, 
+            "numport": 9, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 62
+    }, 
+    {
+        "fields": {
+            "idswitch": 1092540, 
+            "numport": 10, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 63
+    },
+      {
+        "fields": {
+            "idswitch": 16690345153, 
+            "numport": 1, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 106
+    }, 
+    {
+        "fields": {
+            "idswitch": 16690345153, 
+            "numport": 2, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 107
+    }, 
+    {
+        "fields": {
+            "idswitch": 16690345153, 
+            "numport": 3, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 108
+    }, 
+    {
+        "fields": {
+            "idswitch": 16690345153, 
+            "numport": 4, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 109
+    }, 
+    {
+        "fields": {
+            "idswitch": 16690345153, 
+            "numport": 5, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 110
+    }, 
+    {
+        "fields": {
+            "idswitch": 16690345153, 
+            "numport": 6, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 111
+    }, 
+    {
+        "fields": {
+            "idswitch": 16690345153, 
+            "numport": 7, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 112
+    }, 
+    {
+        "fields": {
+            "idswitch": 16690345153, 
+            "numport": 8, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 113
+    }, 
+    {
+        "fields": {
+            "idswitch": 16690345153, 
+            "numport": 9, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 114
+    }, 
+    {
+        "fields": {
+            "idswitch": 16690345153, 
+            "numport": 10, 
+            "typeport": "Ethernet", 
+            "usable": true
+        }, 
+        "model": "Database.port", 
+        "pk": 115
+    },
+      {
+        "fields": {
+            "idport1": 114,
+            "idport2": 62
+        },
+        "model": "Database.switchlink",
+        "pk": 1
+    },
+      {
+        "fields": {
+            "idport1": 115,
+            "idport2": 10
+        },
+        "model": "Database.switchlink",
+        "pk": 1
+    },
+      {
+        "fields": {
+            "idport1": 9,
+            "idport2": 63
+        },
+        "model": "Database.switchlink",
+        "pk": 1
+    },
+      {
+        "fields": {
+            "etat": "Production",
+            "idmembre": 1,
+            "idport": 1,
+            "ipv4hote": "192.160.7.1",
+            "ipv6hote": "2001:4f0:e7c::4:7184:1",
+            "machote": "00:75:73:58:6F:D0",
+            "nomhote": "RS_IXP 1",
+            "valid": true
+        },
+        "model": "Database.hote",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "etat": "Production",
+            "idmembre": 2,
+            "idport": 2,
+            "ipv4hote": "192.160.7.11",
+            "ipv6hote": "2001:4f0:e7c::3:9405:1",
+            "machote": "40:BE:69:24:94:6F",
+            "nomhote": "Member_1",
+            "valid": true
+        },
+        "model": "Database.hote",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "etat": "Production",
+            "idmembre": 2,
+            "idport": 56,
+            "ipv4hote": "91.213.236.12",
+            "ipv6hote": "2001:4f0:e7c::4:8072:1",
+            "machote": "AF:8A:33:B5:E8:90",
+            "nomhote": "Member_2",
+            "valid": true
+        },
+        "model": "Database.hote",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "etat": "Production",
+            "idmembre": 3,
+            "idport": 107,
+            "ipv4hote": "91.213.236.19",
+            "ipv6hote": "2001:4f0:e7c::19:7133:1",
+            "machote": "14:EA:76:CC:5E:11",
+            "nomhote": "Member_3",
+            "valid": true
+        },
+        "model": "Database.hote",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "date_joined": "2015-08-10T14:21:01",
+            "email": "test@example.com",
+            "first_name": "John",
+            "groups": [],
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "last_login": "2016-01-06T15:55:17",
+            "last_name": "Doe",
+            "password": "pbkdf2_sha256$24000$jyOvB78Jd2YZ$rdTsixQ8dTPq+YesFkRVPbVdHrpNAO1MdslzwUSr4Sk=",
+            "user_permissions": [],
+            "username": "admin"
+        },
+        "model": "auth.user",
+        "pk": 1
+    },
+    {
+      "fields": {
+          "date_joined": "2015-08-10T14:21:01",
+          "email": "test2@example.com",
+          "first_name": "John",
+          "groups": [],
+          "is_active": true,
+          "is_staff": false,
+          "is_superuser": false,
+          "last_login": "2016-01-06T15:55:17",
+          "last_name": "Doe",
+          "password": "pbkdf2_sha256$24000$jyOvB78Jd2YZ$rdTsixQ8dTPq+YesFkRVPbVdHrpNAO1MdslzwUSr4Sk=",
+          "user_permissions": [],
+          "username": "member1"
+      },
+      "model": "auth.user",
+      "pk": 2
+  },
+      {
+      "fields": {
+          "date_joined": "2015-08-10T14:21:01",
+          "email": "test3@example.com",
+          "first_name": "John",
+          "groups": [],
+          "is_active": true,
+          "is_staff": false,
+          "is_superuser": false,
+          "last_login": "2016-01-06T15:55:17",
+          "last_name": "Doe",
+          "password": "pbkdf2_sha256$24000$jyOvB78Jd2YZ$rdTsixQ8dTPq+YesFkRVPbVdHrpNAO1MdslzwUSr4Sk=",
+          "user_permissions": [],
+          "username": "member2"
+      },
+      "model": "auth.user",
+      "pk": 3
+  },
+      {
+      "fields": {
+          "date_joined": "2015-08-10T14:21:01",
+          "email": "test4@example.com",
+          "first_name": "John",
+          "groups": [],
+          "is_active": true,
+          "is_staff": false,
+          "is_superuser": false,
+          "last_login": "2016-01-06T15:55:17",
+          "last_name": "Doe",
+          "password": "pbkdf2_sha256$24000$jyOvB78Jd2YZ$rdTsixQ8dTPq+YesFkRVPbVdHrpNAO1MdslzwUSr4Sk=",
+          "user_permissions": [],
+          "username": "member3"
+      },
+      "model": "auth.user",
+      "pk": 4
+  },
+    {
+        "fields": {
+            "membre": 1,
+            "user": 1
+        },
+        "model": "Database.usermembre",
+        "pk": 13
+    },
+      {
+        "fields": {
+            "membre": 1,
+            "user": 2
+        },
+        "model": "Database.usermembre",
+        "pk": 14
+    },
+      {
+        "fields": {
+            "membre": 2,
+            "user": 3
+        },
+        "model": "Database.usermembre",
+        "pk": 15
+    },
+      {
+        "fields": {
+            "membre": 3,
+            "user": 4
+        },
+        "model": "Database.usermembre",
+        "pk": 16
+    }
+]
