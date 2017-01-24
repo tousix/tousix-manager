@@ -30,10 +30,10 @@ ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-# These are the required apps to run all the functionnalities on TouSIX-Manager
+# These are the required apps to run all the features on TouSIX-Manager
 INSTALLED_APPS = (
     'registration',
-    'django.contrib.admin.apps.SimpleAdminConfig',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
