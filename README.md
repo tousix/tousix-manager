@@ -19,11 +19,11 @@ TouSIX is running in production with Pica8 whitebox OpenFlow switch with PicOS 2
 
 
 
-<img src="http://195.154.106.70/topo_touSIX.021.png" title="Topology of TouSIX" width="600" height="500" />
+<img src="https://github.com/tousix/tousix-manager/raw/799b8a0fb7ae45e41b541f0e673fcf75a5d1aef2/docs/images/topo_touSIX.021.png" title="Topology of TouSIX" width="600" height="500" />
 
 *Software architecture*
 
-<img src="http://195.154.106.70/soft_archi_tousix.001.png" title="TouSIX software architecture" width="600" height="500" />
+<img src="https://github.com/tousix/tousix-manager/raw/799b8a0fb7ae45e41b541f0e673fcf75a5d1aef2/docs/images/soft_archi_tousix.001.png" title="TouSIX software architecture" width="600" height="500" />
 
     
 Installation
