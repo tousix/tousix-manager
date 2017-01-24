@@ -61,21 +61,22 @@ def pre_save_hote_modification(sender, **kwargs):
     :param kwargs:
     :return:
     """
-    if kwargs['created'] is False:
-        instance = kwargs['instance']
-        previous_hote = Hote.objects.get(pk=instance.pk)
-        if previous_hote.ipv6hote != instance.ipv6hote or previous_hote.ipv6hote != previous_hote.ipv4hote:
-            conflict_ip = Hote.objects.filter(Q(ipv4hote=instance.ipv4hote) | Q(ipv6hote=instance.ipv6hote))
-            if conflict_ip.count() is not 0:
-                error_string = "IP address is already assigned to these hosts: "
-                for host_conflict in conflict_ip:
-                    error_string += host_conflict.nomhote + ", "
-                raise ValidationError(error_string)
+    if not kwargs.get('raw', False):
+        if kwargs['created'] is False:
+            instance = kwargs['instance']
+            previous_hote = Hote.objects.get(pk=instance.pk)
+            if previous_hote.ipv6hote != instance.ipv6hote or previous_hote.ipv6hote != previous_hote.ipv4hote:
+                conflict_ip = Hote.objects.filter(Q(ipv4hote=instance.ipv4hote) | Q(ipv6hote=instance.ipv6hote))
+                if conflict_ip.count() is not 0:
+                    error_string = "IP address is already assigned to these hosts: "
+                    for host_conflict in conflict_ip:
+                        error_string += host_conflict.nomhote + ", "
+                    raise ValidationError(error_string)
 
-            manager = Manager()
-            manager.create_rules_single(Switch.objects.all(), instance)
-            deployment = RulesDeployment()
-            deployment.send_flowrules_single_host(Switch.objects.all(), instance)
+                manager = Manager()
+                manager.create_rules_single(Switch.objects.all(), instance)
+                deployment = RulesDeployment()
+                deployment.send_flowrules_single_host(Switch.objects.all(), instance)
 
 @receiver(pre_delete, sender=Hote)
 def pre_delete_hote(sender, **kwargs):
