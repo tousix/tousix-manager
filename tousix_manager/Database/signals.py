@@ -70,7 +70,7 @@ def pre_save_hote_modification(sender, **kwargs):
         except Hote.DoesNotExist:
             # skip this step if new object
             return None
-        if previous_hote.ipv6hote != instance.ipv6hote or previous_hote.ipv6hote != previous_hote.ipv4hote:
+        if previous_hote.ipv6hote != instance.ipv6hote or previous_hote.ipv4hote != previous_hote.ipv4hote:
             conflict_ip = Hote.objects.filter(Q(ipv4hote=instance.ipv4hote) | Q(ipv6hote=instance.ipv6hote))
             if conflict_ip.count() is not 0:
                 error_string = "IP address is already assigned to these hosts: "
