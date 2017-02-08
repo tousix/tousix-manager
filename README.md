@@ -77,6 +77,12 @@ It is possible to launch all the applications in one instance. Here is a launch 
    
 For any questions please contact us !
 
+Documentation
+-------------
+More documentation can be found on this link:
+
+https://tousix-manager.readthedocs.io/en/latest/
+
 Contact
 -------
 Rémy Lapeyrade (remy.lapeyrade@laas.fr)
