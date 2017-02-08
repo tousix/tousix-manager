@@ -64,6 +64,8 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
             id_membre = UserMembre.objects.filter(user=self.request.user).first().membre.idmembre
             if self.verify_data_access(id_membre, form) is "Forbidden":
                 raise PermissionDenied
+            if form.get_destination() == form.get_source():
+                raise PermissionDenied
         if cache_value is None:
             if settings.INFLUXDB_ENABLE:
                 forge = forgeDataInflux()
