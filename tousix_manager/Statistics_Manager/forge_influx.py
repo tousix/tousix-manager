@@ -89,7 +89,10 @@ class forgeData(object):
         points = list(data.get_points())
         # Remove first value to avoid showing derivative computing error
         # https://github.com/influxdata/influxdb/issues/5943
-        points[0]['value'] = None
+        try:
+            points[0]['value'] = None
+        except IndexError:
+            return None
         return points
 
     def forge_query(self, source='0', destination= '0', flow_type='IPv4', time=now().isoformat(), period='day', unit='bytes'):

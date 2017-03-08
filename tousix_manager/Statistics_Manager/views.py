@@ -28,8 +28,8 @@ from tousix_manager.Statistics_Manager.forge import forgeData
 from tousix_manager.Statistics_Manager.forge_influx import forgeData as forgeDataInflux
 from tousix_manager.Statistics_Manager.forms import FluxSelectionForm, RestrictedFluxSelectionForm
 from django.conf import  settings
-from django.core.exceptions import PermissionDenied
-
+from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
+from django.http import JsonResponse
 # Create your views here.
 
 
@@ -76,6 +76,8 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
                                   flow_type=form.get_type(),
                                   period=form.get_period(),
                                   unit='bytes')
+            if data is None:
+                return JsonResponse(None, status=403)
             cache_statistics.set(composed_request, data)
             return JSONResponseMixin.render_to_response(self, data)
         else:
