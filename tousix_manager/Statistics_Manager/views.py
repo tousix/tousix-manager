@@ -77,7 +77,7 @@ class StatsMembersList(LoginRequiredMixin, FormView, JSONResponseMixin):
                                   period=form.get_period(),
                                   unit='bytes')
             if data is None:
-                return JsonResponse(None, status=403)
+                return JsonResponse({}, status=403)
             cache_statistics.set(composed_request, data)
             return JSONResponseMixin.render_to_response(self, data)
         else:
