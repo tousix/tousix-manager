@@ -47,7 +47,7 @@ class HoteAdmin(FSMTransitionMixin, admin.ModelAdmin):
     """
     Class for router visibility in admin panel.
     """
-    list_display = ["nomhote", "ipv4hote", "ipv6hote", "membre", "pop", "switch", "port", "etat"]
+    list_display = ["nomhote", "ipv4hote", "ipv6hote", "machote", "membre", "pop", "switch", "port", "etat"]
     exclude = ["idmembre"]
     list_filter = ['valid']
     search_fields = ["nomhote", "ipv4hote", "ipv6hote", "machote"]
