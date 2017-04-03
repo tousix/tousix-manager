@@ -161,6 +161,7 @@ class Port(models.Model):
     numport = models.IntegerField(db_column='numPort', blank=True, null=True)
     typeport = models.CharField(db_column='TypePort', max_length=10, blank=True, null=True)
     usable = models.BooleanField(db_column='Usable')
+    backbone = models.BooleanField(db_column='backbone')
     idswitch = models.ForeignKey(Switch, to_field='idswitch', db_column='idSwitch')
 
     def switch(self):
