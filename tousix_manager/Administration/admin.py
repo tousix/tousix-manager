@@ -71,7 +71,7 @@ class PortAdmin(admin.ModelAdmin):
     """
     Class for port visibility in admin panel.
     """
-    list_display = ["idport", "switch", "numport", "typeport", "enabled"]
+    list_display = ["idport", "switch", "numport", "typeport", "enabled", "backbone"]
     inlines = [HoteInLine]
     form = PortForm
     list_filter = ["idswitch__nomswitch"]

@@ -97,7 +97,7 @@ class PortForm(forms.ModelForm):
 
     class Meta:
         model = Port
-        fields = ['idswitch', 'numport', 'typeport', 'enabled']
+        fields = ['idswitch', 'numport', 'typeport', 'enabled', 'backbone']
 
 
 class ConnexionChoiceField(forms.ModelChoiceField):
