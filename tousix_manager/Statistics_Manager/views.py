@@ -114,6 +114,8 @@ class RestrictedStats(FormView, JSONResponseMixin):
             else:
                 forge = forgeData()
             data = forge.get_data('0', '0', form.get_type(), form.get_period(), 'bytes')
+            if data is None:
+                return JsonResponse({}, status=403)
             cache_statistics.set(composed_request, data)
             return JSONResponseMixin.render_to_response(self, data)
         else:
