@@ -48,6 +48,13 @@
         };
 
 
+        // Presentational
+        defaultOptions.noData.style = {
+            fontWeight: 'bold',
+            fontSize: '12px',
+            color: '#666666'
+        };
+
 
         /**
          * Define hasData functions for series. These return true if there are data points on this series within the plot area
@@ -69,7 +76,7 @@
         /**
          * Display a no-data message.
          *
-         * @param {String} str An optional message to show in place of the default one 
+         * @param {String} str An optional message to show in place of the default one
          */
         chartPrototype.showNoData = function(str) {
             var chart = this,
@@ -92,6 +99,10 @@
                     );
 
 
+                chart.noDataLabel
+                    .attr(noDataOptions.attr)
+                    .css(noDataOptions.style);
+
 
                 chart.noDataLabel.add();
 
@@ -100,7 +111,7 @@
         };
 
         /**
-         * Hide no-data message	
+         * Hide no-data message
          */
         chartPrototype.hideNoData = function() {
             var chart = this;

@@ -73,6 +73,36 @@
         };
 
 
+        // Presentational attributes
+        merge(true, defaultOptions.navigation, {
+            menuStyle: {
+                border: '1px solid #999999',
+                background: '#ffffff',
+                padding: '5px 0'
+            },
+            menuItemStyle: {
+                padding: '0.5em 1em',
+                background: 'none',
+                color: '#333333',
+                fontSize: isTouchDevice ? '14px' : '11px',
+                transition: 'background 250ms, color 250ms'
+            },
+            menuItemHoverStyle: {
+                background: '#335cad',
+                color: '#ffffff'
+            },
+            buttonOptions: {
+                symbolFill: '#666666',
+                symbolStroke: '#666666',
+                symbolStrokeWidth: 3,
+                theme: {
+                    fill: '#ffffff', // capture hover
+                    stroke: 'none',
+                    padding: 5
+                }
+            }
+        });
+
 
 
         // Add the export related options
@@ -230,6 +260,21 @@
                     .replace(/&shy;/g, '\u00AD'); // soft hyphen
 
 
+                // IE specific
+                svg = svg
+                    .replace(/<IMG /g, '<image ')
+                    .replace(/<(\/?)TITLE>/g, '<$1title>')
+                    .replace(/height=([^" ]+)/g, 'height="$1"')
+                    .replace(/width=([^" ]+)/g, 'width="$1"')
+                    .replace(/hc-svg-href="([^"]+)">/g, 'xlink:href="$1"/>')
+                    .replace(/ id=([^" >]+)/g, ' id="$1"') // #4003
+                    .replace(/class=([^" >]+)/g, 'class="$1"')
+                    .replace(/ transform /g, ' ')
+                    .replace(/:(path|rect)/g, '$1')
+                    .replace(/style="([^"]+)"/g, function(s) {
+                        return s.toLowerCase();
+                    });
+
 
                 return svg;
             },
@@ -238,8 +283,6 @@
              * Return innerHTML of chart. Used as hook for plugins.
              */
             getChartHTML: function() {
-
-                this.inlineStyles();
 
                 return this.container.innerHTML;
             },
@@ -521,6 +564,13 @@
                     }, null, menu);
 
 
+                    // Presentational CSS
+                    css(innerMenu, extend({
+                        MozBoxShadow: '3px 3px 10px #888',
+                        WebkitBoxShadow: '3px 3px 10px #888',
+                        boxShadow: '3px 3px 10px #888'
+                    }, navOptions.menuStyle));
+
 
                     // hide on mouse out
                     hide = function() {
@@ -574,6 +624,16 @@
                                     innerHTML: item.text || chart.options.lang[item.textKey]
                                 }, null, innerMenu);
 
+
+                                element.onmouseover = function() {
+                                    css(this, navOptions.menuItemHoverStyle);
+                                };
+                                element.onmouseout = function() {
+                                    css(this, navOptions.menuItemStyle);
+                                };
+                                css(element, extend({
+                                    cursor: 'pointer'
+                                }, navOptions.menuItemStyle));
 
                             }
 
@@ -682,6 +742,8 @@
                     .addClass(options.className)
                     .attr({
 
+                        'stroke-linecap': 'round',
+
                         title: chart.options.lang[btnOptions._titleKey],
                         zIndex: 3 // #4955
                     });
@@ -700,6 +762,12 @@
                             zIndex: 1
                         }).add(button);
 
+
+                    symbol.attr({
+                        stroke: btnOptions.symbolStroke,
+                        fill: btnOptions.symbolFill,
+                        'stroke-width': btnOptions.symbolStrokeWidth || 1
+                    });
 
                 }
 
@@ -770,145 +838,6 @@
             }
         });
 
-
-        // These ones are translated to attributes rather than styles
-        SVGRenderer.prototype.inlineToAttributes = [
-            'fill',
-            'stroke',
-            'strokeLinecap',
-            'strokeLinejoin',
-            'strokeWidth',
-            'textAnchor',
-            'x',
-            'y'
-        ];
-        // These CSS properties are not inlined. Remember camelCase.
-        SVGRenderer.prototype.inlineBlacklist = [
-            /-/, // In Firefox, both hyphened and camelCased names are listed
-            /^(clipPath|cssText|d|height|width)$/, // Full words
-            /^font$/, // more specific props are set
-            /[lL]ogical(Width|Height)$/,
-            /perspective/,
-            /TapHighlightColor/,
-            /^transition/
-            // /^text (border|color|cursor|height|webkitBorder)/
-        ];
-        SVGRenderer.prototype.unstyledElements = [
-            'clipPath',
-            'defs',
-            'desc'
-        ];
-
-        /**
-         * Analyze inherited styles from stylesheets and add them inline
-         *
-         * @todo: What are the border styles for text about? In general, text has a lot of properties.
-         * @todo: Make it work with IE9 and IE10.
-         */
-        Chart.prototype.inlineStyles = function() {
-            var renderer = this.renderer,
-                inlineToAttributes = renderer.inlineToAttributes,
-                blacklist = renderer.inlineBlacklist,
-                unstyledElements = renderer.unstyledElements,
-                defaultStyles = {},
-                dummySVG;
-
-            /**
-             * Make hyphenated property names out of camelCase
-             */
-            function hyphenate(prop) {
-                return prop.replace(
-                    /([A-Z])/g,
-                    function(a, b) {
-                        return '-' + b.toLowerCase();
-                    }
-                );
-            }
-
-            /**
-             * Call this on all elements and recurse to children
-             */
-            function recurse(node) {
-                var prop,
-                    styles,
-                    parentStyles,
-                    cssText = '',
-                    dummy,
-                    styleAttr,
-                    blacklisted,
-                    i;
-
-                if (node.nodeType === 1 && unstyledElements.indexOf(node.nodeName) === -1) {
-                    styles = win.getComputedStyle(node, null);
-                    parentStyles = node.nodeName === 'svg' ? {} : win.getComputedStyle(node.parentNode, null);
-
-                    // Get default styles from the browser so that we don't have to add these
-                    if (!defaultStyles[node.nodeName]) {
-                        if (!dummySVG) {
-                            dummySVG = doc.createElementNS(H.SVG_NS, 'svg');
-                            dummySVG.setAttribute('version', '1.1');
-                            doc.body.appendChild(dummySVG);
-                        }
-                        dummy = doc.createElementNS(node.namespaceURI, node.nodeName);
-                        dummySVG.appendChild(dummy);
-                        defaultStyles[node.nodeName] = merge(win.getComputedStyle(dummy, null)); // Copy, so we can remove the node
-                        dummySVG.removeChild(dummy);
-                    }
-
-                    // Loop over all the computed styles and check whether they are in the 
-                    // white list for styles or atttributes.
-                    for (prop in styles) {
-
-                        // Check against blacklist
-                        blacklisted = false;
-                        i = blacklist.length;
-                        while (i-- && !blacklisted) {
-                            blacklisted = blacklist[i].test(prop) || typeof styles[prop] === 'function';
-                        }
-
-                        if (!blacklisted) {
-
-                            // If parent node has the same style, it gets inherited, no need to inline it
-                            if (parentStyles[prop] !== styles[prop] && defaultStyles[node.nodeName][prop] !== styles[prop]) {
-
-                                // Attributes
-                                if (inlineToAttributes.indexOf(prop) !== -1) {
-                                    node.setAttribute(hyphenate(prop), styles[prop]);
-
-                                    // Styles
-                                } else {
-                                    cssText += hyphenate(prop) + ':' + styles[prop] + ';';
-                                }
-                            }
-                        }
-                    }
-
-                    // Apply styles
-                    if (cssText) {
-                        styleAttr = node.getAttribute('style');
-                        node.setAttribute('style', (styleAttr ? styleAttr + ';' : '') + cssText);
-                    }
-
-                    if (node.nodeName === 'text') {
-                        return;
-                    }
-
-                    // Recurse
-                    each(node.children || node.childNodes, recurse);
-                }
-            }
-
-            /**
-             * Remove the dummy objects used to get defaults
-             */
-            function tearDown() {
-                dummySVG.parentNode.removeChild(dummySVG);
-            }
-
-            recurse(this.container.querySelector('svg'));
-            tearDown();
-
-        };
 
 
 
