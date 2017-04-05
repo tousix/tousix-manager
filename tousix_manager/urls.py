@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf import settings
 
 from tousix_manager.Frontpages.views import WelcomeView
 from tousix_manager.Log_Controller.views import AsyncEventView
@@ -39,3 +40,8 @@ urlpatterns = [
     url(r'^', WelcomeView.as_view(), name='welcome page'),
 
 ]
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
