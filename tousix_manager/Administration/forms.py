@@ -18,8 +18,6 @@
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
 from django import forms
-from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth.models import User
 from django.forms.utils import ErrorList
 from tousix_manager.Database.models import Hote, Port, Switch, Pop, Membre, ConnectionType, UserMembre
 

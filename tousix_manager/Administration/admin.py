@@ -22,13 +22,6 @@ class HoteInLine(admin.TabularInline):
     form = HoteForm
 
 
-class CustomUser(UserAdmin):
-    form = CustomUserForm
-
-admin.site.unregister(User)
-admin.site.register(User, CustomUser)
-
-
 @admin.register(Membre)
 class MembreAdmin(admin.ModelAdmin):
     """
