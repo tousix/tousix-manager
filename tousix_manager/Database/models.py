@@ -94,6 +94,8 @@ class UserMembre(models.Model):
     class Meta:
         db_table = 'UserMembre'
 
+    def nommembre(self):
+        return self.membre.nommembre
 
 class Controleur(models.Model):
     """

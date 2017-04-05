@@ -21,7 +21,7 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 from django.forms.utils import ErrorList
-from tousix_manager.Database.models import Hote, Port, Switch, Pop, Membre, ConnectionType
+from tousix_manager.Database.models import Hote, Port, Switch, Pop, Membre, ConnectionType, UserMembre
 
 
 class PortChoiceField(forms.ModelChoiceField):
@@ -127,16 +127,13 @@ class MemberChoiceField(forms.ModelChoiceField):
     ModelChoiceField modification for display member name instead of complete object.
     """
 
-    widget = forms.RadioSelect
-
     def label_from_instance(self, obj):
-        return "%s" % obj.membre.nommembre
+        return "%s" % obj.nommembre
 
 
-class CustomUserForm(UserChangeForm):
+class UserMembreForm(forms.ModelForm):
+    membre = MemberChoiceField(queryset=Membre.objects.all(), empty_label=None)
 
-    membre = MemberChoiceField(queryset=Membre.objects.all())
-
-    class Meta(UserChangeForm.Meta):
-        model = User
-        fields = ["membre"]
+    class Meta:
+        model = UserMembre
+        fields = ['user', 'membre']
