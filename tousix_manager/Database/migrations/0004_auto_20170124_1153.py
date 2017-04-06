@@ -12,7 +12,7 @@ def load_initial_data(apps, schema_editor):
 class Migration(migrations.Migration):
     initial = True
     dependencies = [
-        ('Database', 'hote_internal_server'),
+        ('Database', '0003_auto_20160205_1214'),
         ('sites', '0002_alter_domain_unique'),
         ("auth", '0007_alter_validators_add_error_messages')
     ]
