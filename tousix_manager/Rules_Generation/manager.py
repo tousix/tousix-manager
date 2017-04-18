@@ -91,7 +91,7 @@ class Manager(object):
         """
         for switch in switches:
             peers = self.get_peers(switch)
-            rules = self.call_managers(switch.idswitch, peers, host.idhote)
+            rules = self.call_managers_single(switch.idswitch, peers, host.idhote)
 
             # Remove existing rules for this switch
             Regles.objects.filter(idswitch=switch.idswitch).filter(etat="Production").exclude(typeregle="Group").delete()
