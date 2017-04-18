@@ -38,8 +38,7 @@ class HoteForm(forms.ModelForm):
     create a custom list with complete description all the ports avaliable.
     """
     idport = PortChoiceField(queryset=Port.objects
-                             .filter(enabled=True)
-                             .exclude(idport__in=(Hote.objects.values("idport"))), empty_label=None)
+                             .filter(enabled=True), empty_label=None)
 
     def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
                  initial=None, error_class=ErrorList, label_suffix=None,
@@ -49,11 +48,7 @@ class HoteForm(forms.ModelForm):
                                        empty_permitted, instance)
         if self.instance.idhote is not None:
             # Set idport editing value for instance
-            self.fields["idport"].queryset = Port.objects.\
-                                             filter(enabled=True).\
-                                             exclude(idport__in=(Hote.objects
-                                                                 .exclude(idhote=self.instance.idhote)
-                                                                 .values("idport")))
+            self.fields["idport"].queryset = Port.objects.filter(enabled=True)
             if self.instance.idport is not None:
                 self.fields["idport"].initial = {self.instance.idport_id: self.instance.idport.string_description}
 
