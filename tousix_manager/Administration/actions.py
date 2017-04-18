@@ -105,4 +105,4 @@ def apply_hote_on_production(modeladmin, request, queryset):
         else:
             raise Exception("Not a valid router.")
 
-change_hote_status.short_description = "Appliquer les changements des hôtes sur la production"
+apply_hote_on_production.short_description = "Appliquer les changements des hôtes sur la production"
