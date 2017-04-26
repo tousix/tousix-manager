@@ -61,11 +61,9 @@ class BillingView(object):
 
         return [x.get('value') for x in points]
 
-
     def show_result(self, host_id):
         result = self.get_result(self.influx_client, host_id)
-        print("Result for host_id "+ str(host_id)+ " : "+ str(percentile(result, 0.95)))
-        return None
+        return int(percentile(result, 0.95))
 
     def __init__(self):
         self.influx_client = self.config_influx()

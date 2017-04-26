@@ -22,7 +22,7 @@ from tousix_manager.BGP_Configuration.views import render_conf_members, render_c
 from tousix_manager.Database.models import Hote, Membre, Switch
 from tousix_manager.Rules_Generation.manager import Manager
 from tousix_manager.Rules_Deployment.rules import RulesDeployment
-
+from tousix_manager.Statistics_Manager.billing_influx import BillingView
 
 def generate_routeserver_conf(modeladmin, request, queryset):
     """
@@ -106,3 +106,11 @@ def apply_hote_on_production(modeladmin, request, queryset):
             raise Exception("Not a valid router.")
 
 apply_hote_on_production.short_description = "Appliquer les changements des hôtes sur la production"
+
+
+def get_percentile_hote(modeladmin, request, queryset):
+    billing = BillingView()
+    for hote in queryset:
+        modeladmin.message_user(request, "Bande passante consommé pour l'hôte " + hote.nomhote + ": " + str(billing.show_result(hote.idhote)) + " bit/s")
+
+get_percentile_hote.short_description = "Afficher l'utilisation de la bande passante au courcs  de l'année (95 centile)"
