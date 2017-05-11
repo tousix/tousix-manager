@@ -55,7 +55,11 @@ class UpdateMemberView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMe
         context["billing"] = BillingForm(instance=self.get_object().billing, prefix="billing")
         if context["billing"].instance.pk is not None:
             context["billing"].empty = False
-        context["router"] = RouterForm(instance=Hote.objects.filter(idmembre=self.get_object()).first(), prefix="router")
+
+        context["router"] = []
+        for hote in Hote.objects.filter(idmembre=UserMembre.objects.filter(user=self.request.user).first().membre.idmembre):
+            context["router"].append(RouterForm(instance=hote, prefix="router_"+str(hote.idhote)))
+
         context["password"] = PasswordChangeForm(self.request.user, prefix="password")
         return context
 

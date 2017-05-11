@@ -36,31 +36,40 @@ class RouterUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMe
     form_class = RouterForm
     template_name = "update_member.html"
     success_message = "Changement routeur enregistré. Un administrateur doit confirmer."
-    context_object_name = "router"
 
     def get_object(self, queryset=None):
         return Hote.objects.filter(idmembre=UserMembre.objects.filter(user=self.request.user).first().membre.idmembre).first()
 
-    def get_form(self, form_class=None):
-        return RouterForm(instance=self.get_object(), prefix="router")
+    def get_context_data(self, **kwargs):
+        context = super(UpdateUrlMixin, self).get_context_data(**kwargs)
+        return context
 
     def get(self, request, *args, **kwargs):
         return redirect(reverse("update member"))
 
     def form_valid(self, form):
-        form.instance.valid = False
-        form.save()
-        form.instance.Prepare()
-        form.save()
-        return redirect(reverse("update member"))
+        if form.has_changed():
+            form.instance.valid = False
+            form.save()
+            form.instance.Prepare()
+            form.save()
+            return True
+        return False
 
     def form_invalid(self, form):
         return self.render_to_response(self.create_context_data({"router": form}))
 
     def post(self, request, *args, **kwargs):
-        router = RouterForm(data=request.POST, instance=self.get_object(), prefix="router")
+        hosts = []
+        for hote in Hote.objects.filter(
+                idmembre=UserMembre.objects.filter(user=self.request.user).first().membre.idmembre):
+            hosts.append(RouterForm(data=request.POST, instance=hote, prefix="router_" + str(hote.idhote)))
+        for router in hosts:
+            if router.is_valid():
+                self.form_valid(router)
+            else:
+                self.form_invalid(router)
+        return redirect(reverse("update member"))
 
-        if router.is_valid():
-            return self.form_valid(router)
-        else:
-            return self.form_invalid(router)
+    def get_membre(self):
+        return UserMembre.objects.filter(user=self.request.user).first().membre

@@ -76,9 +76,16 @@
                         <h3 class="panel-title">Modification routeur</h3>
                     </div>
                     <div class="panel-body">
+
                         <form action="{% url "update router" %}" id="RouterForm" method="post">
                             {% csrf_token %}
-                            {{ router.as_p }}
+                            {% for host in router %}
+                                 <div class="panel panel-primary">
+                                 <div class="panel-body">{{ host.as_p }}
+                                 </div>
+                                 </div>
+                            {% endfor %}
+
                             <button class="btn btn-primary" type="submit">Envoyer</button>
                             <button class="btn btn-default" type="reset">Réinitialiser</button>
                         </form>

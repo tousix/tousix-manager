@@ -19,7 +19,11 @@
 
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.urlresolvers import reverse
-
+from tousix_manager.Member_Manager.forms.billing import BillingForm
+from tousix_manager.Member_Manager.forms.member import MemberForm
+from tousix_manager.Member_Manager.forms.technical import TechnicalForm
+from tousix_manager.Member_Manager.forms.noc import NOCForm
+from tousix_manager.Member_Manager.forms.router import RouterForm
 from tousix_manager.Database.models import Hote, UserMembre
 
 
@@ -44,7 +48,10 @@ class UpdateUrlMixin(object):
             if context["billing"].instance.pk is not None:
                 context["billing"].empty = False
         if self.form_class != RouterForm:
-            context["router"] = RouterForm(instance=Hote.objects.filter(idmembre=self.get_membre().idmembre).first(), prefix="router")
+            context["router"] = []
+            for hote in Hote.objects.filter(idmembre=UserMembre.objects.filter(user=self.request.user).first().membre.idmembre):
+                context["router"].append(RouterForm(instance=hote, prefix="router_" + str(hote.idhote)))
+
         if self.form_class != PasswordChangeForm:
             context["password"] = PasswordChangeForm(self.request.user, prefix="password")
         return context
