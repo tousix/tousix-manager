@@ -80,12 +80,12 @@ class RulesDeployment(object):
         fails = 0
         for group in rules:
             try:
-                request = requests.post(self.host+"/stats/groupentry/add", json=json.loads(group.regle))
+                request = requests.post(self.host+"/stats/groupentry/add", json=json.loads(group.regle), timeout=5)
                 if request.status_code is not 200:
                     fails += 1
                 else:
                     success += 1
-            except requests.ConnectionError:
+            except (requests.ConnectionError, requests.exceptions.Timeout):
                 return{"success": 0,
                        "fails": 0
                        }
@@ -102,12 +102,12 @@ class RulesDeployment(object):
         fails = 0
         for flow in rules:
             try:
-                request = requests.post(self.host+"/stats/flowentry/add", json=json.loads(flow.regle))
+                request = requests.post(self.host+"/stats/flowentry/add", json=json.loads(flow.regle), timeout=5)
                 if request.status_code is not 200:
                     fails += 1
                 else:
                     success += 1
-            except requests.ConnectionError:
+            except (requests.ConnectionError, requests.exceptions.Timeout):
                 return{"success": 0,
                        "fails": 0
                        }
@@ -127,12 +127,12 @@ class RulesDeployment(object):
         for rule in rules:
             try:
                 # strict comparaison
-                request = requests.post(self.host+"/stats/flowentry/delete_strict", json=json.loads(rule.regle))
+                request = requests.post(self.host+"/stats/flowentry/delete_strict", json=json.loads(rule.regle), timeout=5)
                 if request.status_code is not 200:
                     fails += 1
                 else:
                     success += 1
-            except requests.ConnectionError:
+            except (requests.ConnectionError, requests.exceptions.Timeout):
                 return{"success": 0,
                        "fails": 0
                        }
