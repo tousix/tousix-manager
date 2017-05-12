@@ -22,7 +22,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.views.generic.edit import UpdateView
-
+from django.contrib import messages
+from django.core.mail import mail_admins
 from tousix_manager.Authentication.LoginMixin import LoginRequiredMixin
 from tousix_manager.Database.models import Hote, UserMembre
 from tousix_manager.Member_Manager.update.UpdateMixin import UpdateUrlMixin
@@ -35,7 +36,6 @@ class RouterUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMe
     model = Hote
     form_class = RouterForm
     template_name = "update_member.html"
-    success_message = "Changement routeur enregistré. Un administrateur doit confirmer."
 
     def get_object(self, queryset=None):
         return Hote.objects.filter(idmembre=UserMembre.objects.filter(user=self.request.user).first().membre.idmembre).first()
@@ -51,13 +51,11 @@ class RouterUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMe
         if form.has_changed():
             form.instance.valid = False
             form.save()
-            form.instance.Prepare()
-            form.save()
             return True
         return False
 
     def form_invalid(self, form):
-        return self.render_to_response(self.create_context_data({"router": form}))
+        messages.error(self.request, "Erreur: Certains champs sont invalides.")
 
     def post(self, request, *args, **kwargs):
         hosts = []
@@ -66,10 +64,12 @@ class RouterUpdateView(LoginRequiredMixin, UpdateView, UpdateUrlMixin, SuccessMe
             hosts.append(RouterForm(data=request.POST, instance=hote, prefix="router_" + str(hote.idhote)))
         for router in hosts:
             if router.is_valid():
-                self.form_valid(router)
-            else:
-                self.form_invalid(router)
-        return redirect(reverse("update member"))
+                if self.form_valid(router) is True:
+                    messages.info(self.request,  "Changement routeur enregistré. Un administrateur doit confirmer la modification.")
+                    subject = "Demande de changement paramètre routeur"
+                    content = "Bonjour,\n\n Une demande a été envoyé pour appliquer les modifications sur le routeur "+ router.instance.nomhote+"."
+                    mail_admins(subject, content)
+        return self.render_to_response(self.create_context_data({"router": hosts}))
 
     def get_membre(self):
         return UserMembre.objects.filter(user=self.request.user).first().membre
