@@ -112,7 +112,7 @@
             }]
         });
     };
-    jQuery.post("{% url "charts" %}", $("#Fluxpost").serialize(), function datarecieved(data){dataUpdated(data,"year","bits");}, "json");
+    jQuery.post("{% url "restricted stats" %}", $("#Fluxpost").serialize(), function datarecieved(data){dataUpdated(data,"year","bits");}, "json");
     var updateInterval = setInterval(FormChanged, 300000, this.form);
 </script>
 {% endblock sb_admin_custom_js %}
