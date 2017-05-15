@@ -54,7 +54,19 @@
     function FormChanged(dataForm){
         var data_serialized = $("#Fluxpost").serialize();
         var period = dataForm.elements['id_period'].value;
-        jQuery.post("{% url "restricted stats" %}", data_serialized, function datarecieved(data){dataUpdated(data,period);}, "json");
+        var jqxhr_post = jQuery.post("{% url "restricted stats" %}", data_serialized, function datarecieved(data){dataUpdated(data,period);}, "json");
+        if (jqxhr_post.status == 403){
+            document.getElementById("alert_info").innerHTML = "Error: Access forbidden";
+            document.getElementById("alert_info").style.display = "block";
+        }
+        else if(jqxhr_post.status == 501){
+            document.getElementById("alert_info").innerHTML = "Error: Operation not supported";
+            document.getElementById("alert_info").style.display = "block";
+
+        }
+        else if (jqxhr_post.status == 200){
+            document.getElementById("alert_info").style.display = "none";
+        }
     }
     function dataUpdated(stats, period) {
         var statsDef = []
