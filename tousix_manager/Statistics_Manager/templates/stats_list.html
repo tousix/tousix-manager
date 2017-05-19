@@ -35,6 +35,8 @@
             <script type="text/javascript" src="{% static "js/highstock.js" %}"></script>
 <script type="text/javascript" src="{% static "js/modules_highstock/exporting.js" %}"></script>
             <script type="text/javascript" src="{% static "js/modules_highstock/no-data-to-display.js" %}"></script>
+            <script type="text/javascript" src="{% static "js/moment.min.js" %}"></script>
+
 <script type="text/javascript">
     var ranges = [
       { divider: 1e18 , suffix: 'P' },
@@ -73,8 +75,13 @@
     function dataUpdated(stats, period, unit) {
         var statsDef = [];
     for (i = 0; i < stats.length; i++) {
-        statsDef[i] = [Date.parse(stats[i].time), stats[i].value]
+        statsDef[i] = [moment(stats[i].time), stats[i].value]
     };
+        Highcharts.setOptions({
+        global: {
+            timezoneOffset: statsDef[0].getTimezoneOffset()
+        }
+    });
         Highcharts.stockChart('Chart',{
             chart: {
                 zoomType: 'x'

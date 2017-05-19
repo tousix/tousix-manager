@@ -71,8 +71,13 @@
     function dataUpdated(stats, period) {
         var statsDef = []
     for (i = 0; i < stats.length; i++) {
-        statsDef[i] = [Date.parse(stats[i].time), stats[i].value]
+        statsDef[i] = [moment(stats[i].time), stats[i].value]
     };
+        Highcharts.setOptions({
+        global: {
+            timezoneOffset: statsDef[0].getTimezoneOffset()
+        }
+    });
         Highcharts.stockChart('Chart',{
             chart: {
                 zoomType: 'x'

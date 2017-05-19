@@ -18,7 +18,8 @@
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.http import JsonResponse
-from django.utils.timezone import datetime
+from django.utils.timezone import datetime, localtime
+import pytz
 
 class JSONResponseMixin(object):
     """
@@ -48,8 +49,10 @@ class JSONResponseMixin(object):
         :param context:
         :return:
         """
+        timezone = pytz.timezone("UTC")
         for data in context:
-            if isinstance(data.get('time'), datetime):
+            if not isinstance(data.get('time'), datetime):
                 # Remove microseconds & Transforms into ISO 8601 format
-                data['time'] = data['time'].replace(microsecond=0).isoformat()
+                data['time'] = datetime.strptime(data['time'], "%Y-%m-%dT%H:%M:%SZ")
+            data['time'] = localtime(data['time'].replace(tzinfo=timezone))
         return context
