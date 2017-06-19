@@ -70,18 +70,24 @@ def pre_save_hote_modification(sender, **kwargs):
         except Hote.DoesNotExist:
             # skip this step if new object
             return None
-        if previous_hote.ipv6hote != instance.ipv6hote or previous_hote.ipv4hote != instance.ipv4hote:
-            conflict_ip = Hote.objects.filter(Q(ipv4hote=instance.ipv4hote) | Q(ipv6hote=instance.ipv6hote))
+        if previous_hote.ipv6hote != instance.ipv6hote:
+            conflict_ip = Hote.objects.filter(Q(ipv6hote=instance.ipv6hote))
             if conflict_ip.count() is not 0:
                 error_string = "IP address is already assigned to these hosts: "
                 for host_conflict in conflict_ip:
                     error_string += host_conflict.nomhote + ", "
                 raise ValidationError(error_string)
-
-            manager = Manager()
-            manager.create_rules_single(Switch.objects.all(), instance)
-            deployment = RulesDeployment()
-            deployment.send_flowrules_single_host(Switch.objects.all(), instance)
+        if previous_hote.ipv4hote != instance.ipv4hote:
+            conflict_ip = Hote.objects.filter(Q(ipv4hote=instance.ipv4hote))
+            if conflict_ip.count() is not 0:
+                error_string = "IP address is already assigned to these hosts: "
+                for host_conflict in conflict_ip:
+                    error_string += host_conflict.nomhote + ", "
+                raise ValidationError(error_string)
+        manager = Manager()
+        manager.create_rules_single(Switch.objects.all(), instance)
+        deployment = RulesDeployment()
+        deployment.send_flowrules_single_host(Switch.objects.all(), instance)
 
 
 @receiver(pre_delete, sender=Hote)
