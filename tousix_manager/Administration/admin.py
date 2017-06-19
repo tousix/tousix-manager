@@ -18,7 +18,7 @@ class HoteInLine(admin.TabularInline):
     model = Hote
     max_num = 3
     min_num = 0
-    extra = 1
+    extra = 0
     form = HoteForm
 
 
