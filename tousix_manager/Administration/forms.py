@@ -42,10 +42,10 @@ class HoteForm(forms.ModelForm):
 
     def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
                  initial=None, error_class=ErrorList, label_suffix=None,
-                 empty_permitted=False, instance=None):
+                 empty_permitted=False, instance=None, use_required_attribute=None):
         super(HoteForm, self).__init__(data, files, auto_id, prefix,
                                        initial, error_class, label_suffix,
-                                       empty_permitted, instance)
+                                       empty_permitted, instance, use_required_attribute)
         if self.instance.idhote is not None:
             # Set idport editing value for instance
             self.fields["idport"].queryset = Port.objects.filter(enabled=True)
