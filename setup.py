@@ -51,7 +51,8 @@ setup(
         'mysqlclient',
         'influxdb',
         'pygments',
-        'requests'
+        'requests',
+        'pyyaml'
     ],
     classifiers=[
         'Environment :: Web Environment',

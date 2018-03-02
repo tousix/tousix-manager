@@ -287,6 +287,27 @@ class Hote(models.Model):
         regles_deprecated.delete()
 
 
+class Vlan(models.Model):
+    """
+    Model for assigning vlans to Hosts.
+    """
+    id = models.AutoField()
+    name = models.CharField(max_length=20)
+    vlan_id = models.PositiveIntegerField() # TODO add limit on model
+
+
+class Hote_VLAN(models.Model):
+    """
+    Model to assign VLAN to member_host
+    For mode field:
+    - False = access
+    - True = tagged
+    """
+    hote = models.ForeignKey(Hote, to_field='idhote', related_name='hote', null=False)
+    vlan = models.ForeignKey(Vlan, to_field='id', related_name='vlan', null=False)
+    mode = models.BooleanField(default=False)
+
+
 class Flux(models.Model):
     """
     Model for flow between two :model:`Database.Hote`.
