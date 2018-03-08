@@ -52,7 +52,7 @@ setup(
         'influxdb',
         'pygments',
         'requests',
-        'pyyaml'
+        'ruamel.yaml'
     ],
     classifiers=[
         'Environment :: Web Environment',

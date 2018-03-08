@@ -1,4 +1,4 @@
-from tousix_manager.Administration.actions import generate_routeserver_conf, generate_openflow_rules, get_rules_list, change_hote_status, apply_hote_on_production, get_percentile_hote
+from tousix_manager.Administration.actions import generate_routeserver_conf, generate_openflow_rules, generate_faucet_config, get_rules_list, change_hote_status, apply_hote_on_production, get_percentile_hote
 from tousix_manager.Administration.adminsite import admin_tousix
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
@@ -104,7 +104,7 @@ class SwitchAdmin(admin.ModelAdmin):
     list_display = ["nomswitch", "ipswitch", "idswitch"]
     form = SwitchForm
     search_fields = ["nomswitch", "ipswitch", "idswitch"]
-    actions = [generate_openflow_rules]
+    actions = [generate_openflow_rules, generate_faucet_config]
 
 
 @admin.register(LogSwitch)
