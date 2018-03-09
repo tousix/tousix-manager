@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from fsm_admin.mixins import FSMTransitionMixin
 from tousix_manager.Administration.forms import HoteForm, SwitchForm, MembreForm, PortForm, UserMembreForm
-from tousix_manager.Database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch, Regles, ConnectionType, UserMembre
+from tousix_manager.Database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch, Regles, ConnectionType, UserMembre, Switchlink
 
 
 # Register your models here.
@@ -138,10 +138,20 @@ class ConnectionTypeAdmin(admin.ModelAdmin):
     """
     list_display = ["connection_type"]
 
+
 @admin.register(UserMembre)
 class UserMembreAdmin(admin.ModelAdmin):
     list_display = ['user', 'nommembre']
     form = UserMembreForm
+
+
+@admin.register(Switchlink)
+class SwitchLinkAdmin(admin.ModelAdmin):
+    """
+    Class for reprensenting Switchlink model in the admin panel
+    """
+    list_display = ["idport1__switch", "idport1", "idport2__switch", "idport2"]
+
 
 admin_tousix.register(Regles, ReglesField)
 admin_tousix.register(LogSwitch, LogSwitchAdmin)
@@ -153,3 +163,4 @@ admin_tousix.register(Hote, HoteAdmin)
 admin_tousix.register(Membre, MembreAdmin)
 admin_tousix.register(ConnectionType, ConnectionTypeAdmin)
 admin_tousix.register(UserMembre, UserMembreAdmin)
+admin_tousix.register(Switchlink, SwitchLinkAdmin)

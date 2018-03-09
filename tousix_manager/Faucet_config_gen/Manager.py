@@ -18,14 +18,15 @@
 #    along with TouSIX-Manager.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from tousix_manager.Database.models import Hote, Vlan, Hote_VLAN
+from tousix_manager.Database.models import Hote, Switchlink, Switch, Port
 import yaml
-
+from django.conf import settings
 
 class Manager(object):
     def __init__(self):
         pass
 
+# TODO implement link query for yaml script
     def generate_host(self, hote):
 
         hote = Hote.objects.get(id=1)
@@ -38,27 +39,31 @@ class Manager(object):
         cl.mac = hote.machote
         cl.port = hote.idport.numport
 
-    def generate_all_peers(self):
-        hotes = Hote.objects.filter(valid=True).exclude(etat="Inactive")
-        yaml_interfaces = []
-        for host in hotes:
-            yaml_interfaces.append(self.generate_peer(host))
+    def get_next_hop(self, node_src):
+        pass
 
-        return yaml_interfaces
+    def get_interfaces_switch(self, switch):
+        pass
 
-    def generate_peer(self, member):
-        member = Hote.objects.filter(valid=True).exclude(etat="Inactive").get(id=1)
-        interface = Interface()
-        interface.port = member.port()
-        interface.switch = member.idport.idswitch
-        interface.name = member.nomhote
-        interface.description = "Member " + member.idmembre.nommembre + ": " + member.nomhote
-        interface.vlans['access'].extend(Hote_VLAN.objects.filter(hote=member, mode=False).all().values('vlan__vlan_id'))
-        interface.vlans['tagged'].extend(Hote_VLAN.objects.filter(hote=member, mode=True).all().values('vlan__vlan_id'))
-
-        interface.acls = []
-
-        return interface.gen_yaml()
+    def generate_datapath(self):
+        result = {}
+        for switch in Switch.objects.all():
+            switch_def = {}
+            switch_def['dp_id'] = switch.idswitch
+            switch_def['hardware'] = switch.faucet_class
+            intf = {}
+            for port in Port.objects.filter(idswitch=switch.id):
+                intf[port.numport] = {'acl_in': switch_def['dp_id'],
+                                      'description': Hote.objects.filter(idport=port.id).get(0).nomhote,
+                                      'name':  Hote.objects.filter(idport=port.id).get(0).nomhote,
+                                      'native_vlan': settings['FAUCET_SETTINGS']['vlan_native_id'],
+                                      'opstatus_reconf': False}
+            switch_def['interfaces'] = intf
+            result[switch.nomswitch] = switch_def
+        return {'dps': result}
+    def generate_acls(self):
+        #TODO include script gen.py
+        pass
 
 
 class Interface(object):

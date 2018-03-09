@@ -92,16 +92,6 @@ TEMPLATES = [
             ],
         'NAME': 'default'
         },
-    },
-    {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-            ],
-        'NAME': 'faucet'
-        },
     }
 ]
 
@@ -194,6 +184,11 @@ INFLUXDB_CONFIG = {
 # 'Ryu' Cor creating production and monitoring stack from scratch
 # 'Faucet' for enabling faut Faucet configuration generation on each step
 APPLY_PRODUCTION_METHOD = 'Ryu'
+
+FAUCET_SETTINGS = {
+"vlan_name": 'IXP_VLAN',
+"vlan_native_id": 400
+}
 
 # Enable or disable some modules of the Rules_Generation app
 #  Only used with 'Ryu' option on APPLY_PRODUCTION_METHOD

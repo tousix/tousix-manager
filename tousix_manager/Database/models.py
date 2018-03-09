@@ -115,6 +115,7 @@ class Switch(models.Model):
     """
     idswitch = PositiveBigIntegerField(db_column='idSwitch', primary_key=True)
     nomswitch = models.CharField(db_column='nomSwitch', max_length=20, blank=True, null=True)
+    faucet_class = models.CharField(null=False, blank=True)
     ipswitch = models.CharField(db_column='IPSwitch', max_length=39, blank=True, null=True)
     idpop = models.ForeignKey(Pop, to_field='idpop', db_column='idPOP', blank=True, null=True)
 
@@ -285,27 +286,6 @@ class Hote(models.Model):
         deployment = RulesDeployment()
         deployment.remove_rules(regles_invalides)
         regles_deprecated.delete()
-
-
-class Vlan(models.Model):
-    """
-    Model for assigning vlans to Hosts.
-    """
-    id = models.AutoField()
-    name = models.CharField(max_length=20)
-    vlan_id = models.PositiveIntegerField() # TODO add limit on model
-
-
-class Hote_VLAN(models.Model):
-    """
-    Model to assign VLAN to member_host
-    For mode field:
-    - False = access
-    - True = tagged
-    """
-    hote = models.ForeignKey(Hote, to_field='idhote', related_name='hote', null=False)
-    vlan = models.ForeignKey(Vlan, to_field='id', related_name='vlan', null=False)
-    mode = models.BooleanField(default=False)
 
 
 class Flux(models.Model):
