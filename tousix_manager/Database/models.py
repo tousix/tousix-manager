@@ -370,7 +370,7 @@ class Switchlink(models.Model):
     """
     idport1 = models.OneToOneField(Port, to_field='idport', db_column='idPort1', related_name='idport1', unique=True)
     idport2 = models.OneToOneField(Port, to_field='idport', db_column='idPort2', related_name='idport2', unique=True)
-    name = models.CharField(max_length=25, null=False)
+    name = models.CharField(max_length=25, null=False, default='link')
 
     class Meta:
         db_table = 'SwitchLink'
