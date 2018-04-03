@@ -61,6 +61,7 @@ INSTALLED_APPS = (
     'tousix_manager.Member_Manager',
     'tousix_manager.Database',
     'tousix_manager.Frontpages',
+    'tousix_manager.Faucet_config_gen'
 )
 
 MIDDLEWARE_CLASSES = (
