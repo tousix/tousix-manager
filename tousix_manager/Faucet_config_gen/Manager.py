@@ -64,21 +64,21 @@ class Manager(object):
     def triangle(self, list_load = []):
 
         data = {'vlans': {'tousix': {'vid': 100, 'description': qs(self.faucet_settings['vlan_name'])}}, 'dps': {
-            'Edge1': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 1").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 1").faucet_class), 'interfaces': {
+            'Edge 1': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 1").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 1").faucet_class), 'interfaces': {
                 1: {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100, 'acl_in': 1,
                     'opstatus_reconf': False},
                 int(self.faucet_settings['sw1_portnum_to_sw2']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 1, 'opstatus_reconf': False},
                 int(self.faucet_settings['sw1_portnum_to_sw3']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 1, 'opstatus_reconf': False}}
-                      }, 'Edge2': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 2").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 2").faucet_class), 'interfaces': {
+                      }, 'Edge 2': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 2").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 2").faucet_class), 'interfaces': {
                 1: {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100, 'acl_in': 2,
                     'opstatus_reconf': False},
                 int(self.faucet_settings['sw2_portnum_to_sw1']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 2, 'opstatus_reconf': False},
                 int(self.faucet_settings['sw2_portnum_to_sw3']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 2, 'opstatus_reconf': False}}},
-            'Edge3': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 3").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 3").faucet_class), 'interfaces': {
+            'Edge 3': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 3").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 3").faucet_class), 'interfaces': {
                 1: {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100, 'acl_in': 3,
                     'opstatus_reconf': False},
                 int(self.faucet_settings['sw3_portnum_to_sw1']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
@@ -87,8 +87,8 @@ class Manager(object):
                                           'acl_in': 3, 'opstatus_reconf': False}}}},
                 'acls': {}}
         for i in range(len(list_load)):
-            if list_load[i]['switch'] == 'Edge1' and list_load[i]['status'] == 'Production':
-                data['dps']['Edge1']['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
+            if list_load[i]['switch'] == 'Edge 1' and list_load[i]['status'] == 'Production':
+                data['dps']['Edge 1']['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
                                                                                  'description': qs(
                                                                                      list_load[i]['hostname']),
                                                                                  'native_vlan': 100, 'acl_in': 1}
@@ -128,8 +128,8 @@ class Manager(object):
                         list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 500 + i,
                                                                                         'ports': Braket(
                                                                                             '[' + self.faucet_settings['sw3_portnum_to_sw1'] + ',' + self.faucet_settings['sw3_portnum_to_sw2'] + ']')}}}}})
-            elif list_load[i]['switch'] == 'Edge2' and list_load[i]['status'] == 'Production':
-                data['dps']['Edge2']['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
+            elif list_load[i]['switch'] == 'Edge 2' and list_load[i]['status'] == 'Production':
+                data['dps']['Edge 2']['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
                                                                                  'description': qs(
                                                                                      list_load[i]['hostname']),
                                                                                  'native_vlan': 100, 'acl_in': 2}
@@ -169,8 +169,8 @@ class Manager(object):
                         list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 1100 + i,
                                                                                         'ports': Braket(
                                                                                             '[' + self.faucet_settings['sw3_portnum_to_sw2'] + ',' + self.faucet_settings['sw3_portnum_to_sw1'] + ']')}}}}})
-            elif list_load[i]['switch'] == 'Edge3' and list_load[i]['status'] == 'Production':
-                data['dps']['Edge3']['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
+            elif list_load[i]['switch'] == 'Edge 3' and list_load[i]['status'] == 'Production':
+                data['dps']['Edge 3']['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
                                                                                  'description': qs(
                                                                                      list_load[i]['hostname']),
                                                                                  'native_vlan': 100, 'acl_in': 3}
