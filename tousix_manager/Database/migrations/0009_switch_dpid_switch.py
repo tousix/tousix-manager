@@ -7,7 +7,7 @@ from django.apps import apps
 from django.db.models import F
 
 
-def copy_field():
+def copy_field(arg1, arg2):
     MyModel = apps.get_model('Database', 'Switch')
     MyModel.objects.all().update(dpid_switch=F('idswitch'))
 
