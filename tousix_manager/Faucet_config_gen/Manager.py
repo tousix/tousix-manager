@@ -218,6 +218,7 @@ class Manager(object):
 
     def generate_all_peers(self):
         self.data = self.triangle(self.convert_table())
+        return self.data
 
     def dump_config(self):
         if len(self.data) is not 0:

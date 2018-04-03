@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{%  load staticfiles %}
+{% block sb_admin_content %}
+    {%  if not data %}
+    <form id="PeersForm" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-lg btn-default">Envoyer</button>
+    </form>
+    {%  else %}
+        <textarea> {{ data }}</textarea>
+    {% endif %}
+{% endblock sb_admin_content %}
