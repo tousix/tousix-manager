@@ -40,7 +40,7 @@ def Braket(i):
 
 class Manager(object):
     def __init__(self):
-        self.vlan_name = settings.FAUCET_SETTINGS['vlan_name']
+        self.faucet_settings = settings.FAUCET_SETTINGS
         self.data = ()
 
     def convert_table(self):
@@ -63,27 +63,27 @@ class Manager(object):
 
     def triangle(self, list_load = []):
 
-        data = {'vlans': {'tousix': {'vid': 100, 'description': qs(self.vlan_name)}}, 'dps': {
+        data = {'vlans': {'tousix': {'vid': 100, 'description': qs(self.faucet_settings['vlan_name'])}}, 'dps': {
             'Edge1': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 1").idswitch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 1").faucet_class), 'interfaces': {
                 1: {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100, 'acl_in': 1,
                     'opstatus_reconf': False},
-                int(settings.FAUCET_SETTINGS['sw1_portnum_to_sw2']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
+                int(self.faucet_settings['sw1_portnum_to_sw2']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 1, 'opstatus_reconf': False},
-                int(settings.FAUCET_SETTINGS['sw1_portnum_to_sw3']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
+                int(self.faucet_settings['sw1_portnum_to_sw3']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 1, 'opstatus_reconf': False}}
                       }, 'Edge2': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 2").idswitch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 2").faucet_class), 'interfaces': {
                 1: {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100, 'acl_in': 2,
                     'opstatus_reconf': False},
-                int(settings.FAUCET_SETTINGS['sw2_portnum_to_sw1']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
+                int(self.faucet_settings['sw2_portnum_to_sw1']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 2, 'opstatus_reconf': False},
-                int(settings.FAUCET_SETTINGS['sw2_portnum_to_sw3']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
+                int(self.faucet_settings['sw2_portnum_to_sw3']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 2, 'opstatus_reconf': False}}},
             'Edge3': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 3").idswitch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 3").faucet_class), 'interfaces': {
                 1: {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100, 'acl_in': 3,
                     'opstatus_reconf': False},
-                int(settings.FAUCET_SETTINGS['sw3_portnum_to_sw1']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
+                int(self.faucet_settings['sw3_portnum_to_sw1']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 3, 'opstatus_reconf': False},
-                int(settings.FAUCET_SETTINGS['sw3_portnum_to_sw2']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
+                int(self.faucet_settings['sw3_portnum_to_sw2']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 3, 'opstatus_reconf': False}}}},
                 'acls': {}}
         for i in range(len(list_load)):
@@ -103,31 +103,31 @@ class Manager(object):
 
                 data['acls'][2].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
                     'output': {'failover': {'group_id': 1 + i, 'ports': Braket(
-                        '[' + settings.FAUCET_SETTINGS['sw2_portnum_to_sw1'] + ',' + settings.FAUCET_SETTINGS['sw2_portnum_to_sw3'] + ']')}}}}})
+                        '[' + self.faucet_settings['sw2_portnum_to_sw1'] + ',' + self.faucet_settings['sw2_portnum_to_sw3'] + ']')}}}}})
                 data['acls'][2].append(
                     {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
                         list_load[i]['addr_ipv6']), 'actions': {'output': {'failover': {'group_id': 100 + i,
                                                                                         'ports': Braket(
-                                                                                            '[' + settings.FAUCET_SETTINGS['sw2_portnum_to_sw1'] + ',' + settings.FAUCET_SETTINGS['sw2_portnum_to_sw3'] + ']')}}}}})
+                                                                                            '[' + self.faucet_settings['sw2_portnum_to_sw1'] + ',' + self.faucet_settings['sw2_portnum_to_sw3'] + ']')}}}}})
                 data['acls'][2].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
                         list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 200 + i,
                                                                                         'ports': Braket(
-                                                                                            '[' + settings.FAUCET_SETTINGS['sw2_portnum_to_sw1'] + ',' + settings.FAUCET_SETTINGS['sw2_portnum_to_sw3'] + ']')}}}}})
+                                                                                            '[' + self.faucet_settings['sw2_portnum_to_sw1'] + ',' + self.faucet_settings['sw2_portnum_to_sw3'] + ']')}}}}})
 
                 data['acls'][3].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
                     'output': {'failover': {'group_id': 300 + i, 'ports': Braket(
-                        '[' + settings.FAUCET_SETTINGS['sw3_portnum_to_sw1'] + ',' + settings.FAUCET_SETTINGS ['sw3_portnum_to_sw2'] + ']')}}}}})
+                        '[' + self.faucet_settings['sw3_portnum_to_sw1'] + ',' + self.faucet_settings ['sw3_portnum_to_sw2'] + ']')}}}}})
                 data['acls'][3].append(
                     {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
                         list_load[i]['addr_ipv6']), 'actions': {'output': {'failover': {'group_id': 400 + i,
                                                                                         'ports': Braket(
-                                                                                            '[' + settings.FAUCET_SETTINGS['sw3_portnum_to_sw1'] + ',' + settings.FAUCET_SETTINGS['sw3_portnum_to_sw2'] + ']')}}}}})
+                                                                                            '[' + self.faucet_settings['sw3_portnum_to_sw1'] + ',' + self.faucet_settings['sw3_portnum_to_sw2'] + ']')}}}}})
                 data['acls'][3].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
                         list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 500 + i,
                                                                                         'ports': Braket(
-                                                                                            '[' + settings.FAUCET_SETTINGS['sw3_portnum_to_sw1'] + ',' + settings.FAUCET_SETTINGS['sw3_portnum_to_sw2'] + ']')}}}}})
+                                                                                            '[' + self.faucet_settings['sw3_portnum_to_sw1'] + ',' + self.faucet_settings['sw3_portnum_to_sw2'] + ']')}}}}})
             elif list_load[i]['switch'] == 'Edge2' and list_load[i]['status'] == 'Production':
                 data['dps']['Edge2']['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
                                                                                  'description': qs(
@@ -135,17 +135,17 @@ class Manager(object):
                                                                                  'native_vlan': 100, 'acl_in': 2}
                 data['acls'][1].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
                     'output': {'failover': {'group_id': 600 + i, 'ports': Braket(
-                        '[' + settings.FAUCET_SETTINGS['sw1_portnum_to_sw2'] + ',' + settings.FAUCET_SETTINGS['sw1_portnum_to_sw3'] + ']')}}}}})
+                        '[' + self.faucet_settings['sw1_portnum_to_sw2'] + ',' + self.faucet_settings['sw1_portnum_to_sw3'] + ']')}}}}})
                 data['acls'][1].append(
                     {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
                         list_load[i]['addr_ipv6']), 'actions': {'output': {'failover': {'group_id': 700 + i,
                                                                                         'ports': Braket(
-                                                                                            '[' + settings.FAUCET_SETTINGS['sw1_portnum_to_sw2'] + ',' + settings.FAUCET_SETTINGS['sw1_portnum_to_sw3'] + ']')}}}}})
+                                                                                            '[' + self.faucet_settings['sw1_portnum_to_sw2'] + ',' + self.faucet_settings['sw1_portnum_to_sw3'] + ']')}}}}})
                 data['acls'][1].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
                         list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 800 + i,
                                                                                         'ports': Braket(
-                                                                                            '[' + settings.FAUCET_SETTINGS['sw1_portnum_to_sw2'] + ',' + settings.FAUCET_SETTINGS['sw1_portnum_to_sw3'] + ']')}}}}})
+                                                                                            '[' + self.faucet_settings['sw1_portnum_to_sw2'] + ',' + self.faucet_settings['sw1_portnum_to_sw3'] + ']')}}}}})
 
                 data['acls'][2].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
                     'output': {'port': int(list_load[i]['port'])}}}})
@@ -158,17 +158,17 @@ class Manager(object):
 
                 data['acls'][3].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
                     'output': {'failover': {'group_id': 900 + i, 'ports': Braket(
-                        '[' + settings.FAUCET_SETTINGS['sw3_portnum_to_sw2'] + ',' + settings.FAUCET_SETTINGS['sw3_portnum_to_sw1'] + ']')}}}}})
+                        '[' + self.faucet_settings['sw3_portnum_to_sw2'] + ',' + self.faucet_settings['sw3_portnum_to_sw1'] + ']')}}}}})
                 data['acls'][3].append(
                     {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
                         list_load[i]['addr_ipv6']), 'actions': {'output': {'failover': {'group_id': 1000 + i,
                                                                                         'ports': Braket(
-                                                                                            '[' + settings.FAUCET_SETTINGS['sw3_portnum_to_sw2'] + ',' + settings.FAUCET_SETTINGS['sw3_portnum_to_sw1'] + ']')}}}}})
+                                                                                            '[' + self.faucet_settings['sw3_portnum_to_sw2'] + ',' + self.faucet_settings['sw3_portnum_to_sw1'] + ']')}}}}})
                 data['acls'][3].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
                         list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 1100 + i,
                                                                                         'ports': Braket(
-                                                                                            '[' + settings.FAUCET_SETTINGS['sw3_portnum_to_sw2'] + ',' + settings.FAUCET_SETTINGS['sw3_portnum_to_sw1'] + ']')}}}}})
+                                                                                            '[' + self.faucet_settings['sw3_portnum_to_sw2'] + ',' + self.faucet_settings['sw3_portnum_to_sw1'] + ']')}}}}})
             elif list_load[i]['switch'] == 'Edge3' and list_load[i]['status'] == 'Production':
                 data['dps']['Edge3']['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
                                                                                  'description': qs(
@@ -176,31 +176,31 @@ class Manager(object):
                                                                                  'native_vlan': 100, 'acl_in': 3}
                 data['acls'][1].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
                     'output': {'failover': {'group_id': 1200 + i, 'ports': Braket(
-                        '[' + settings.FAUCET_SETTINGS['sw1_portnum_to_sw3'] + ',' + settings.FAUCET_SETTINGS['sw1_portnum_to_sw2'] + ']')}}}}})
+                        '[' + self.faucet_settings['sw1_portnum_to_sw3'] + ',' + self.faucet_settings['sw1_portnum_to_sw2'] + ']')}}}}})
                 data['acls'][1].append(
                     {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
                         list_load[i]['addr_ipv6']), 'actions': {'output': {'failover': {'group_id': 1300 + i,
                                                                                         'ports': Braket(
-                                                                                            '[' + settings.FAUCET_SETTINGS['sw1_portnum_to_sw3'] + ',' + settings.FAUCET_SETTINGS['sw1_portnum_to_sw2'] + ']')}}}}})
+                                                                                            '[' + self.faucet_settings['sw1_portnum_to_sw3'] + ',' + self.faucet_settings['sw1_portnum_to_sw2'] + ']')}}}}})
                 data['acls'][1].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
                         list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 1400 + i,
                                                                                         'ports': Braket(
-                                                                                            '[' + settings.FAUCET_SETTINGS['sw1_portnum_to_sw3'] + ',' + settings.FAUCET_SETTINGS['sw1_portnum_to_sw2'] + ']')}}}}})
+                                                                                            '[' + self.faucet_settings['sw1_portnum_to_sw3'] + ',' + self.faucet_settings['sw1_portnum_to_sw2'] + ']')}}}}})
 
                 data['acls'][2].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
                     'output': {'failover': {'group_id': 1500 + i, 'ports': Braket(
-                        '[' + settings.FAUCET_SETTINGS['sw2_portnum_to_sw3'] + ',' + settings.FAUCET_SETTINGS['sw2_portnum_to_sw1'] + ']')}}}}})
+                        '[' + self.faucet_settings['sw2_portnum_to_sw3'] + ',' + self.faucet_settings['sw2_portnum_to_sw1'] + ']')}}}}})
                 data['acls'][2].append(
                     {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
                         list_load[i]['addr_ipv6']), 'actions': {'output': {'failover': {'group_id': 1600 + i,
                                                                                         'ports': Braket(
-                                                                                            '[' + settings.FAUCET_SETTINGS['sw2_portnum_to_sw3'] + ',' + settings.FAUCET_SETTINGS['sw2_portnum_to_sw1'] + ']')}}}}})
+                                                                                            '[' + self.faucet_settings['sw2_portnum_to_sw3'] + ',' + self.faucet_settings['sw2_portnum_to_sw1'] + ']')}}}}})
                 data['acls'][2].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
                         list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 1700 + i,
                                                                                         'ports': Braket(
-                                                                                            '[' + settings.FAUCET_SETTINGS['sw2_portnum_to_sw3'] + ',' + settings.FAUCET_SETTINGS['sw2_portnum_to_sw1'] + ']')}}}}})
+                                                                                            '[' + self.faucet_settings['sw2_portnum_to_sw3'] + ',' + self.faucet_settings['sw2_portnum_to_sw1'] + ']')}}}}})
 
                 data['acls'][3].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
                     'output': {'port': int(list_load[i]['port'])}}}})
@@ -225,7 +225,7 @@ class Manager(object):
             yaml.boolean_representation = ['False', 'True']
             yaml.default_flow_style = False
 
-            yaml.dump(self.data, settings.FAUCET_SETTINGS['faucet_config_path'])
+            yaml.dump(self.data, self.faucet_settings['faucet_config_path'])
 
 class Interface(object):
     switch = 0xaaa
