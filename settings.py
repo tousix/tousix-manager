@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.sites',
     'formtools',
+    'revproxy',
     'django_fsm',
     'debug_toolbar',
     'reversion',
@@ -187,7 +188,14 @@ APPLY_PRODUCTION_METHOD = 'Ryu'
 
 FAUCET_SETTINGS = {
 "vlan_name": 'IXP_VLAN',
-"vlan_native_id": 400
+"vlan_native_id": 400,
+"faucet_config_path": "/etc/faucet/faucet.yaml",
+"sw1_portnum_to_sw2" :'25',
+"sw1_portnum_to_sw3" : '28',
+"sw2_portnum_to_sw1" : '25',
+"sw2_portnum_to_sw3": '26',
+"sw3_portnum_to_sw1" : '28',
+"sw3_portnum_to_sw2" : '25'
 }
 
 # Enable or disable some modules of the Rules_Generation app

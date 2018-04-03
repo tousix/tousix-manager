@@ -52,7 +52,10 @@ setup(
         'influxdb',
         'pygments',
         'requests',
-        'ruamel.yaml'
+        'ruamel.yaml==0.15.35',
+        'docopt==0.6.2',
+        'ipaddress==1.0.19',
+        'django-revproxy'
     ],
     classifiers=[
         'Environment :: Web Environment',
