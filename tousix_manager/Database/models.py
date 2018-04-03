@@ -114,6 +114,7 @@ class Switch(models.Model):
     Model representing any type of switch (even the legacy ones could be referenced).
     """
     idswitch = PositiveBigIntegerField(db_column='idSwitch', primary_key=True)
+    dpid_switch = PositiveBigIntegerField(default=1)
     nomswitch = models.CharField(db_column='nomSwitch', max_length=20, blank=True, null=True)
     faucet_class = models.CharField(null=False, blank=True, max_length=35)
     ipswitch = models.CharField(db_column='IPSwitch', max_length=39, blank=True, null=True)
