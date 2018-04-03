@@ -85,7 +85,7 @@ class Manager(object):
                                           'acl_in': 3, 'opstatus_reconf': False},
                 int(self.faucet_settings['sw3_portnum_to_sw2']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 3, 'opstatus_reconf': False}}}},
-                'acls': {}}
+                'acls': {1: [], 2: [], 3:[]}}
         for i in range(len(list_load)):
             if list_load[i]['switch'] == 'Edge 1' and list_load[i]['status'] == 'Production':
                 data['dps']['Edge 1']['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
