@@ -69,7 +69,7 @@ class RulesRestorationView(AddressLimitationMixin, JSONResponseMixin, ListView):
 
     def get_queryset(self):
         if "idswitch" in self.request.GET:
-            return Regles.objects.filter(idswitch=self.request.GET["idswitch"]).values_list("regle", flat=True)
+            return Regles.objects.filter(dpid_switch=self.request.GET["idswitch"]).values_list("regle", flat=True)
         else:
             return super(RulesRestorationView, self).get_queryset().values_list("regle", flat=True)
         

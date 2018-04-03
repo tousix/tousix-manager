@@ -76,7 +76,7 @@ class Manager(object):
                                        source_id=rule.get("source"), destination_id=rule.get("destination")))
             Regles.objects.bulk_create(db_rules)
             # Copy raw group rules into database
-            groups_switch = settings.RULES_GENERATION_GROUPS_DEFINITION[switch.idswitch]
+            groups_switch = settings.RULES_GENERATION_GROUPS_DEFINITION[switch.dpid_switch]
             db_groups = []
             for group in groups_switch:
                 db_groups.append(Regles(idswitch=switch, typeregle="Group", regle=json.dumps(group)))

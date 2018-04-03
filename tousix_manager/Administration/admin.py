@@ -101,9 +101,9 @@ class SwitchAdmin(admin.ModelAdmin):
     """
     Class for switch visibility in admin panel.
     """
-    list_display = ["nomswitch", "ipswitch", "idswitch"]
+    list_display = ["nomswitch", "ipswitch", "dpid_switch"]
     form = SwitchForm
-    search_fields = ["nomswitch", "ipswitch", "idswitch"]
+    search_fields = ["nomswitch", "ipswitch", "dpid_switch"]
     actions = [generate_openflow_rules, generate_faucet_config]
 
 
@@ -115,7 +115,7 @@ class LogSwitchAdmin(admin.ModelAdmin):
     list_display = ['nomswitch', "time", "level", "message"]
     search_fields = ['idswitch__nomswitch', "level", "time"]
     list_filter = ['idswitch__nomswitch', "level"]
-    readonly_fields = ['idlog', "idswitch", "time", "level", "message", "json"]
+    readonly_fields = ['idlog', "dpid_switch", "time", "level", "message", "json"]
 
 
 @admin.register(Regles)
@@ -123,7 +123,7 @@ class ReglesField(FSMTransitionMixin, admin.ModelAdmin):
     """
     Class for rules visibility in admin panel.
     """
-    readonly_fields = ['idregle', 'typeregle', 'regle', 'idswitch', 'etat']
+    readonly_fields = ['idregle', 'typeregle', 'regle', 'dpid_switch', 'etat']
     list_display = ['switch', 'regle', 'typeregle', 'etat']
     search_fields = ['regle']
     list_filter = ['idswitch__nomswitch', "typeregle", "source__nomhote", "destination__nomhote"]

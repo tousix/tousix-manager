@@ -73,7 +73,7 @@ class SwitchForm(forms.ModelForm):
 
     class Meta:
         model = Switch
-        fields = ['nomswitch', 'idswitch', 'ipswitch', 'idpop']
+        fields = ['nomswitch', 'dpid_switch', 'ipswitch', 'idpop']
 
 
 class SwitchChoiceField(forms.ModelChoiceField):
@@ -92,7 +92,7 @@ class PortForm(forms.ModelForm):
 
     class Meta:
         model = Port
-        fields = ['idswitch', 'numport', 'typeport', 'enabled', 'backbone']
+        fields = ['dpid_switch', 'numport', 'typeport', 'enabled', 'backbone']
 
 
 class ConnexionChoiceField(forms.ModelChoiceField):

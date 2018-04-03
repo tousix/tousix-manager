@@ -64,21 +64,21 @@ class Manager(object):
     def triangle(self, list_load = []):
 
         data = {'vlans': {'tousix': {'vid': 100, 'description': qs(self.faucet_settings['vlan_name'])}}, 'dps': {
-            'Edge1': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 1").idswitch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 1").faucet_class), 'interfaces': {
+            'Edge1': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 1").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 1").faucet_class), 'interfaces': {
                 1: {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100, 'acl_in': 1,
                     'opstatus_reconf': False},
                 int(self.faucet_settings['sw1_portnum_to_sw2']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 1, 'opstatus_reconf': False},
                 int(self.faucet_settings['sw1_portnum_to_sw3']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 1, 'opstatus_reconf': False}}
-                      }, 'Edge2': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 2").idswitch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 2").faucet_class), 'interfaces': {
+                      }, 'Edge2': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 2").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 2").faucet_class), 'interfaces': {
                 1: {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100, 'acl_in': 2,
                     'opstatus_reconf': False},
                 int(self.faucet_settings['sw2_portnum_to_sw1']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 2, 'opstatus_reconf': False},
                 int(self.faucet_settings['sw2_portnum_to_sw3']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
                                           'acl_in': 2, 'opstatus_reconf': False}}},
-            'Edge3': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 3").idswitch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 3").faucet_class), 'interfaces': {
+            'Edge3': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 3").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 3").faucet_class), 'interfaces': {
                 1: {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100, 'acl_in': 3,
                     'opstatus_reconf': False},
                 int(self.faucet_settings['sw3_portnum_to_sw1']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
