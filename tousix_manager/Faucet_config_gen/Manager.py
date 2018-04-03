@@ -225,7 +225,7 @@ class Manager(object):
             yaml.boolean_representation = ['False', 'True']
             yaml.default_flow_style = False
 
-            yaml.dump(self.data, self.faucet_settings['faucet_config_path'])
+            yaml.dump(self.data, open(self.faucet_settings['faucet_config_path'],'w'))
 
 class Interface(object):
     switch = 0xaaa
