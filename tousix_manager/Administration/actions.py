@@ -20,7 +20,8 @@
 from django.shortcuts import render, redirect
 from tousix_manager.BGP_Configuration.views import render_conf_members, render_conf_hosts
 from tousix_manager.Database.models import Hote, Membre, Switch
-from tousix_manager.Rules_Generation.manager import Manager
+from tousix_manager.Rules_Generation.manager import Manager as RyuManager
+from tousix_manager.Faucet_config_gen.Manager import Manager as FaucetManager
 from tousix_manager.Rules_Deployment.rules import RulesDeployment
 from tousix_manager.Statistics_Manager.billing_influx import BillingView
 
@@ -53,12 +54,29 @@ def generate_openflow_rules(modeladmin, request, queryset):
     :param queryset:
     :return:
     """
-    manager = Manager()
+    manager = RyuManager()
     manager.create_rules(queryset)
     modeladmin.message_user(request, "Les règles ont été mises à jour dans la base de données.")
     return redirect('rules_confirm')
 
-generate_openflow_rules.short_description = "Générer la configuration Openflow pour la sélection"
+generate_openflow_rules.short_description = "Générer la configuration Openflow pour la sélection sur un contrôleur Ryu"
+
+
+def generate_faucet_config(modeladmin, request, queryset):
+    """
+    Action for generating openflow rules on switch.
+    :param modeladmin:
+    :param request:
+    :param queryset:
+    :return:
+    """
+    manager = FaucetManager()
+    data = manager.generate_all_peers()
+    manager.dump_config()
+    modeladmin.message_user(request, "Le fichier de configuration Faucet a été modifié. Veuillez recharger le service afin d'appliquer les modifications")
+    return render(request, "config_confirm.html", context={"data": data})
+
+generate_faucet_config.short_description = "Générer la configuration Faucet tous les hôtes"
 
 
 def get_rules_list(modeladmin, request, queryset):

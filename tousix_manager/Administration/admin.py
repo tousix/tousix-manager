@@ -1,11 +1,11 @@
-from tousix_manager.Administration.actions import generate_routeserver_conf, generate_openflow_rules, get_rules_list, change_hote_status, apply_hote_on_production, get_percentile_hote
+from tousix_manager.Administration.actions import generate_routeserver_conf, generate_openflow_rules, generate_faucet_config, get_rules_list, change_hote_status, apply_hote_on_production, get_percentile_hote
 from tousix_manager.Administration.adminsite import admin_tousix
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from fsm_admin.mixins import FSMTransitionMixin
 from tousix_manager.Administration.forms import HoteForm, SwitchForm, MembreForm, PortForm, UserMembreForm
-from tousix_manager.Database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch, Regles, ConnectionType, UserMembre
+from tousix_manager.Database.models import Membre, Hote, Port, Pop, Contact, Switch, LogSwitch, Regles, ConnectionType, UserMembre, Switchlink
 
 
 # Register your models here.
@@ -101,10 +101,10 @@ class SwitchAdmin(admin.ModelAdmin):
     """
     Class for switch visibility in admin panel.
     """
-    list_display = ["nomswitch", "ipswitch", "idswitch"]
+    list_display = ["nomswitch", "ipswitch", "dpid_switch"]
     form = SwitchForm
-    search_fields = ["nomswitch", "ipswitch", "idswitch"]
-    actions = [generate_openflow_rules]
+    search_fields = ["nomswitch", "ipswitch", "dpid_switch"]
+    actions = [generate_openflow_rules, generate_faucet_config]
 
 
 @admin.register(LogSwitch)
@@ -115,7 +115,7 @@ class LogSwitchAdmin(admin.ModelAdmin):
     list_display = ['nomswitch', "time", "level", "message"]
     search_fields = ['idswitch__nomswitch', "level", "time"]
     list_filter = ['idswitch__nomswitch', "level"]
-    readonly_fields = ['idlog', "idswitch", "time", "level", "message", "json"]
+    readonly_fields = ['idlog', "dpid_switch", "time", "level", "message", "json"]
 
 
 @admin.register(Regles)
@@ -123,7 +123,7 @@ class ReglesField(FSMTransitionMixin, admin.ModelAdmin):
     """
     Class for rules visibility in admin panel.
     """
-    readonly_fields = ['idregle', 'typeregle', 'regle', 'idswitch', 'etat']
+    readonly_fields = ['idregle', 'typeregle', 'regle', 'dpid_switch', 'etat']
     list_display = ['switch', 'regle', 'typeregle', 'etat']
     search_fields = ['regle']
     list_filter = ['idswitch__nomswitch', "typeregle", "source__nomhote", "destination__nomhote"]
@@ -138,10 +138,20 @@ class ConnectionTypeAdmin(admin.ModelAdmin):
     """
     list_display = ["connection_type"]
 
+
 @admin.register(UserMembre)
 class UserMembreAdmin(admin.ModelAdmin):
     list_display = ['user', 'nommembre']
     form = UserMembreForm
+
+
+@admin.register(Switchlink)
+class SwitchLinkAdmin(admin.ModelAdmin):
+    """
+    Class for reprensenting Switchlink model in the admin panel
+    """
+    list_display = ["idport1", "idport2"]
+
 
 admin_tousix.register(Regles, ReglesField)
 admin_tousix.register(LogSwitch, LogSwitchAdmin)
@@ -153,3 +163,4 @@ admin_tousix.register(Hote, HoteAdmin)
 admin_tousix.register(Membre, MembreAdmin)
 admin_tousix.register(ConnectionType, ConnectionTypeAdmin)
 admin_tousix.register(UserMembre, UserMembreAdmin)
+admin_tousix.register(Switchlink, SwitchLinkAdmin)

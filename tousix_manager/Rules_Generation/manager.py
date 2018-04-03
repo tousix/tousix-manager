@@ -53,7 +53,7 @@ class Manager(object):
             else:
                 # TODO parcours chemin à étudier ?
                 peer.Egress = False
-                peer.nextHop = hote.idport.idswitch_id
+                peer.nextHop = hote.idport.idswitch.dpid_switch
 
             peers.append(peer)
         return peers
@@ -66,7 +66,7 @@ class Manager(object):
         """
         for switch in switches:
             peers = self.get_peers(switch)
-            rules = self.call_managers(switch.idswitch, peers)
+            rules = self.call_managers(switch.dpid_switch, peers)
 
             # Remove existing rules for this switch
             Regles.objects.filter(idswitch=switch.idswitch).filter(etat="Production").delete()
@@ -76,7 +76,7 @@ class Manager(object):
                                        source_id=rule.get("source"), destination_id=rule.get("destination")))
             Regles.objects.bulk_create(db_rules)
             # Copy raw group rules into database
-            groups_switch = settings.RULES_GENERATION_GROUPS_DEFINITION[switch.idswitch]
+            groups_switch = settings.RULES_GENERATION_GROUPS_DEFINITION[switch.dpid_switch]
             db_groups = []
             for group in groups_switch:
                 db_groups.append(Regles(idswitch=switch, typeregle="Group", regle=json.dumps(group)))
@@ -91,7 +91,7 @@ class Manager(object):
         """
         for switch in switches:
             peers = self.get_peers(switch)
-            rules = self.call_managers_single(switch.idswitch, peers, host.idhote)
+            rules = self.call_managers_single(switch.dpid_switch, peers, host.idhote)
 
             # Remove existing rules for this switch
             Regles.objects.filter(idswitch=switch.idswitch).filter(etat="Production").exclude(typeregle="Group").delete()

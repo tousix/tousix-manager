@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.sites',
     'formtools',
+    'revproxy',
     'django_fsm',
     'debug_toolbar',
     'reversion',
@@ -60,6 +61,7 @@ INSTALLED_APPS = (
     'tousix_manager.Member_Manager',
     'tousix_manager.Database',
     'tousix_manager.Frontpages',
+    'tousix_manager.Faucet_config_gen'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -90,8 +92,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'tousix_manager.Authentication.MemberContext.context'
             ],
+        'NAME': 'default'
         },
-    },
+    }
 ]
 
 
@@ -179,7 +182,25 @@ INFLUXDB_CONFIG = {
     "use_ssl": True
 }
 
+# Choose between the different stacks of production SDN rules:
+# 'Ryu' Cor creating production and monitoring stack from scratch
+# 'Faucet' for enabling faut Faucet configuration generation on each step
+APPLY_PRODUCTION_METHOD = 'Ryu'
+
+FAUCET_SETTINGS = {
+"vlan_name": 'IXP_VLAN',
+"vlan_native_id": 400,
+"faucet_config_path": "/etc/faucet/faucet.yaml",
+"sw1_portnum_to_sw2" :'25',
+"sw1_portnum_to_sw3" : '28',
+"sw2_portnum_to_sw1" : '25',
+"sw2_portnum_to_sw3": '26',
+"sw3_portnum_to_sw1" : '28',
+"sw3_portnum_to_sw2" : '25'
+}
+
 # Enable or disable some modules of the Rules_Generation app
+#  Only used with 'Ryu' option on APPLY_PRODUCTION_METHOD
 RULES_GENERATION_ENABLED = {
     "Production": {
        "Umbrella": {
@@ -198,6 +219,7 @@ RULES_GENERATION_ENABLED = {
 }
 
 # Configure the flow priority for the modules of Rules_Generation app
+# Only used with 'Ryu' option on APPLY_PRODUCTION_METHOD
 RULES_GENERATION_PRIORITIES = {
     "Production": {
        "Umbrella": {
@@ -217,6 +239,7 @@ RULES_GENERATION_PRIORITIES = {
 
 # For our solution, each ingress forwarding is represented by the last switched managed by the IXP before delivering
 # to the member. This option permits to translate the dpid destination to a OpenFlow group ID.
+# Only used with 'Ryu' option on APPLY_PRODUCTION_METHOD
 RULES_GENERATION_GROUPS = {
     22211208: 1,
     1092540: 3,
@@ -227,6 +250,7 @@ RULES_GENERATION_GROUPS = {
 # This is a temporary option to define our forwarding groups, and includes them into the database.
 # The format of the group definition is a JSON-like object.
 # http://ryu.readthedocs.org/en/latest/app/ofctl_rest.html#add-a-group-entry
+# Only used with 'Ryu' option on APPLY_PRODUCTION_METHOD
 RULES_GENERATION_GROUPS_DEFINITION = {
     22211208: [
         {"dpid": 22211208,
