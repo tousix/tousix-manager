@@ -62,7 +62,7 @@ def generate_openflow_rules(modeladmin, request, queryset):
 generate_openflow_rules.short_description = "Générer la configuration Openflow pour la sélection sur un contrôleur Ryu"
 
 
-def generate_faucet_config(modeladmin, request):
+def generate_faucet_config(modeladmin, request, queryset):
     """
     Action for generating openflow rules on switch.
     :param modeladmin:
@@ -76,7 +76,7 @@ def generate_faucet_config(modeladmin, request):
     modeladmin.message_user(request, "Le fichier de configuration Faucet a été modifié. Veuillez recharger le service afin d'appliquer les modifications")
     return render(request, "config_confirm.html", context={"data": data})
 
-generate_openflow_rules.short_description = "Générer la configuration Faucet tous les hôtes"
+generate_faucet_config.short_description = "Générer la configuration Faucet tous les hôtes"
 
 
 def get_rules_list(modeladmin, request, queryset):
