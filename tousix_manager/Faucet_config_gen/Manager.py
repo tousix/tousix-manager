@@ -210,9 +210,6 @@ class Manager(object):
                 data['acls'][3].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
                         list_load[i]['addr_ipv4']), 'actions': {'output': {'port': int(list_load[i]['port'])}}}})
-        data['acls'][1].append({'rule': {'actions': {'allow': 0}}})
-        data['acls'][2].append({'rule': {'actions': {'allow': 0}}})
-        data['acls'][3].append({'rule': {'actions': {'allow': 0}}})
 
         return (data)
 
