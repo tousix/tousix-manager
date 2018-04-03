@@ -73,7 +73,7 @@ class SwitchForm(forms.ModelForm):
 
     class Meta:
         model = Switch
-        fields = ['nomswitch', 'dpid_switch', 'ipswitch', 'idpop']
+        fields = ['nomswitch', 'dpid_switch', 'ipswitch', 'idpop', 'faucet_class']
 
 
 class SwitchChoiceField(forms.ModelChoiceField):
