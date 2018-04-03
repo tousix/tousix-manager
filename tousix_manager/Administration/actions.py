@@ -72,7 +72,8 @@ def generate_faucet_config(modeladmin, request):
     """
     manager = FaucetManager()
     manager.generate_all_peers()
-    modeladmin.message_user(request, "Les règles ont été mises à jour dans la base de données.")
+    manager.dump_config()
+    modeladmin.message_user(request, "Le fichier de configuration Faucet a été modifié. Veuillez recharger le service afin d'appliquer les modifications")
     return redirect('rules_confirm')
 
 generate_openflow_rules.short_description = "Générer la configuration Faucet tous les hôtes"

@@ -41,32 +41,27 @@ def Braket(i):
 class Manager(object):
     def __init__(self):
         self.vlan_name = settings['FAUCET_SETTINGS']['vlan_name']
-
-# TODO implement link query for yaml script
-    def generate_host(self, hote):
-
-        hote = Hote.objects.get(id=1)
-        cl = Host
-        cl.name = hote.nomhote
-        cl.location = hote.idport.idswitch.idpop.nompop
-        cl.description = "Machine of member " + hote.idmembre.nommembre + ", location: " + cl.location
-        cl.ipv4 = hote.ipv4hote
-        cl.ipv6 = hote.ipv6hote
-        cl.mac = hote.machote
-        cl.port = hote.idport.numport
-
-    def get_next_hop(self, node_src):
-        pass
+        self.data = ()
 
     def convert_table(self):
         list = []
         for host in Hote.objects.all():
-            table = {}
+            table = {"idrtr": host.idhote,
+                     "hostname": host.nomhote,
+                     "addr_ipv4": host.ipv4hote,
+                     "addr_ipv6": host.ipv6hote,
+                     "macaddr": host.machote,
+                     "membre": host.idmembre.nommembre,
+                     "pop": host.pop(),
+                     "switch": host.switch(),
+                     'port': host.idport.numport,
+                     "status": host.etat}
+            list.append(table)
 
-        return []
+        return list
 
 
-    def triangle(self, list_load = [], def_switches = []):
+    def triangle(self, list_load = []):
 
         data = {'vlans': {'tousix': {'vid': 100, 'description': qs(self.vlan_name)}}, 'dps': {
             'Edge1': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge1").id), 'hardware': qs(Switch.objects.get(nomswitch="Edge1").faucet_class), 'interfaces': {
@@ -221,29 +216,18 @@ class Manager(object):
 
         return (data)
 
-    def get_interfaces_switch(self, switch):
-        pass
+    def generate_all_peers(self):
+        self.data = self.triangle(self.convert_table())
 
-    def generate_datapath(self):
-        result = {}
-        for switch in Switch.objects.all():
-            switch_def = {}
-            switch_def['dp_id'] = switch.idswitch
-            switch_def['hardware'] = switch.faucet_class
-            intf = {}
-            for port in Port.objects.filter(idswitch=switch.id):
-                intf[port.numport] = {'acl_in': switch_def['dp_id'],
-                                      'description': Hote.objects.filter(idport=port.id).get(0).nomhote,
-                                      'name':  Hote.objects.filter(idport=port.id).get(0).nomhote,
-                                      'native_vlan': settings['FAUCET_SETTINGS']['vlan_native_id'],
-                                      'opstatus_reconf': False}
-            switch_def['interfaces'] = intf
-            result[switch.nomswitch] = switch_def
-        return {'dps': result}
-    def generate_acls(self):
-        #TODO include script gen.py
-        pass
+    def dump_config(self):
+        if len(self.data) is not 0:
+            yaml.indent(mapping=2, sequence=4, offset=2)
+            yaml.indent = 40
+            yaml.preserve_quotes = True
+            yaml.boolean_representation = ['False', 'True']
+            yaml.default_flow_style = False
 
+            yaml.dump(self.data, settings['FAUCET_SETTINGS']['faucet_config_path'])
 
 class Interface(object):
     switch = 0xaaa

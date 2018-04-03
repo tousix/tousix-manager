@@ -19,7 +19,7 @@
 
 from django import forms
 from django.forms.utils import ErrorList
-from tousix_manager.Database.models import Hote, Port, Switch, Pop, Membre, ConnectionType, UserMembre
+from tousix_manager.Database.models import Hote, Port, Switch, Pop, Membre, ConnectionType, UserMembre, Switchlink
 
 
 class PortChoiceField(forms.ModelChoiceField):
@@ -130,3 +130,13 @@ class UserMembreForm(forms.ModelForm):
     class Meta:
         model = UserMembre
         fields = ['user', 'membre']
+
+
+class SwitchlinkForm(forms.ModelForm):
+
+    def label_from_instance(self, obj):
+        return "%s" % obj.string_description
+
+    class Meta:
+        model = Switchlink
+        fields = ['idport1', 'idport2']
