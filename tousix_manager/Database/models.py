@@ -115,7 +115,7 @@ class Switch(models.Model):
     """
     idswitch = PositiveBigIntegerField(db_column='idSwitch', primary_key=True)
     nomswitch = models.CharField(db_column='nomSwitch', max_length=20, blank=True, null=True)
-    faucet_class = models.CharField(null=False, blank=True)
+    faucet_class = models.CharField(null=False, blank=True, max_length=35)
     ipswitch = models.CharField(db_column='IPSwitch', max_length=39, blank=True, null=True)
     idpop = models.ForeignKey(Pop, to_field='idpop', db_column='idPOP', blank=True, null=True)
 
@@ -370,7 +370,7 @@ class Switchlink(models.Model):
     """
     idport1 = models.OneToOneField(Port, to_field='idport', db_column='idPort1', related_name='idport1', unique=True)
     idport2 = models.OneToOneField(Port, to_field='idport', db_column='idPort2', related_name='idport2', unique=True)
-    name = models.CharField(max_length=25, null=False, empty_value="link")
+    name = models.CharField(max_length=25, null=False)
 
     class Meta:
         db_table = 'SwitchLink'

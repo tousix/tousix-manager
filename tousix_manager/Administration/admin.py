@@ -150,7 +150,7 @@ class SwitchLinkAdmin(admin.ModelAdmin):
     """
     Class for reprensenting Switchlink model in the admin panel
     """
-    list_display = ["idport1__switch", "idport1", "idport2__switch", "idport2"]
+    list_display = ["idport1", "idport2"]
 
 
 admin_tousix.register(Regles, ReglesField)
