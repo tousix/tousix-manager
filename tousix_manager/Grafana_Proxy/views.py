@@ -19,12 +19,17 @@
 
 
 from revproxy.views import ProxyView
-
+from tousix_manager.Database.models import UserMembre
 
 class GraphanaProxyView(ProxyView):
     upstream = 'http://127.0.0.1:3000/dashboard/'
 
     def get_proxy_request_headers(self, request):
         headers = super(GraphanaProxyView, self).get_proxy_request_headers(request)
-        headers['X-WEBAUTH-USER'] = request.user.username
+        if request.user.is_superuser:
+            headers['X-WEBAUTH-USER'] = 'admin'
+        elif request.user.is_authenticated() and UserMembre.objects.filter(user=request.user).count() > 0:
+            headers['X-WEBAUTH-USER'] = UserMembre.objects.filter(user=request.user).first().membre.login_external
+        else:
+            headers['X-WEBAUTH-USER'] = 'guest'
         return headers
