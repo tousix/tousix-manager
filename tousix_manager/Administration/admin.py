@@ -27,7 +27,7 @@ class MembreAdmin(admin.ModelAdmin):
     """
     Class for member visibility in admin panel.
     """
-    list_display = ["nommembre", "url", "asnumber", "approved"]
+    list_display = ["nommembre", "url", "asnumber", "approved", "login_external"]
     inlines = [HoteInLine]
     list_filter = ['approved']
     form = MembreForm
