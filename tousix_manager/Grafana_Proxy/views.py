@@ -22,8 +22,8 @@ from revproxy.views import ProxyView
 from tousix_manager.Database.models import UserMembre
 
 class GraphanaProxyView(ProxyView):
-    upstream = 'http://127.0.0.1:3000/dashboard/'
-    rewrite = ((r'^/public/$', r'/grafana/public/$'),)
+    upstream = 'http://127.0.0.1:3000/'
+    #rewrite = ((r'^/public/(.*)$', r'/manager/grafana/\1'),)
 
     def get_proxy_request_headers(self, request):
         headers = super(GraphanaProxyView, self).get_proxy_request_headers(request)
