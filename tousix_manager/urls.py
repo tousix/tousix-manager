@@ -23,7 +23,7 @@ from tousix_manager.Log_Statistics.views import RecieveStatsForm
 from tousix_manager.Member_Manager import urls as members_urls
 from tousix_manager.Rules_Deployment import urls as rules_deployment_urls
 from tousix_manager.Statistics_Manager import urls as statistics_urls
-
+from tousix_manager.Grafana_Proxy import urls as grafana_urls
 admin.autodiscover()
 
 urlpatterns = [
@@ -37,8 +37,9 @@ urlpatterns = [
     url(r'^deployment', include(rules_deployment_urls)),
     # url(r'^django-sb-admin/', include('django_sb_admin.urls')),
     url(r'^stats', include(statistics_urls)),
-    url(r'^', WelcomeView.as_view(), name='welcome page'),
+    url(r'^grafana', include(grafana_urls),name='graphana-dashboards'),
 
+    url(r'^', WelcomeView.as_view(), name='welcome page'),
 ]
 if settings.DEBUG:
     import debug_toolbar

@@ -61,7 +61,8 @@ INSTALLED_APPS = (
     'tousix_manager.Member_Manager',
     'tousix_manager.Database',
     'tousix_manager.Frontpages',
-    'tousix_manager.Faucet_config_gen'
+    'tousix_manager.Faucet_config_gen',
+    'tousix_manager.Grafana_Proxy'
 )
 
 MIDDLEWARE_CLASSES = (
