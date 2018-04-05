@@ -112,7 +112,7 @@ class MembreForm(forms.ModelForm):
 
     class Meta:
         model = Membre
-        fields = ["nommembre", "asnumber", "connexion_type", "fqdn_host", "idpop", "approved"]
+        fields = ["nommembre", "asnumber", "connexion_type", "fqdn_host", "idpop", "approved", "login_external"]
 
 
 class MemberChoiceField(forms.ModelChoiceField):

@@ -82,6 +82,7 @@ class Membre(models.Model):
     noc = models.OneToOneField(Contact, to_field='idcontact', related_name='noc', parent_link=True, blank=True, null=True, on_delete=models.SET_NULL)
     technical = models.OneToOneField(Contact, to_field='idcontact', related_name='technical', parent_link=True, blank=True, null=True, on_delete=models.SET_NULL)
     approved = models.BooleanField(default=False)
+    login_external = models.CharField(max_length=35, default="guest")
 
     class Meta:
         db_table = 'Membre'
