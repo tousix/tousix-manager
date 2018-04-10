@@ -182,6 +182,7 @@ def download_csv_faucet(modeladmin, request, queryset):
     writer.writerow(field_names)
     # Write data rows
     for obj in queryset:
-        writer.writerow([obj.idhote, obj.nomhote, obj.ipv4hote, obj.ipv6hote, obj.machote, obj.membre, obj.pop, obj.switch, obj.port, obj.etat])
+        lookup = Hote.objects.get(idhote=obj.idhote)
+        writer.writerow([obj.idhote, obj.nomhote, obj.ipv4hote, obj.ipv6hote, obj.machote, lookup.membre, lookup.pop, lookup.switch, lookup.port, obj.etat])
     return response
 download_csv_faucet.short_description = "Download selected as csv for faucet configuration"
