@@ -160,3 +160,28 @@ def download_csv(modeladmin, request, queryset):
         writer.writerow([getattr(obj, field) for field in field_names])
     return response
 download_csv.short_description = "Download selected as csv"
+
+def download_csv_faucet(modeladmin, request, queryset):
+    """
+    Snippet from https://djangosnippets.org/snippets/2690/
+    :param modeladmin:
+    :param request:
+    :param queryset:
+    :return:
+    """
+    if not request.user.is_staff:
+        raise PermissionDenied
+    opts = queryset.model._meta
+    response = HttpResponse(content_type='text/csv')
+    # force download.
+    response['Content-Disposition'] = 'attachment;filename=export.csv'
+    # the csv writer
+    writer = csv.writer(response)
+    field_names = ["idrtr", "hostname", "addr_ipv4", "addr_ipv6", "macaddr", "membre", "pop", "switch", "port", "status"]
+    # Write a first row with header information
+    writer.writerow(field_names)
+    # Write data rows
+    for obj in queryset:
+        writer.writerow([obj.idhote, obj.nomhote, obj.addr_ipv4, obj.addr_ipv6, obj.macaddr, obj.membre, obj.pop, obj.switch, obj.port, obj.etat])
+    return response
+download_csv_faucet.short_description = "Download selected as csv for faucet configuration"

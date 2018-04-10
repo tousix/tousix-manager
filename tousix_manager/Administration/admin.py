@@ -1,4 +1,4 @@
-from tousix_manager.Administration.actions import generate_routeserver_conf, generate_openflow_rules, generate_faucet_config, get_rules_list, change_hote_status, apply_hote_on_production, get_percentile_hote, download_csv
+from tousix_manager.Administration.actions import generate_routeserver_conf, generate_openflow_rules, generate_faucet_config, get_rules_list, change_hote_status, apply_hote_on_production, get_percentile_hote, download_csv, download_csv_faucet
 from tousix_manager.Administration.adminsite import admin_tousix
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
@@ -45,7 +45,7 @@ class HoteAdmin(FSMTransitionMixin, admin.ModelAdmin):
     list_filter = ['valid']
     search_fields = ["nomhote", "ipv4hote", "ipv6hote", "machote"]
     form = HoteForm
-    actions = [generate_routeserver_conf, change_hote_status, apply_hote_on_production, get_percentile_hote, download_csv]
+    actions = [generate_routeserver_conf, change_hote_status, apply_hote_on_production, get_percentile_hote, download_csv_faucet]
     readonly_fields = ['etat']
     fsm_field = ['etat']
 
