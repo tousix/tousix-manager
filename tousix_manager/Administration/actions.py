@@ -182,6 +182,6 @@ def download_csv_faucet(modeladmin, request, queryset):
     writer.writerow(field_names)
     # Write data rows
     for obj in queryset:
-        writer.writerow([obj.idhote, obj.nomhote, obj.addr_ipv4, obj.addr_ipv6, obj.macaddr, obj.membre, obj.pop, obj.switch, obj.port, obj.etat])
+        writer.writerow([obj.idhote, obj.nomhote, obj.ipv4hote, obj.ipv6hote, obj.machote, obj.membre, obj.pop, obj.switch, obj.port, obj.etat])
     return response
 download_csv_faucet.short_description = "Download selected as csv for faucet configuration"
