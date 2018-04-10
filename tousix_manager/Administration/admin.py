@@ -1,4 +1,4 @@
-from tousix_manager.Administration.actions import generate_routeserver_conf, generate_openflow_rules, generate_faucet_config, get_rules_list, change_hote_status, apply_hote_on_production, get_percentile_hote
+from tousix_manager.Administration.actions import generate_routeserver_conf, generate_openflow_rules, generate_faucet_config, get_rules_list, change_hote_status, apply_hote_on_production, get_percentile_hote, download_csv
 from tousix_manager.Administration.adminsite import admin_tousix
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
@@ -32,7 +32,7 @@ class MembreAdmin(admin.ModelAdmin):
     list_filter = ['approved']
     form = MembreForm
     search_fields = ["nommembre", "asnumber"]
-    actions = [generate_routeserver_conf]
+    actions = [generate_routeserver_conf, download_csv]
 
 
 @admin.register(Hote)
@@ -45,7 +45,7 @@ class HoteAdmin(FSMTransitionMixin, admin.ModelAdmin):
     list_filter = ['valid']
     search_fields = ["nomhote", "ipv4hote", "ipv6hote", "machote"]
     form = HoteForm
-    actions = [generate_routeserver_conf, change_hote_status, apply_hote_on_production, get_percentile_hote]
+    actions = [generate_routeserver_conf, change_hote_status, apply_hote_on_production, get_percentile_hote, download_csv]
     readonly_fields = ['etat']
     fsm_field = ['etat']
 
@@ -104,7 +104,7 @@ class SwitchAdmin(admin.ModelAdmin):
     list_display = ["nomswitch", "ipswitch", "dpid_switch"]
     form = SwitchForm
     search_fields = ["nomswitch", "ipswitch", "dpid_switch"]
-    actions = [generate_openflow_rules, generate_faucet_config]
+    actions = [generate_openflow_rules, generate_faucet_config, download_csv]
 
 
 @admin.register(LogSwitch)
@@ -127,7 +127,7 @@ class ReglesField(FSMTransitionMixin, admin.ModelAdmin):
     list_display = ['switch', 'regle', 'typeregle', 'etat']
     search_fields = ['regle']
     list_filter = ['idswitch__nomswitch', "typeregle", "source__nomhote", "destination__nomhote"]
-    actions = [get_rules_list]
+    actions = [get_rules_list, download_csv]
     fsm_field = ['etat']
 
 

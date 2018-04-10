@@ -24,6 +24,9 @@ from tousix_manager.Rules_Generation.manager import Manager as RyuManager
 from tousix_manager.Faucet_config_gen.Manager import Manager as FaucetManager
 from tousix_manager.Rules_Deployment.rules import RulesDeployment
 from tousix_manager.Statistics_Manager.billing_influx import BillingView
+import csv
+from django.http import HttpResponse
+from django.core.exceptions import PermissionDenied
 
 def generate_routeserver_conf(modeladmin, request, queryset):
     """
@@ -132,3 +135,28 @@ def get_percentile_hote(modeladmin, request, queryset):
         modeladmin.message_user(request, "Bande passante consommé pour l'hôte " + hote.nomhote + ": " + str(billing.show_result(hote.idhote)) + " bit/s")
 
 get_percentile_hote.short_description = "Afficher l'utilisation de la bande passante au courcs  de l'année (95 centile)"
+
+def download_csv(modeladmin, request, queryset):
+    """
+    Snippet from https://djangosnippets.org/snippets/2690/
+    :param modeladmin:
+    :param request:
+    :param queryset:
+    :return:
+    """
+    if not request.user.is_staff:
+        raise PermissionDenied
+    opts = queryset.model._meta
+    response = HttpResponse(mimetype='text/csv')
+    # force download.
+    response['Content-Disposition'] = 'attachment;filename=export.csv'
+    # the csv writer
+    writer = csv.writer(response)
+    field_names = [field.name for field in opts.fields]
+    # Write a first row with header information
+    writer.writerow(field_names)
+    # Write data rows
+    for obj in queryset:
+        writer.writerow([getattr(obj, field) for field in field_names])
+    return response
+download_csv.short_description = "Download selected as csv"
