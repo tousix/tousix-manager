@@ -37,7 +37,7 @@ urlpatterns = [
     url(r'^deployment', include(rules_deployment_urls)),
     # url(r'^django-sb-admin/', include('django_sb_admin.urls')),
     url(r'^stats', include(statistics_urls)),
-    url(r'^grafana', include(grafana_urls),name='graphana-dashboards'),
+    url(r'^grafana', include(grafana_urls)),
 
     url(r'^', WelcomeView.as_view(), name='welcome page'),
 ]
