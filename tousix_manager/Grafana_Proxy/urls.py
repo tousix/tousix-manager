@@ -37,4 +37,6 @@ from tousix_manager.Grafana_Proxy.views import *
 
 urlpatterns = [
     url(r'^/(?P<path>.*)$', GraphanaProxyView.as_view(), name='grafana proxy view'),
+    url(r'^/', GraphanaProxyView.as_view(), name='grafana_main'),
+
 ]
