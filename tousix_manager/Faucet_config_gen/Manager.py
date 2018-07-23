@@ -63,154 +63,194 @@ class Manager(object):
 
     def triangle(self, list_load = []):
 
-        data = {'vlans': {'tousix': {'vid': 100, 'description': qs(self.faucet_settings['vlan_name'])}}, 'dps': {
-            'Edge 1': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 1").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 1").faucet_class), 'interfaces': {
-                1: {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100, 'acl_in': 1,
-                    'opstatus_reconf': False},
-                int(self.faucet_settings['sw1_portnum_to_sw2']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
-                                          'acl_in': 1, 'opstatus_reconf': False},
-                int(self.faucet_settings['sw1_portnum_to_sw3']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
-                                          'acl_in': 1, 'opstatus_reconf': False}}
-                      }, 'Edge 2': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 2").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 2").faucet_class), 'interfaces': {
-                1: {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100, 'acl_in': 2,
-                    'opstatus_reconf': False},
-                int(self.faucet_settings['sw2_portnum_to_sw1']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
-                                          'acl_in': 2, 'opstatus_reconf': False},
-                int(self.faucet_settings['sw2_portnum_to_sw3']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
-                                          'acl_in': 2, 'opstatus_reconf': False}}},
-            'Edge 3': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 3").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 3").faucet_class), 'interfaces': {
-                1: {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100, 'acl_in': 3,
-                    'opstatus_reconf': False},
-                int(self.faucet_settings['sw3_portnum_to_sw1']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
-                                          'acl_in': 3, 'opstatus_reconf': False},
-                int(self.faucet_settings['sw3_portnum_to_sw2']): {'name': qs('link'), 'description': qs('link'), 'native_vlan': 100,
-                                          'acl_in': 3, 'opstatus_reconf': False}}}},
-                'acls': {1: [], 2: [], 3:[]}}
+
+        data = {'vlans': {Switch.objects.get(nomswitch="Edge 1").nomswitch: {'vid': 101, 'description': qs(self.faucet_settings['vlan_name']), 'acl_in': 1},
+                          Switch.objects.get(nomswitch="Edge 2").nomswitch: {'vid': 102, 'description': qs(self.faucet_settings['vlan_name']), 'acl_in': 2},
+                          Switch.objects.get(nomswitch="Edge 3").nomswitch: {'vid': 103, 'description': qs(self.faucet_settings['vlan_name']), 'acl_in': 3}},
+                'dps': {'Edge1': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 1").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 1").faucet_class), 'interfaces': {
+                    int(self.faucet_settings['sw1_portnum_to_sw2']): {'name': qs('Uplink'), 'description': qs('link_sw1_sw2'),
+                                              'native_vlan': Switch.objects.get(nomswitch="Edge 1").nomswitch, 'opstatus_reconf': False},
+                    int(self.faucet_settings['sw1_portnum_to_sw3']): {'name': qs('Uplink'), 'description': qs('link_sw1_sw3'),
+                                              'native_vlan': Switch.objects.get(nomswitch="Edge 1").nomswitch, 'opstatus_reconf': False}}},
+                        Switch.objects.get(nomswitch="Edge 2").nomswitch: {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 2").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 2").faucet_class), 'interfaces': {
+                            int(self.faucet_settings['sw2_portnum_to_sw1']): {'name': qs('Uplink'), 'description': qs('link_sw2_sw1'),
+                                                      'native_vlan': Switch.objects.get(nomswitch="Edge 2").nomswitch, 'opstatus_reconf': False},
+                            int(self.faucet_settings['sw2_portnum_to_sw3']): {'name': qs('Uplink'), 'description': qs('link_sw2_sw3'),
+                                                      'native_vlan': Switch.objects.get(nomswitch="Edge 2").nomswitch, 'opstatus_reconf': False}}},
+                        Switch.objects.get(nomswitch="Edge 3").nomswitch: {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 3").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 3").faucet_class), 'interfaces': {
+                            int(self.faucet_settings['sw3_portnum_to_sw1']): {'name': qs('Uplink'), 'description': qs('link_sw3_sw1'),
+                                                      'native_vlan': Switch.objects.get(nomswitch="Edge 3").nomswitch, 'opstatus_reconf': False},
+                            int(self.faucet_settings['sw3_portnum_to_sw2']): {'name': qs('Uplink'), 'description': qs('link_sw3_sw2'),
+                                                      'native_vlan': Switch.objects.get(nomswitch="Edge 3").nomswitch, 'opstatus_reconf': False}}}},
+                'acls': {1: [],
+                         2: [],
+                         3: []}}
+
         for i in range(len(list_load)):
-            if list_load[i]['switch'] == 'Edge 1' and list_load[i]['status'] == 'Production':
-                data['dps']['Edge 1']['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
-                                                                                 'description': qs(
-                                                                                     list_load[i]['hostname']),
-                                                                                 'native_vlan': 100, 'acl_in': 1}
+            if list_load[i]['switch'] == Switch.objects.get(nomswitch="Edge 1").nomswitch and list_load[i]['status'] == 'Production':
+                data['dps'][Switch.objects.get(nomswitch="Edge 1").nomswitch]['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
+                                                                                  'description': qs(
+                                                                                      list_load[i]['hostname']),
+                                                                                  'native_vlan': Switch.objects.get(nomswitch="Edge 1").nomswitch}
                 data['acls'][1].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
-                    'output': {'port': int(list_load[i]['port'])}}}})
-                data['acls'][1].append(
-                    {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
-                        list_load[i]['addr_ipv6']), 'actions': {'output': {'port': int(list_load[i]['port'])}}}})
+                    'output': {'pop_vlans': True, 'port': int(list_load[i]['port'])}}}})
+                if self.faucet_settings['IPV6_active'] == True:
+                    data['acls'][1].append(
+                        {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
+                            list_load[i]['addr_ipv6']),
+                                  'actions': {'output': {'pop_vlans': True, 'port': int(list_load[i]['port'])}}}})
+
                 data['acls'][1].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
-                        list_load[i]['addr_ipv4']), 'actions': {'output': {'port': int(list_load[i]['port'])}}}})
+                        list_load[i]['addr_ipv4']),
+                              'actions': {'output': {'pop_vlans': True, 'port': int(list_load[i]['port'])}}}})
 
                 data['acls'][2].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
-                    'output': {'failover': {'group_id': 1 + i, 'ports': Braket(
+                    'output': {'pop_vlans': True, 'failover': {'group_id': 1 + i, 'ports': Braket(
                         '[' + self.faucet_settings['sw2_portnum_to_sw1'] + ',' + self.faucet_settings['sw2_portnum_to_sw3'] + ']')}}}}})
-                data['acls'][2].append(
-                    {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
-                        list_load[i]['addr_ipv6']), 'actions': {'output': {'failover': {'group_id': 100 + i,
-                                                                                        'ports': Braket(
-                                                                                            '[' + self.faucet_settings['sw2_portnum_to_sw1'] + ',' + self.faucet_settings['sw2_portnum_to_sw3'] + ']')}}}}})
+                if self.faucet_settings['IPV6_active'] == True:
+                    data['acls'][2].append(
+                        {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
+                            list_load[i]['addr_ipv6']), 'actions': {'output': {'pop_vlans': True,
+                                                                               'failover': {'group_id': 100 + i,
+                                                                                            'ports': Braket(
+                                                                                                '[' + self.faucet_settings['sw2_portnum_to_sw1'] + ',' + self.faucet_settings['sw2_portnum_to_sw3'] + ']')}}}}})
+
                 data['acls'][2].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
-                        list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 200 + i,
+                        list_load[i]['addr_ipv4']), 'actions': {'output': {'pop_vlans': True,
+                                                                           'failover': {'group_id': 200 + i,
                                                                                         'ports': Braket(
                                                                                             '[' + self.faucet_settings['sw2_portnum_to_sw1'] + ',' + self.faucet_settings['sw2_portnum_to_sw3'] + ']')}}}}})
 
                 data['acls'][3].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
-                    'output': {'failover': {'group_id': 300 + i, 'ports': Braket(
-                        '[' + self.faucet_settings['sw3_portnum_to_sw1'] + ',' + self.faucet_settings ['sw3_portnum_to_sw2'] + ']')}}}}})
-                data['acls'][3].append(
-                    {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
-                        list_load[i]['addr_ipv6']), 'actions': {'output': {'failover': {'group_id': 400 + i,
-                                                                                        'ports': Braket(
-                                                                                            '[' + self.faucet_settings['sw3_portnum_to_sw1'] + ',' + self.faucet_settings['sw3_portnum_to_sw2'] + ']')}}}}})
+                    'output': {'pop_vlans': True, 'failover': {'group_id': 300 + i, 'ports': Braket(
+                        '[' + self.faucet_settings['sw3_portnum_to_sw1'] + ',' + self.faucet_settings['sw3_portnum_to_sw2'] + ']')}}}}})
+                if self.faucet_settings['IPV6_active'] == True:
+                    data['acls'][3].append(
+                        {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
+                            list_load[i]['addr_ipv6']), 'actions': {'output': {'pop_vlans': True,
+                                                                               'failover': {'group_id': 400 + i,
+                                                                                            'ports': Braket(
+                                                                                                '[' + self.faucet_settings['sw3_portnum_to_sw1'] + ',' + self.faucet_settings['sw3_portnum_to_sw2'] + ']')}}}}})
+
                 data['acls'][3].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
-                        list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 500 + i,
+                        list_load[i]['addr_ipv4']), 'actions': {'output': {'pop_vlans': True,
+                                                                           'failover': {'group_id': 500 + i,
                                                                                         'ports': Braket(
                                                                                             '[' + self.faucet_settings['sw3_portnum_to_sw1'] + ',' + self.faucet_settings['sw3_portnum_to_sw2'] + ']')}}}}})
-            elif list_load[i]['switch'] == 'Edge 2' and list_load[i]['status'] == 'Production':
-                data['dps']['Edge 2']['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
-                                                                                 'description': qs(
-                                                                                     list_load[i]['hostname']),
-                                                                                 'native_vlan': 100, 'acl_in': 2}
+
+            elif list_load[i]['switch'] == Switch.objects.get(nomswitch="Edge 2").nomswitch and list_load[i]['status'] == 'Production':
+                data['dps'][Switch.objects.get(nomswitch="Edge 2").nomswitch]['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
+                                                                                  'description': qs(
+                                                                                      list_load[i]['hostname']),
+                                                                                  'native_vlan': Switch.objects.get(nomswitch="Edge 2").nomswitch}
                 data['acls'][1].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
-                    'output': {'failover': {'group_id': 600 + i, 'ports': Braket(
+                    'output': {'pop_vlans': True, 'failover': {'group_id': 600 + i, 'ports': Braket(
                         '[' + self.faucet_settings['sw1_portnum_to_sw2'] + ',' + self.faucet_settings['sw1_portnum_to_sw3'] + ']')}}}}})
-                data['acls'][1].append(
-                    {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
-                        list_load[i]['addr_ipv6']), 'actions': {'output': {'failover': {'group_id': 700 + i,
-                                                                                        'ports': Braket(
-                                                                                            '[' + self.faucet_settings['sw1_portnum_to_sw2'] + ',' + self.faucet_settings['sw1_portnum_to_sw3'] + ']')}}}}})
+                if self.faucet_settings['IPV6_active'] == True:
+                    data['acls'][1].append(
+                        {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
+                            list_load[i]['addr_ipv6']), 'actions': {'output': {'pop_vlans': True,
+                                                                               'failover': {'group_id': 700 + i,
+                                                                                            'ports': Braket(
+                                                                                                '[' + self.faucet_settings['sw1_portnum_to_sw2'] + ',' + self.faucet_settings['sw1_portnum_to_sw3'] + ']')}}}}})
+
                 data['acls'][1].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
-                        list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 800 + i,
+                        list_load[i]['addr_ipv4']), 'actions': {'output': {'pop_vlans': True,
+                                                                           'failover': {'group_id': 800 + i,
                                                                                         'ports': Braket(
                                                                                             '[' + self.faucet_settings['sw1_portnum_to_sw2'] + ',' + self.faucet_settings['sw1_portnum_to_sw3'] + ']')}}}}})
 
                 data['acls'][2].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
-                    'output': {'port': int(list_load[i]['port'])}}}})
-                data['acls'][2].append(
-                    {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
-                        list_load[i]['addr_ipv6']), 'actions': {'output': {'port': int(list_load[i]['port'])}}}})
+                    'output': {'pop_vlans': True, 'port': int(list_load[i]['port'])}}}})
+                if self.faucet_settings['IPV6_active'] == True:
+                    data['acls'][2].append(
+                        {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
+                            list_load[i]['addr_ipv6']),
+                                  'actions': {'output': {'pop_vlans': True, 'port': int(list_load[i]['port'])}}}})
+
                 data['acls'][2].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
-                        list_load[i]['addr_ipv4']), 'actions': {'output': {'port': int(list_load[i]['port'])}}}})
+                        list_load[i]['addr_ipv4']),
+                              'actions': {'output': {'pop_vlans': True, 'port': int(list_load[i]['port'])}}}})
 
                 data['acls'][3].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
-                    'output': {'failover': {'group_id': 900 + i, 'ports': Braket(
+                    'output': {'pop_vlans': True, 'failover': {'group_id': 900 + i, 'ports': Braket(
                         '[' + self.faucet_settings['sw3_portnum_to_sw2'] + ',' + self.faucet_settings['sw3_portnum_to_sw1'] + ']')}}}}})
-                data['acls'][3].append(
-                    {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
-                        list_load[i]['addr_ipv6']), 'actions': {'output': {'failover': {'group_id': 1000 + i,
-                                                                                        'ports': Braket(
-                                                                                            '[' + self.faucet_settings['sw3_portnum_to_sw2'] + ',' + self.faucet_settings['sw3_portnum_to_sw1'] + ']')}}}}})
+                if self.faucet_settings['IPV6_active'] == True:
+                    data['acls'][3].append(
+                        {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
+                            list_load[i]['addr_ipv6']), 'actions': {'output': {'pop_vlans': True,
+                                                                               'failover': {'group_id': 1000 + i,
+                                                                                            'ports': Braket(
+                                                                                                '[' + self.faucet_settings['sw3_portnum_to_sw2'] + ',' + self.faucet_settings['sw3_portnum_to_sw1'] + ']')}}}}})
+
                 data['acls'][3].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
-                        list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 1100 + i,
+                        list_load[i]['addr_ipv4']), 'actions': {'output': {'pop_vlans': True,
+                                                                           'failover': {'group_id': 1100 + i,
                                                                                         'ports': Braket(
                                                                                             '[' + self.faucet_settings['sw3_portnum_to_sw2'] + ',' + self.faucet_settings['sw3_portnum_to_sw1'] + ']')}}}}})
-            elif list_load[i]['switch'] == 'Edge 3' and list_load[i]['status'] == 'Production':
-                data['dps']['Edge 3']['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
-                                                                                 'description': qs(
-                                                                                     list_load[i]['hostname']),
-                                                                                 'native_vlan': 100, 'acl_in': 3}
+
+            elif list_load[i]['switch'] == Switch.objects.get(nomswitch="Edge 3").nomswitch and list_load[i]['status'] == 'Production':
+                data['dps'][Switch.objects.get(nomswitch="Edge 3").nomswitch]['interfaces'][int(list_load[i]['port'])] = {'name': qs(list_load[i]['hostname']),
+                                                                                  'description': qs(
+                                                                                      list_load[i]['hostname']),
+                                                                                  'native_vlan': Switch.objects.get(nomswitch="Edge 3").nomswitch}
                 data['acls'][1].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
-                    'output': {'failover': {'group_id': 1200 + i, 'ports': Braket(
+                    'output': {'pop_vlans': True, 'failover': {'group_id': 1200 + i, 'ports': Braket(
                         '[' + self.faucet_settings['sw1_portnum_to_sw3'] + ',' + self.faucet_settings['sw1_portnum_to_sw2'] + ']')}}}}})
-                data['acls'][1].append(
-                    {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
-                        list_load[i]['addr_ipv6']), 'actions': {'output': {'failover': {'group_id': 1300 + i,
-                                                                                        'ports': Braket(
-                                                                                            '[' + self.faucet_settings['sw1_portnum_to_sw3'] + ',' + self.faucet_settings['sw1_portnum_to_sw2'] + ']')}}}}})
+                if self.faucet_settings['IPV6_active'] == True:
+                    data['acls'][1].append(
+                        {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
+                            list_load[i]['addr_ipv6']), 'actions': {'output': {'pop_vlans': True,
+                                                                               'failover': {'group_id': 1300 + i,
+                                                                                            'ports': Braket(
+                                                                                                '[' + self.faucet_settings['sw1_portnum_to_sw3'] + ',' + self.faucet_settings['sw1_portnum_to_sw2'] + ']')}}}}})
+
                 data['acls'][1].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
-                        list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 1400 + i,
+                        list_load[i]['addr_ipv4']), 'actions': {'output': {'pop_vlans': True,
+                                                                           'failover': {'group_id': 1400 + i,
                                                                                         'ports': Braket(
                                                                                             '[' + self.faucet_settings['sw1_portnum_to_sw3'] + ',' + self.faucet_settings['sw1_portnum_to_sw2'] + ']')}}}}})
 
                 data['acls'][2].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
-                    'output': {'failover': {'group_id': 1500 + i, 'ports': Braket(
+                    'output': {'pop_vlans': True, 'failover': {'group_id': 1500 + i, 'ports': Braket(
                         '[' + self.faucet_settings['sw2_portnum_to_sw3'] + ',' + self.faucet_settings['sw2_portnum_to_sw1'] + ']')}}}}})
-                data['acls'][2].append(
-                    {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
-                        list_load[i]['addr_ipv6']), 'actions': {'output': {'failover': {'group_id': 1600 + i,
-                                                                                        'ports': Braket(
-                                                                                            '[' + self.faucet_settings['sw2_portnum_to_sw3'] + ',' + self.faucet_settings['sw2_portnum_to_sw1'] + ']')}}}}})
+                if self.faucet_settings['IPV6_active'] == True:
+                    data['acls'][2].append(
+                        {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
+                            list_load[i]['addr_ipv6']), 'actions': {'output': {'pop_vlans': True,
+                                                                               'failover': {'group_id': 1600 + i,
+                                                                                            'ports': Braket(
+                                                                                                '[' + self.faucet_settings['sw2_portnum_to_sw3'] + ',' + self.faucet_settings['sw2_portnum_to_sw1'] + ']')}}}}})
+
                 data['acls'][2].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
-                        list_load[i]['addr_ipv4']), 'actions': {'output': {'failover': {'group_id': 1700 + i,
+                        list_load[i]['addr_ipv4']), 'actions': {'output': {'pop_vlans': True,
+                                                                           'failover': {'group_id': 1700 + i,
                                                                                         'ports': Braket(
                                                                                             '[' + self.faucet_settings['sw2_portnum_to_sw3'] + ',' + self.faucet_settings['sw2_portnum_to_sw1'] + ']')}}}}})
 
                 data['acls'][3].append({'rule': {'dl_dst': qs(list_load[i]['macaddr']), 'actions': {
-                    'output': {'port': int(list_load[i]['port'])}}}})
-                data['acls'][3].append(
-                    {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
-                        list_load[i]['addr_ipv6']), 'actions': {'output': {'port': int(list_load[i]['port'])}}}})
+                    'output': {'pop_vlans': True, 'port': int(list_load[i]['port'])}}}})
+                if self.faucet_settings['IPV6_active'] == True:
+                    data['acls'][3].append(
+                        {'rule': {'dl_type': HexInt(0x86dd), 'ip_proto': 58, 'icmpv6_type': 135, 'ipv6_nd_target': qs(
+                            list_load[i]['addr_ipv6']),
+                                  'actions': {'output': {'pop_vlans': True, 'port': int(list_load[i]['port'])}}}})
+
                 data['acls'][3].append(
                     {'rule': {'dl_type': HexInt(0x806), 'dl_dst': qs('ff:ff:ff:ff:ff:ff'), 'arp_tpa': qs(
-                        list_load[i]['addr_ipv4']), 'actions': {'output': {'port': int(list_load[i]['port'])}}}})
-
+                        list_load[i]['addr_ipv4']),
+                              'actions': {'output': {'pop_vlans': True, 'port': int(list_load[i]['port'])}}}})
+        data['acls'][1].append({'rule': {'actions': {'allow': 0}}})
+        data['acls'][2].append({'rule': {'actions': {'allow': 0}}})
+        data['acls'][3].append({'rule': {'actions': {'allow': 0}}})
         return (data)
 
     def generate_all_peers(self):

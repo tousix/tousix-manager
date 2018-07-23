@@ -189,6 +189,7 @@ INFLUXDB_CONFIG = {
 APPLY_PRODUCTION_METHOD = 'Ryu'
 
 FAUCET_SETTINGS = {
+"IPV6_active": True,
 "vlan_name": 'IXP_VLAN',
 "vlan_native_id": 400,
 "faucet_config_path": "/etc/faucet/faucet.yaml",
