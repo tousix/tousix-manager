@@ -130,7 +130,7 @@ def apply_hote_on_production(modeladmin, request, queryset):
                 manager.convert_table()
                 manager.generate_all_peers()
                 manager.dump_config()
-                modeladmin.message_user(request,"Les paramètres du router " + hote.nomhote + " ont été appliqués sur le fichier "+ self.faucet_settings['faucet_config_path'] +". Veuiller relancer faucet pour appliquer la configuration")
+                modeladmin.message_user(request,"Les paramètres du router " + hote.nomhote + " ont été appliqués sur le fichier "+ settings.FAUCET_SETTINGS['faucet_config_path'] +". Veuiller relancer faucet pour appliquer la configuration")
 
             else:
                 modeladmin.message_user(request, "Les paramètres n'ont pas pu être appliqués: mauvaise définition de APPLY_PRODUCTION_METHOD")
