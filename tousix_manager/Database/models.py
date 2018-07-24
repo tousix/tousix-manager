@@ -22,6 +22,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
 from django_fsm import FSMField, transition
+from django.conf import settings
 
 from tousix_manager.Database.fields import PositiveBigIntegerField, MACAddressField
 
@@ -253,10 +254,12 @@ class Hote(models.Model):
         :return:
         """
         if self.valid is True:
-            manager = Manager()
-            manager.create_rules(Switch.objects.all())
-            deployment = RulesDeployment()
-            deployment.send_rules(Switch.objects.all())
+            if settings.APPLY_PRODUCTION_METHOD is 'Ryu':
+
+                manager = Manager()
+                manager.create_rules(Switch.objects.all())
+                deployment = RulesDeployment()
+                deployment.send_rules(Switch.objects.all())
         else:
             raise Exception("Not a valid router.")
 
@@ -267,14 +270,17 @@ class Hote(models.Model):
         and applies rules for the new configuration.
         :return:
         """
-        regles = Regles.objects.filter(Q(source=self) | Q(destination=self))
-        for regle in regles:
-            regle.ChangeRulesStatus()
-            regle.save()
-        manager = Manager()
-        manager.create_rules(Switch.objects.all())
-        deployment = RulesDeployment()
-        deployment.send_rules(Switch.objects.all())
+        #TODO write transition state for faucet
+        if settings.APPLY_PRODUCTION_METHOD is 'Ryu':
+
+            regles = Regles.objects.filter(Q(source=self) | Q(destination=self))
+            for regle in regles:
+                regle.ChangeRulesStatus()
+                regle.save()
+            manager = Manager()
+            manager.create_rules(Switch.objects.all())
+            deployment = RulesDeployment()
+            deployment.send_rules(Switch.objects.all())
 
     @transition(field=etat, source="Changing", target="Production")
     def Apply(self):
@@ -282,12 +288,14 @@ class Hote(models.Model):
         Transition method for removing rules applied for the previous configuration of the router.
         :return:
         """
-        regles_deprecated = Regles.objects.filter((Q(source=self) | Q(destination=self)) & Q(etat="Deprecated"))
-        regles_production = Regles.objects.filter((Q(source=self) | Q(destination=self)) & Q(etat="Production")).values("regle")
-        regles_invalides = regles_deprecated.exclude(Q(regle__in=regles_production))
-        deployment = RulesDeployment()
-        deployment.remove_rules(regles_invalides)
-        regles_deprecated.delete()
+        if settings.APPLY_PRODUCTION_METHOD is 'Ryu':
+
+            regles_deprecated = Regles.objects.filter((Q(source=self) | Q(destination=self)) & Q(etat="Deprecated"))
+            regles_production = Regles.objects.filter((Q(source=self) | Q(destination=self)) & Q(etat="Production")).values("regle")
+            regles_invalides = regles_deprecated.exclude(Q(regle__in=regles_production))
+            deployment = RulesDeployment()
+            deployment.remove_rules(regles_invalides)
+            regles_deprecated.delete()
 
 
 class Flux(models.Model):
