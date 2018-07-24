@@ -21,11 +21,14 @@ from django.db.models import Q
 from django.db.models.signals import post_save, pre_delete, pre_save
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
+from django.conf import settings
 
 from tousix_manager.BGP_Configuration.views import render_conf_hosts
 from tousix_manager.Database.models import Hote, Flux, Stats, Switch
-from tousix_manager.Rules_Deployment.rules import RulesDeployment
-from tousix_manager.Rules_Generation.manager import Manager
+from tousix_manager.Rules_Deployment.rules import RulesDeployment as RyuDeployment
+from tousix_manager.Faucet_deploy.deployment import Deployment as FaucetDeployment
+from tousix_manager.Rules_Generation.manager import Manager as RyuManager
+from tousix_manager.Faucet_config_gen.Manager import Manager as FaucetManager
 
 
 @receiver(post_save, sender=Hote)
@@ -38,16 +41,17 @@ def post_save_hote_creation(sender, **kwargs):
     """
     if not kwargs.get('raw', False):
         if kwargs['created'] is True:
-            db_flux = list()
-            db_flux.append(Flux(hote_src=None, hote_dst=kwargs['instance'], type="ICMPv6"))
-            db_flux.append(Flux(hote_src=None, hote_dst=kwargs['instance'], type="ARP"))
-            for peer_dst in Hote.objects.all():
-                if peer_dst != kwargs['instance']:
-                    db_flux.append(Flux(hote_src=peer_dst, hote_dst=kwargs['instance'], type="IPv4"))
-                    db_flux.append(Flux(hote_src=kwargs['instance'], hote_dst=peer_dst, type="IPv4"))
-                    db_flux.append(Flux(hote_src=peer_dst, hote_dst=kwargs['instance'], type="IPv6"))
-                    db_flux.append(Flux(hote_src=kwargs['instance'], hote_dst=peer_dst, type="IPv6"))
-            Flux.objects.bulk_create(db_flux)
+            if settings.APPLY_PRODUCTION_METHOD is 'Ryu':
+                db_flux = list()
+                db_flux.append(Flux(hote_src=None, hote_dst=kwargs['instance'], type="ICMPv6"))
+                db_flux.append(Flux(hote_src=None, hote_dst=kwargs['instance'], type="ARP"))
+                for peer_dst in Hote.objects.all():
+                    if peer_dst != kwargs['instance']:
+                        db_flux.append(Flux(hote_src=peer_dst, hote_dst=kwargs['instance'], type="IPv4"))
+                        db_flux.append(Flux(hote_src=kwargs['instance'], hote_dst=peer_dst, type="IPv4"))
+                        db_flux.append(Flux(hote_src=peer_dst, hote_dst=kwargs['instance'], type="IPv6"))
+                        db_flux.append(Flux(hote_src=kwargs['instance'], hote_dst=peer_dst, type="IPv6"))
+                Flux.objects.bulk_create(db_flux)
 
             # Deploy BGP configuration with the new host
             render_conf_hosts(Hote.objects.all())
@@ -84,11 +88,17 @@ def pre_save_hote_modification(sender, **kwargs):
                 for host_conflict in conflict_ip:
                     error_string += host_conflict.nomhote + ", "
                 raise ValidationError(error_string)
-        manager = Manager()
-        manager.create_rules_single(Switch.objects.all(), instance)
-        deployment = RulesDeployment()
-        deployment.send_flowrules_single_host(Switch.objects.all(), instance)
+        if settings.APPLY_PRODUCTION_METHOD is 'Ryu':
 
+            manager = RyuManager()
+            manager.create_rules_single(Switch.objects.all(), instance)
+            deployment = RyuDeployment()
+            deployment.send_flowrules_single_host(Switch.objects.all(), instance)
+        elif settings.APPLY_PRODUCTION_METHOD is 'Faucet':
+            manager = FaucetManager()
+            manager.convert_table()
+            manager.generate_all_peers()
+            manager.dump_config()
 
 @receiver(pre_delete, sender=Hote)
 def pre_delete_hote(sender, **kwargs):
@@ -98,17 +108,23 @@ def pre_delete_hote(sender, **kwargs):
     :param kwargs:
     :return:
     """
-    # Retrieve all flux where the deleted host is present
-    flux_list = Flux.objects.filter(Q(hote_src=kwargs['instance']) | Q(hote_dst=kwargs['instance']))
-    # Remove stats from these flux
-    Stats.objects.filter(idflux__in=flux_list).delete()
-    # delete flux
-    flux_list.delete()
+    if settings.APPLY_PRODUCTION_METHOD is 'Ryu':
+        # Retrieve all flux where the deleted host is present
+        flux_list = Flux.objects.filter(Q(hote_src=kwargs['instance']) | Q(hote_dst=kwargs['instance']))
+        # Remove stats from these flux
+        Stats.objects.filter(idflux__in=flux_list).delete()
+        # delete flux
+        flux_list.delete()
 
-    # remove rules for designated host
-    deployment = RulesDeployment()
-    deployment.remove_host([kwargs['instance']])
+        # remove rules for designated host
+        deployment = RyuDeployment()
+        deployment.remove_host([kwargs['instance']])
 
+    elif settings.APPLY_PRODUCTION_METHOD is 'Faucet':
+        manager = FaucetManager()
+        manager.convert_table()
+        manager.generate_all_peers()
+        manager.dump_config()
     # Remove host from the BGP configuration
     render_conf_hosts(Hote.objects.exclude(idhote=kwargs['instance'].idhote))
 
