@@ -27,6 +27,7 @@ from tousix_manager.Statistics_Manager.billing_influx import BillingView
 import csv
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
+from django.conf import settings
 
 def generate_routeserver_conf(modeladmin, request, queryset):
     """
@@ -118,7 +119,13 @@ def apply_hote_on_production(modeladmin, request, queryset):
     """
     for hote in queryset:
         if hote.valid is True:
-            manager = Manager()
+            if settings.APPLY_PRODUCTION_METHOD is 'Ryu':
+                manager = RyuManager()
+            elif settings.APPLY_PRODUCTION_METHOD is 'Faucet':
+                manager = FaucetManager()
+            else:
+                modeladmin.message_user(request, "Les paramètres n'ont pas pu être appliqués: mauvaise définition de APPLY_PRODUCTION_METHOD")
+                return None
             manager.create_rules_single(Switch.objects.all(), hote)
             deployment = RulesDeployment()
             deployment.send_flowrules_single_host(Switch.objects.all(), hote)
