@@ -67,7 +67,7 @@ class Manager(object):
         data = {'vlans': {Switch.objects.get(nomswitch="Edge 1").nomswitch: {'vid': 101, 'description': qs(self.faucet_settings['vlan_name']), 'acl_in': 1},
                           Switch.objects.get(nomswitch="Edge 2").nomswitch: {'vid': 102, 'description': qs(self.faucet_settings['vlan_name']), 'acl_in': 2},
                           Switch.objects.get(nomswitch="Edge 3").nomswitch: {'vid': 103, 'description': qs(self.faucet_settings['vlan_name']), 'acl_in': 3}},
-                'dps': {'Edge1': {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 1").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 1").faucet_class), 'interfaces': {
+                'dps': {Switch.objects.get(nomswitch="Edge 1").nomswitch: {'dp_id': HexInt(Switch.objects.get(nomswitch="Edge 1").dpid_switch), 'hardware': qs(Switch.objects.get(nomswitch="Edge 1").faucet_class), 'interfaces': {
                     int(self.faucet_settings['sw1_portnum_to_sw2']): {'name': qs('Uplink'), 'description': qs('link_sw1_sw2'),
                                               'native_vlan': Switch.objects.get(nomswitch="Edge 1").nomswitch, 'opstatus_reconf': False},
                     int(self.faucet_settings['sw1_portnum_to_sw3']): {'name': qs('Uplink'), 'description': qs('link_sw1_sw3'),
